@@ -140,3 +140,19 @@ export const SendMessage = async (options) => {
         console.error('Error SendMessage:', error); 
     }
 }
+export const AddFriend = async (toUserID: string) => {
+    try {
+        const paramsReq = {toUserID: toUserID,
+        reqMsg: '' };
+        const operationID = 'OperationID_value';
+      
+        await OpenIMSDKRN.addFriend(
+          paramsReq,
+          operationID
+        );
+      
+        console.log("addFriend: Friend request sent with parameters", paramsReq);
+      } catch (error) {
+        console.error('Error addFriend:', error);
+      }
+}

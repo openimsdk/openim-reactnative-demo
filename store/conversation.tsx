@@ -54,6 +54,7 @@ export const useConversationStore = create<ConversationStore>()((set, get) => ({
             
         } catch (error) {
             //   feedbackToast({ error, msg: t("toast.getConversationFailed") });
+                
             return true;
         }
         set((state) => ({

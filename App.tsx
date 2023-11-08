@@ -23,6 +23,8 @@ import FriendRequestVerifyPage from './src/screens/contacts/friendRequestVerifyP
 import ChatRoom from './src/screens/chats/chatRoom';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { initStore, useGlobalEvent } from './store/useGlobalEvent';
+import { API_URL, WS_URL } from './src/config/config';
+import AddFriendScreen from './src/screens/friend/addFriend';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -40,8 +42,9 @@ export default function App() {
       await RNFS.mkdir(RNFS.DocumentDirectoryPath + '/tmp');
       const config = {
         platformID: platform,
-        apiAddr: 'https://web.rentsoft.cn/api',
-        wsAddr: 'wss://web.rentsoft.cn/msg_gateway',
+        apiAddr: API_URL,
+        wsAddr: WS_URL,
+
         dataDir: RNFS.DocumentDirectoryPath + '/tmp',
         logLevel: 6,
         isLogStandardOutput: true,
@@ -130,6 +133,11 @@ export default function App() {
             <Stack.Screen
               name="ChatRoom"
               component={ChatRoom}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="AddFriend"
+              component={AddFriendScreen}
               options={{ headerShown: false }}
             />
           </>

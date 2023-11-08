@@ -6,10 +6,13 @@ import { API } from "../api/typings";
 import { useMessageStore } from "../../../store/message";
 import { useConversationStore } from "../../../store/conversation";
 import { ConversationItem } from "../../../store/types/entity";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 const ChatPage = () => {
     const rawData:ConversationItem[] = useConversationStore((state) => state.conversationList);
-    
+
+    const navigator = useNavigation<NativeStackNavigationProp<any>>();
     const renderConversationItem = ({item}:{item:ConversationItem} ) => {
         return (
             <View style={{}}>
@@ -17,7 +20,9 @@ const ChatPage = () => {
             </View>
         );
     };
-
+    const handleAddFriend = () => {
+        navigator.navigate("AddFriend")
+    }
     return (
         <View>
             <View style={styles.header}>
@@ -26,7 +31,7 @@ const ChatPage = () => {
                         <Text>Edit</Text>
                     </TouchableOpacity>
                     <Text style={styles.title}>Contacts</Text>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={handleAddFriend}>
                         <Text>Add Friend</Text>
                     </TouchableOpacity>
                 </View>
