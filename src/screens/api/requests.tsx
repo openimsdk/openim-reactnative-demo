@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LoginIM } from "./openimsdk";
 import { criticallyDampedSpringCalculations } from "react-native-reanimated/lib/typescript/reanimated2/animation/springUtils";
 import { BusinessUserInfo } from "../../../store/user";
-
+import axios from 'axios';
 export const LoginClient = async (params: { password: string; phoneNumber: any; verifyCode: string; areaCode: string; }) => {
   let platform = 1;
   if (Platform.OS === 'android') {
@@ -264,10 +264,10 @@ export const ResetPasswordClient = async (params: { phoneNumber: any; password: 
 }
 
 export const getBusinessUserInfo = async (userIDs: string[], isSelfInfo = false) => {
-  const tk = await AsyncStorage.getItem('imToken');
+  const tk = await AsyncStorage.getItem('chatToken');
   const id = await AsyncStorage.getItem('userID');
-  return request.post<{ users: BusinessUserInfo[] }>(
-    "/user/find/full",
+  return axios.post<{ users: BusinessUserInfo[] }>(
+    USER_URL + "/user/find/full",
     {
       id,
     },
@@ -279,4 +279,22 @@ export const getBusinessUserInfo = async (userIDs: string[], isSelfInfo = false)
     },
   );
 };
-
+export const searchBusinessUserInfo = async (keyword: string) => {
+  const token = await AsyncStorage.getItem('chatToken');
+  return axios.post<{ total: number; users: BusinessUserInfo[] }>(
+    USER_URL + "/user/search/full",
+    {
+      keyword,
+      pagination: {
+        pageNumber: 1,
+        showNumber: 10,
+      },
+    },
+    {
+      headers: {
+        operationID: '9347234',
+        token,
+      },
+    },
+  );
+};

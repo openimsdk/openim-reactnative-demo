@@ -144,7 +144,7 @@ export const AddFriend = async (toUserID: string) => {
     try {
         const paramsReq = {toUserID: toUserID,
         reqMsg: '' };
-        const operationID = 'OperationID_value';
+        const operationID = 'OperationID_value1';
       
         await OpenIMSDKRN.addFriend(
           paramsReq,
@@ -154,5 +154,20 @@ export const AddFriend = async (toUserID: string) => {
         console.log("addFriend: Friend request sent with parameters", paramsReq);
       } catch (error) {
         console.error('Error addFriend:', error);
+      }
+}
+export const SearchFriend = async (keywordList:string,isSearchUserID: boolean,isSearchNickname: boolean,isSearchRemark: boolean) => {
+    try {
+        const options = { keywordList: [keywordList],
+        isSearchUserID: isSearchUserID,
+        isSearchNickname: isSearchNickname,
+        isSearchRemark: isSearchRemark, };
+        const operationID = 'OperationID_value2';
+      
+        const data = await OpenIMSDKRN.searchFriends(options, operationID);
+      
+        console.log("searchFriends: Searched for friends with options", options, "and received data", data);
+      } catch (error) {
+        console.error('Error searchFriends:', error);
       }
 }

@@ -24,14 +24,14 @@ import ContactCard from './contactCard';
 const ContactListPage = () => {
   const [search, setSearch] = useState('');
   const [alphabetHints, setAlphabetHints] = useState<string[]>([]);
-  const [contactSections, setContactSections] = useState<{ title: string, data: FriendUserItem[] 
-}[]>([]);
+  const [contactSections, setContactSections] = useState<{ title: string, data: FriendUserItem[] }[]>([]);
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const sectionListRef: RefObject<SectionList> = useRef(null);
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const popupSearchInputRef = useRef<TextInput | null>(null);
   const rawData = useContactStore((state) => state.friendList);
   const data: FriendUserItem[] = rawData.sort((a: FriendUserItem, b: FriendUserItem) => a.nickname.localeCompare(b.nickname));
+  
   useEffect(() => {
     const hints: string[] = Array.from(new Set(data.map((item: FriendUserItem) => {
       const firstChar = item.nickname.charAt(0).toUpperCase();
@@ -142,8 +142,8 @@ const ContactListPage = () => {
     <KeyboardAvoidingView style={styles.container} behavior='height' keyboardVerticalOffset={Platform.OS === 'android' ? -60 : -70}>
       <View style={styles.header}>
         <View style={styles.topBar}>
-          <TouchableOpacity style={styles.button} onPress={LogoutIM}>
-            <Text>Edit</Text>
+          <TouchableOpacity style={styles.button}>
+            <Text></Text>
           </TouchableOpacity>
           <Text style={styles.title}>Contacts</Text>
           <TouchableOpacity style={styles.button}>
@@ -153,7 +153,11 @@ const ContactListPage = () => {
         <TouchableOpacity
           style={styles.searchBar}
           onPress={openDrawer}>
-          <Text>Search</Text>
+          <TextInput
+            placeholder="Search"
+            value={search}
+            onChangeText={setSearch} // Update the 'search' state
+          />
         </TouchableOpacity>
       </View>
       <SectionList
