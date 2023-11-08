@@ -3,7 +3,7 @@ import Avatar from "./avatar";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-const NameCards = ({ nickname,faceURL,userID,handleResult }:{nickname:string,faceURL:string,fromUserID:string,handleResult:number}) => {
+const NameCards = ({ nickname,faceURL,userID,handleResult }:{nickname:string,faceURL:string,userID:string,handleResult:number}) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   if (!nickname)
     return null
