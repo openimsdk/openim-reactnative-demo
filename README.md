@@ -1,4 +1,4 @@
-# OpenIM React Native Demo
+# OpenIM React Native Demo 
 
 Welcome to the OpenIM React Native Demo! This application provides a demonstration of OpenIM integration into a React Native project.
 
