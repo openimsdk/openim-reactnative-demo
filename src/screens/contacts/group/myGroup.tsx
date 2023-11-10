@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, RefObject } from 'react';
+import React, {useState, useEffect, useRef, RefObject} from 'react';
 import {
   View,
   Text,
@@ -12,37 +12,54 @@ import {
   Platform,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import SearchDrawer from '../../components/searchDrawer';
-import { useContactStore } from '../../../store/contact';
-import { FriendUserItem } from '../../../store/type.d';
-import ContactCard from './contactCard';
-
-const ContactListPage = () => {
+import {useContactStore} from '../../../../store/contact';
+import {ConversationItem, GroupItem} from '../../../../store/types/entity';
+import ContactCard from '../contactCard';
+import SearchDrawer from '../../../components/searchDrawer';
+import {GetOneConversation} from '../../api/openimsdk';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useNavigation} from '@react-navigation/native';
+import MyGroupCard from './myGroupCard';
+const MyGroupPage = () => {
   const [search, setSearch] = useState('');
   const [alphabetHints, setAlphabetHints] = useState<string[]>([]);
-  const [contactSections, setContactSections] = useState<{ title: string, data: FriendUserItem[] }[]>([]);
+  const [contactSections, setContactSections] = useState<
+    {title: string; data: GroupItem[]}[]
+  >([]);
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const sectionListRef: RefObject<SectionList> = useRef(null);
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const popupSearchInputRef = useRef<TextInput | null>(null);
-  const rawData = useContactStore((state) => state.friendList);
-  const data: FriendUserItem[] = rawData.sort((a: FriendUserItem, b: FriendUserItem) => a.nickname.localeCompare(b.nickname));
-  
+  const rawData = useContactStore(state => state.groupList);
+  const data: GroupItem[] = rawData.sort((a: GroupItem, b: GroupItem) =>
+    a.groupName.localeCompare(b.groupName),
+  );
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const handleConversation = async (currentGroup, type: number) => {
+    const item: ConversationItem = JSON.parse(
+      await GetOneConversation(currentGroup.groupID, type),
+    );
+    navigation.navigate('ChatRoom', {item});
+  };
   useEffect(() => {
-    const hints: string[] = Array.from(new Set(data.map((item: FriendUserItem) => {
-      const firstChar = item.nickname.charAt(0).toUpperCase();
-      return firstChar.match(/[A-Z]/) ? firstChar : '#';
-    })));
-    const modifiedHints = hints.splice(hints.indexOf("#"), 1)
-    hints.push(modifiedHints[0])
+    const hints: string[] = Array.from(
+      new Set(
+        data.map((item: GroupItem) => {
+          const firstChar = item.groupName.charAt(0).toUpperCase();
+          return firstChar.match(/[A-Z]/) ? firstChar : '#';
+        }),
+      ),
+    );
+    const modifiedHints = hints.splice(hints.indexOf('#'), 1);
+    hints.push(modifiedHints[0]);
     setAlphabetHints(hints);
 
-    const groupContactsByFirstCharacter = (contacts: FriendUserItem[]) => {
-      const grouped: { [key: string]: FriendUserItem[] } = {};
+    const groupContactsByFirstCharacter = (contacts: GroupItem[]) => {
+      const grouped: {[key: string]: GroupItem[]} = {};
       let hasNonAlphabet = false;
 
-      contacts.forEach((contact) => {
-        let firstChar = contact.nickname.charAt(0).toUpperCase();
+      contacts.forEach(contact => {
+        let firstChar = contact.groupName.charAt(0).toUpperCase();
 
         if (!firstChar.match(/[A-Z]/)) {
           firstChar = '#';
@@ -55,7 +72,7 @@ const ContactListPage = () => {
         grouped[firstChar].push(contact);
       });
 
-      const sections = Object.keys(grouped).map((key) => ({
+      const sections = Object.keys(grouped).map(key => ({
         title: key,
         data: grouped[key],
       }));
@@ -76,7 +93,7 @@ const ContactListPage = () => {
     const groupedContacts = groupContactsByFirstCharacter(data);
 
     let totalOffset = 0;
-    const sectionsWithOffset = groupedContacts.map((section) => {
+    const sectionsWithOffset = groupedContacts.map(section => {
       const sectionWithOffset = {
         ...section,
         offset: totalOffset,
@@ -85,24 +102,7 @@ const ContactListPage = () => {
       return sectionWithOffset;
     });
 
-    setContactSections([{
-      title: '',
-      data: [{
-          "addSource": 2, "attachedInfo": "", "createTime": 1694072100, "ex": "", "faceURL": "New Friend", "nickname": "New Friend", "operatorUserID": "4458656648",
-          "ownerUserID": "6960562805", "remark": "", "userID": "newFriend"
-      }, {
-          "addSource": 2, "attachedInfo": "", "createTime": 1694072100, "ex": "", "faceURL": "New Group", "nickname": "New Group", "operatorUserID": "4458656648",
-          "ownerUserID": "6960562805", "remark": "", "userID": "newGroup"
-      },
-      ],
-    }, {
-      title: ' ',
-      data: [{
-          "addSource": 2, "attachedInfo": "", "createTime": 1694072100, "ex": "", "faceURL": "My Groups", "nickname": "My Groups", "operatorUserID": "4458656648",
-          "ownerUserID": "6960562805", "remark": "", "userID": "myGroup"
-      }],
-    },
-    ...sectionsWithOffset]);
+    setContactSections(sectionsWithOffset);
   }, [data]);
 
   const scrollToSection = (sectionIndex: number) => {
@@ -135,7 +135,10 @@ const ContactListPage = () => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior='height' keyboardVerticalOffset={Platform.OS === 'android' ? -60 : -70}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior="height"
+      keyboardVerticalOffset={Platform.OS === 'android' ? -60 : -70}>
       <View style={styles.header}>
         <View style={styles.topBar}>
           <TouchableOpacity style={styles.button}>
@@ -146,9 +149,7 @@ const ContactListPage = () => {
             <Text>Add Friend</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={styles.searchBar}
-          onPress={openDrawer}>
+        <TouchableOpacity style={styles.searchBar} onPress={openDrawer}>
           <TextInput
             placeholder="Search"
             value={search}
@@ -165,20 +166,24 @@ const ContactListPage = () => {
             : index.toString()
         }
         bounces={false}
-        renderItem={({ item }) => {
-          return (<ContactCard nickname={item.nickname} faceURL={item.faceURL} userID={item.userID}></ContactCard>);
+        renderItem={({item}) => {
+          return (
+            <MyGroupCard
+              nickname={item.groupName}
+              userID=""
+              faceURL={item.faceURL}
+            />
+          );
         }}
-        renderSectionHeader={({ section }) => {
+        renderSectionHeader={({section}) => {
           if (section.title !== '')
-            return <Text style={styles.sectionHeader}>{section.title}</Text>
-          else
-            return null
-        }
-        }
-        onScroll={(event) => {
+            return <Text style={styles.sectionHeader}>{section.title}</Text>;
+          else return null;
+        }}
+        onScroll={event => {
           const offsetY = event.nativeEvent.contentOffset.y;
           const sectionIndex = contactSections.findIndex(
-            (section) => offsetY >= section.offset
+            section => offsetY >= section.offset,
           );
           if (sectionIndex !== -1) {
             const hint = contactSections[sectionIndex].title;
@@ -188,14 +193,12 @@ const ContactListPage = () => {
       />
       <ScrollView
         style={styles.hintContainer}
-        contentContainerStyle={styles.hintContentContainer}
-      >
+        contentContainerStyle={styles.hintContentContainer}>
         {alphabetHints.map((hint, index) => (
           <TouchableOpacity
             key={index}
             style={styles.hintItem}
-            onPress={() => handleHintItemPress(index)}
-          >
+            onPress={() => handleHintItemPress(index)}>
             <Text>{hint}</Text>
           </TouchableOpacity>
         ))}
@@ -204,11 +207,8 @@ const ContactListPage = () => {
         isVisible={isDrawerVisible}
         onBackdropPress={closeDrawer}
         backdropOpacity={0.5}
-        backdropColor='black'
-      >
-        <SearchDrawer
-          ref={popupSearchInputRef}
-        />
+        backdropColor="black">
+        <SearchDrawer ref={popupSearchInputRef} />
       </Modal>
     </KeyboardAvoidingView>
   );
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingLeft: 8,
     backgroundColor: '#E5E5E5FF',
-    textAlign: "center"
+    textAlign: 'center',
   },
   sectionHeader: {
     fontSize: 18,
@@ -266,4 +266,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ContactListPage;
+export default MyGroupPage;

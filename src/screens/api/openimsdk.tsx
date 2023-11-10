@@ -171,3 +171,59 @@ export const SearchFriend = async (keywordList:string,isSearchUserID: boolean,is
         console.error('Error searchFriends:', error);
       }
 }
+export const SearchGroup = async (keywordList:string,isSearchGroupID: boolean,isSearchGroupName: boolean) => {
+    try {
+        const options = {
+          keywordList: ['nickname'],
+          isSearchGroupID: false,
+          isSearchGroupName: true,
+        };
+        const operationID = 'OperationID_value5';
+      
+        const data = await OpenIMSDKRN.searchGroups(options, operationID);
+      
+        console.log("searchGroups: Searched for groups with options", options, "and received data", data);
+
+        return data;
+
+      } catch (error) {
+        console.error('Error searchGroups:', error);
+      }
+}
+export const CreateGroup = async (groupName:string,groupType:number,memberUserIDs:string[]) => {
+    try {
+
+        const operationID = 'OperationID_value22';
+        const groupInfo = {
+            groupName: groupName,
+            groupType: groupType,
+          }
+        await OpenIMSDKRN.createGroup(
+          {
+            groupInfo:groupInfo,
+            memberUserIDs:memberUserIDs,
+          },
+          operationID
+        );
+      
+        console.log("createGroup: Created a group with group information", groupInfo);
+      } catch (error) {
+        console.error('Error createGroup:', error);
+      }
+}
+export const GetOneConversation = async (sourceID:string,type:number) => {
+    try {
+        const options = {
+          sessionType: type,         // Replace with the actual session type
+          sourceID: sourceID,  // Replace with the actual source ID
+        };
+        const operationID = 'OperationID_value';
+      
+        const data = await OpenIMSDKRN.getOneConversation(options, operationID);
+      
+        console.log("getOneConversation", data);
+        return data;
+      } catch (error) {
+        console.error('Error getOneConversation:', error);
+      }
+}

@@ -25,6 +25,11 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { initStore, useGlobalEvent } from './store/useGlobalEvent';
 import { API_URL, WS_URL } from './src/config/config';
 import AddFriendScreen from './src/screens/friend/addFriend';
+import NewGroup from './src/screens/contacts/group/newGroup';
+import FindGroupPage from './src/screens/contacts/group/findGroup';
+import CreateGroupPage from './src/screens/contacts/group/createGroup';
+import FriendSettingPage from './src/screens/contacts/friendSetting';
+import MyGroupPage from './src/screens/contacts/group/myGroup';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -139,6 +144,31 @@ export default function App() {
               name="AddFriend"
               component={AddFriendScreen}
               options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="NewGroup"
+              component={NewGroup}
+              options={{ headerShown: true }}
+            />
+             <Stack.Screen
+              name="FindGroup"
+              component={FindGroupPage}
+              options={{ headerShown: true }}
+            />
+            <Stack.Screen
+              name="CreateGroup"
+              component={CreateGroupPage}
+              options={{ headerShown: true }}
+            />
+            <Stack.Screen
+              name="FriendSettingPage"
+              component={FriendSettingPage}
+              options={{ headerShown: true }}
+            />
+            <Stack.Screen
+              name="MyGroup"
+              component={MyGroupPage}
+              options={{ headerShown: true }}
             />
           </>
         )}

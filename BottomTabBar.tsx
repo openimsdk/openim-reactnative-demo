@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // Import your tab screen components
 import ContactListPage from './src/screens/contacts/contactListPage';
 import ChatPage from './src/screens/chats/chatPage';
+import SettingPage from './src/screens/setting/settings';
 
 const Tab = createBottomTabNavigator();
 
@@ -14,8 +15,8 @@ const BottomTabBar = () => {
       <Tab.Screen name="Main" component={ChatPage} options={{ headerShown: false }}/>
       <Tab.Screen name="Contact" component={ContactListPage} options={{ headerShown: false }}/>
       
-      {/* <Tab.Screen name="Chat" component={ChatScreen} /> */}
-      {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */}
+      {/* <Tab.Screen name="Work" component={WorkScreen}  options={{ headerShown: false }}/>  */}
+      <Tab.Screen name="Settings" component={SettingPage}  options={{ headerShown: false }}/>
     </Tab.Navigator>
   );
 };
