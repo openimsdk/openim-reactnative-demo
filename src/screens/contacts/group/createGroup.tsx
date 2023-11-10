@@ -153,6 +153,8 @@ const CreateGroupPage = () => {
         }
         bounces={false}
         renderItem={({item}) => {
+          const isSelected = selectedFriend.includes(item.userID);
+
           return (
             <TouchableOpacity
               style={styles.friendSelect}
@@ -171,6 +173,7 @@ const CreateGroupPage = () => {
               }}>
               <Avatar nickname={item.nickname} faceURL={item.faceURL}></Avatar>
               <Text>{item.nickname}</Text>
+              {isSelected && <Text> Selected</Text>}
             </TouchableOpacity>
           );
         }}
