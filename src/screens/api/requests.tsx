@@ -264,17 +264,17 @@ export const ResetPasswordClient = async (params: { phoneNumber: any; password: 
 }
 
 export const getBusinessUserInfo = async (userIDs: string[], isSelfInfo = false) => {
-  const tk = await AsyncStorage.getItem('chatToken');
-  const id = await AsyncStorage.getItem('userID');
+  const token = await AsyncStorage.getItem('chatToken');
+
   return axios.post<{ users: BusinessUserInfo[] }>(
     USER_URL + "/user/find/full",
     {
-      id,
+      userIDs:userIDs,
     },
     {
       headers: {
         operationID: '923821',
-        tk,
+        token:token,
       },
     },
   );

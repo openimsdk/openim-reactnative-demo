@@ -86,7 +86,8 @@ const styles = StyleSheet.create({
   },
   textImageText: {
     color: "white",
-    textAlign: 'center'
+    textAlign: 'center',
+    fontSize:18,
   }
 });
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, RefObject } from 'react';
+import React, {useState, useEffect, useRef, RefObject} from 'react';
 import {
   View,
   Text,
@@ -12,36 +12,48 @@ import {
   Platform,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import SearchDrawer from '../../components/searchDrawer';
-import { useContactStore } from '../../../store/contact';
-import { FriendUserItem } from '../../../store/type.d';
-import ContactCard from './contactCard';
+import {useContactStore} from '../../../../store/contact';
+import {FriendUserItem} from '../../../../store/type.d';
+import ContactCard from '../contactCard';
+import SearchDrawer from '../../../components/searchDrawer';
+import Avatar from '../../../components/avatar';
+import {CreateGroup} from '../../api/openimsdk';
 
-const ContactListPage = () => {
+const CreateGroupPage = () => {
   const [search, setSearch] = useState('');
   const [alphabetHints, setAlphabetHints] = useState<string[]>([]);
-  const [contactSections, setContactSections] = useState<{ title: string, data: FriendUserItem[] }[]>([]);
+  const [contactSections, setContactSections] = useState<
+    {title: string; data: FriendUserItem[]}[]
+  >([]);
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const sectionListRef: RefObject<SectionList> = useRef(null);
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const popupSearchInputRef = useRef<TextInput | null>(null);
-  const rawData = useContactStore((state) => state.friendList);
-  const data: FriendUserItem[] = rawData.sort((a: FriendUserItem, b: FriendUserItem) => a.nickname.localeCompare(b.nickname));
-  
+  const rawData = useContactStore(state => state.friendList);
+  const data: FriendUserItem[] = rawData.sort(
+    (a: FriendUserItem, b: FriendUserItem) =>
+      a.nickname.localeCompare(b.nickname),
+  );
+  const [selectedFriend, setSelectedFriend] = useState([]);
+
   useEffect(() => {
-    const hints: string[] = Array.from(new Set(data.map((item: FriendUserItem) => {
-      const firstChar = item.nickname.charAt(0).toUpperCase();
-      return firstChar.match(/[A-Z]/) ? firstChar : '#';
-    })));
-    const modifiedHints = hints.splice(hints.indexOf("#"), 1)
-    hints.push(modifiedHints[0])
+    const hints: string[] = Array.from(
+      new Set(
+        data.map((item: FriendUserItem) => {
+          const firstChar = item.nickname.charAt(0).toUpperCase();
+          return firstChar.match(/[A-Z]/) ? firstChar : '#';
+        }),
+      ),
+    );
+    const modifiedHints = hints.splice(hints.indexOf('#'), 1);
+    hints.push(modifiedHints[0]);
     setAlphabetHints(hints);
 
     const groupContactsByFirstCharacter = (contacts: FriendUserItem[]) => {
-      const grouped: { [key: string]: FriendUserItem[] } = {};
+      const grouped: {[key: string]: FriendUserItem[]} = {};
       let hasNonAlphabet = false;
 
-      contacts.forEach((contact) => {
+      contacts.forEach(contact => {
         let firstChar = contact.nickname.charAt(0).toUpperCase();
 
         if (!firstChar.match(/[A-Z]/)) {
@@ -55,7 +67,7 @@ const ContactListPage = () => {
         grouped[firstChar].push(contact);
       });
 
-      const sections = Object.keys(grouped).map((key) => ({
+      const sections = Object.keys(grouped).map(key => ({
         title: key,
         data: grouped[key],
       }));
@@ -76,7 +88,7 @@ const ContactListPage = () => {
     const groupedContacts = groupContactsByFirstCharacter(data);
 
     let totalOffset = 0;
-    const sectionsWithOffset = groupedContacts.map((section) => {
+    const sectionsWithOffset = groupedContacts.map(section => {
       const sectionWithOffset = {
         ...section,
         offset: totalOffset,
@@ -85,24 +97,7 @@ const ContactListPage = () => {
       return sectionWithOffset;
     });
 
-    setContactSections([{
-      title: '',
-      data: [{
-          "addSource": 2, "attachedInfo": "", "createTime": 1694072100, "ex": "", "faceURL": "New Friend", "nickname": "New Friend", "operatorUserID": "4458656648",
-          "ownerUserID": "6960562805", "remark": "", "userID": "newFriend"
-      }, {
-          "addSource": 2, "attachedInfo": "", "createTime": 1694072100, "ex": "", "faceURL": "New Group", "nickname": "New Group", "operatorUserID": "4458656648",
-          "ownerUserID": "6960562805", "remark": "", "userID": "newGroup"
-      },
-      ],
-    }, {
-      title: ' ',
-      data: [{
-          "addSource": 2, "attachedInfo": "", "createTime": 1694072100, "ex": "", "faceURL": "My Groups", "nickname": "My Groups", "operatorUserID": "4458656648",
-          "ownerUserID": "6960562805", "remark": "", "userID": "myGroup"
-      }],
-    },
-    ...sectionsWithOffset]);
+    setContactSections(sectionsWithOffset);
   }, [data]);
 
   const scrollToSection = (sectionIndex: number) => {
@@ -135,20 +130,17 @@ const ContactListPage = () => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior='height' keyboardVerticalOffset={Platform.OS === 'android' ? -60 : -70}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior="height"
+      keyboardVerticalOffset={Platform.OS === 'android' ? -60 : -70}>
       <View style={styles.header}>
         <View style={styles.topBar}>
           <TouchableOpacity style={styles.button}>
             <Text></Text>
           </TouchableOpacity>
-          <Text style={styles.title}>Contacts</Text>
-          <TouchableOpacity style={styles.button}>
-            <Text>Add Friend</Text>
-          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={styles.searchBar}
-          onPress={openDrawer}>
+        <TouchableOpacity style={styles.searchBar} onPress={openDrawer}>
           <TextInput
             placeholder="Search"
             value={search}
@@ -165,20 +157,37 @@ const ContactListPage = () => {
             : index.toString()
         }
         bounces={false}
-        renderItem={({ item }) => {
-          return (<ContactCard nickname={item.nickname} faceURL={item.faceURL} userID={item.userID}></ContactCard>);
+        renderItem={({item}) => {
+          return (
+            <TouchableOpacity
+              style={styles.friendSelect}
+              onPress={() => {
+                const isSelected = selectedFriend.includes(item.userID);
+                if (!isSelected) {
+                  setSelectedFriend(prevSelectedItems => [
+                    ...prevSelectedItems,
+                    item.userID,
+                  ]);
+                } else {
+                  setSelectedFriend(prevSelectedItems =>
+                    prevSelectedItems.filter(id => id !== item.userID),
+                  );
+                }
+              }}>
+              <Avatar nickname={item.nickname} faceURL={item.faceURL}></Avatar>
+              <Text>{item.nickname}</Text>
+            </TouchableOpacity>
+          );
         }}
-        renderSectionHeader={({ section }) => {
+        renderSectionHeader={({section}) => {
           if (section.title !== '')
-            return <Text style={styles.sectionHeader}>{section.title}</Text>
-          else
-            return null
-        }
-        }
-        onScroll={(event) => {
+            return <Text style={styles.sectionHeader}>{section.title}</Text>;
+          else return null;
+        }}
+        onScroll={event => {
           const offsetY = event.nativeEvent.contentOffset.y;
           const sectionIndex = contactSections.findIndex(
-            (section) => offsetY >= section.offset
+            section => offsetY >= section.offset,
           );
           if (sectionIndex !== -1) {
             const hint = contactSections[sectionIndex].title;
@@ -188,27 +197,29 @@ const ContactListPage = () => {
       />
       <ScrollView
         style={styles.hintContainer}
-        contentContainerStyle={styles.hintContentContainer}
-      >
+        contentContainerStyle={styles.hintContentContainer}>
         {alphabetHints.map((hint, index) => (
           <TouchableOpacity
             key={index}
             style={styles.hintItem}
-            onPress={() => handleHintItemPress(index)}
-          >
+            onPress={() => handleHintItemPress(index)}>
             <Text>{hint}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
+      <TouchableOpacity
+        onPress={() => {
+          console.log(selectedFriend);
+          CreateGroup('defaultgroup', 2, selectedFriend);
+        }}>
+        <Text>Accept</Text>
+      </TouchableOpacity>
       <Modal
         isVisible={isDrawerVisible}
         onBackdropPress={closeDrawer}
         backdropOpacity={0.5}
-        backdropColor='black'
-      >
-        <SearchDrawer
-          ref={popupSearchInputRef}
-        />
+        backdropColor="black">
+        <SearchDrawer ref={popupSearchInputRef} />
       </Modal>
     </KeyboardAvoidingView>
   );
@@ -242,7 +253,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingLeft: 8,
     backgroundColor: '#E5E5E5FF',
-    textAlign: "center"
+    textAlign: 'center',
   },
   sectionHeader: {
     fontSize: 18,
@@ -264,6 +275,13 @@ const styles = StyleSheet.create({
   hintItem: {
     padding: 4,
   },
+  friendSelect: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    flexDirection: 'row',
+    backgroundColor: 'white',
+  },
 });
 
-export default ContactListPage;
+export default CreateGroupPage;

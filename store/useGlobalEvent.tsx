@@ -12,11 +12,11 @@ export const initStore = () => {
     const {
         getFriendListByReq,
         //   getBlackListByReq,
-        //   getGroupListByReq,
+         getGroupListByReq,
         getRecvFriendApplicationListByReq,
-        //   getRecvGroupApplicationListByReq,
+        getRecvGroupApplicationListByReq,
         getSendFriendApplicationListByReq,
-        //   getSendGroupApplicationListByReq,
+        getSendGroupApplicationListByReq,
     } = useContactStore.getState();
     const { getConversationListByReq, getUnReadCountByReq } =
         useConversationStore.getState();
@@ -26,11 +26,11 @@ export const initStore = () => {
     getSelfInfoByReq();
     getFriendListByReq();
     // getBlackListByReq();
-    // getGroupListByReq();
+    getGroupListByReq();
     getRecvFriendApplicationListByReq();
-    // getRecvGroupApplicationListByReq();
+    getRecvGroupApplicationListByReq();
     getSendFriendApplicationListByReq();
-    // getSendGroupApplicationListByReq();
+    getSendGroupApplicationListByReq();
 };
 export function useGlobalEvent() {
     useEffect(() => {
@@ -63,11 +63,11 @@ export function useGlobalEvent() {
     // const updateBlack = useContactStore((state) => state.updateBlack);
     // const pushNewBlack = useContactStore((state) => state.pushNewBlack);
     // const updateGroup = useContactStore((state) => state.updateGroup);
-    // const pushNewGroup = useContactStore((state) => state.pushNewGroup);
+    const pushNewGroup = useContactStore((state) => state.pushNewGroup);
     const updateRecvFriendApplication = useContactStore((state) => state.updateRecvFriendApplication);
     const updateSendFriendApplication = useContactStore((state) => state.updateSendFriendApplication);
-    // const updateRecvGroupApplication = useContactStore((state) => state.updateRecvGroupApplication);
-    // const updateSendGroupApplication = useContactStore((state) => state.updateSendGroupApplication);
+    const updateRecvGroupApplication = useContactStore((state) => state.updateRecvGroupApplication);
+    const updateSendGroupApplication = useContactStore((state) => state.updateSendGroupApplication);
 
 
     // const selfUpdateHandler = ({ data }: WSEvent<SelfUserInfo>) => updateSelfInfo(data);

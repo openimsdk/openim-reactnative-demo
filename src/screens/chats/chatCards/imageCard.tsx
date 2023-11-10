@@ -1,6 +1,5 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import Avatar from "../../../components/avatar";
-import { GetSelfInfo, GetUsersInfo } from "../../api/openimsdk";
 import { useEffect, useState } from "react";
 import { useUserStore } from "../../../../store/user";
 import { ExMessageItem } from "../../../../store/message";
