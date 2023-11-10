@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -8,28 +8,38 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-
-import { FlatList } from 'react-native-gesture-handler';
-import { SearchGroup } from '../../api/openimsdk';
+import {FlatList} from 'react-native-gesture-handler';
+import {SearchGroup} from '../../api/openimsdk';
+import FriendCard from '../../friend/friendCard';
+import GroupCard from './findGroupCard';
 
 const FindGroupPage = () => {
-    
   const [searchTerm, setSearchTerm] = useState('');
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    console.log(SearchGroup(searchTerm))
-    setSearchResults(SearchGroup(searchTerm))
+    const fetchData = async () => {
+      try {
+        const result = await SearchGroup([searchTerm]);
+        setSearchResults(result);
+      } catch (error) {
+        console.error('Error fetching search results:', error);
+      }
+    };
+
+    fetchData();
   }, [searchTerm]);
 
   return (
     <View style={styles.container}>
       {/* Back Button */}
-      <TouchableOpacity style={styles.backButton} onPress={() => navigator.goBack()}>
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigator.goBack()}>
         <Image source={require('../../../../assets/imgs/back.png')} />
       </TouchableOpacity>
 
@@ -39,29 +49,31 @@ const FindGroupPage = () => {
           style={styles.searchInput}
           placeholder="Search Friends"
           value={searchTerm}
-          onChangeText={(text) => setSearchTerm(text)}
+          onChangeText={text => setSearchTerm(text)}
         />
       </View>
 
       {/* Display search results as cards */}
-      {searchResults === null || searchResults.length === 0 || searchTerm === '' ? (
+      {searchResults === null ||
+      searchResults.length === 0 ||
+      searchTerm === '' ? (
         <Text>No friend matches the search word.</Text>
       ) : (
         <FlatList
           data={searchResults}
-          keyExtractor={(friend) => friend.userID.toString()}
-          renderItem={({ item: friend }) => (
-            <FriendCard
-              key={friend.userID}
-              nickname={friend.nickname}
-              faceURL={friend.faceURL}
-              userID={friend.userID}
+          keyExtractor={group => group.groupID}
+          renderItem={({item: group}) => (
+            // <Text>{JSON.stringify(group)}</Text>
+            <GroupCard
+              key={group.groupID}
+              nickname={group.groupName}
+              faceURL={group.faceURL}
+              groupID={group.groupID}
               style={styles.friendCard} // Add a style prop to your FriendCard component
             />
           )}
           contentContainerStyle={styles.flatList} // Style the FlatList items
         />
-
       )}
     </View>
   );
@@ -73,7 +85,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   searchContainer: {
-    marginTop:20,
+    marginTop: 20,
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
@@ -109,4 +121,3 @@ const styles = StyleSheet.create({
 });
 
 export default FindGroupPage;
-

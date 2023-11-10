@@ -171,12 +171,12 @@ export const SearchFriend = async (keywordList:string,isSearchUserID: boolean,is
         console.error('Error searchFriends:', error);
       }
 }
-export const SearchGroup = async (keywordList:string,isSearchGroupID: boolean,isSearchGroupName: boolean) => {
+export const SearchGroup = async (keywordList:string[],isSearchGroupID: boolean,isSearchGroupName: boolean) => {
     try {
         const options = {
-          keywordList: ['nickname'],
-          isSearchGroupID: false,
-          isSearchGroupName: true,
+          keywordList: keywordList,
+          isSearchGroupID: true,
+          isSearchGroupName: false,
         };
         const operationID = 'OperationID_value5';
       
@@ -184,8 +184,7 @@ export const SearchGroup = async (keywordList:string,isSearchGroupID: boolean,is
       
         console.log("searchGroups: Searched for groups with options", options, "and received data", data);
 
-        return data;
-
+        return JSON.parse(data);
       } catch (error) {
         console.error('Error searchGroups:', error);
       }
@@ -226,4 +225,20 @@ export const GetOneConversation = async (sourceID:string,type:number) => {
       } catch (error) {
         console.error('Error getOneConversation:', error);
       }
+}
+export const JoinGroup = async (groupID:string,joinSource:number) => {
+    try {
+        const options = {
+        groupID: groupID,      // Replace with the actual group ID
+        reqMsg: 'Join request',   // Replace with the actual join request message
+        joinSource: joinSource,           // Replace with the actual join source
+        };
+        const operationID = 'OperationID_value';
+    
+        const data = await OpenIMSDKRN.joinGroup(options, operationID);
+    
+        console.log("joinGroup: Requested to join group", options.groupID, "with message", options.reqMsg, "and join source", options.joinSource, "and received data", data);
+    } catch (error) {
+        console.error('Error joinGroup:', error);
+    }
 }

@@ -80,7 +80,7 @@ export const SignUpClient = async (params: { nickname?: string; phoneNumber: any
         body: JSON.stringify({
           ...params,
           user: {
-            "nickname": "testname",
+            "nickname": params.nickname,
             "faceURL": "",
             "birth": 0,
             "gender": 1,

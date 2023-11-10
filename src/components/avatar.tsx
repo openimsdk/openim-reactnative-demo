@@ -1,13 +1,37 @@
+import React from 'react';
 import { Image, StyleSheet, Text, View } from "react-native";
-import images from "./defaultAvatarHelper";
 import LinearGradient from "react-native-linear-gradient";
 
-const Avatar = ({ nickname,faceURL }: {  nickname:string,faceURL:string}) => {
-  if (faceURL===null) {
+const images = {
+  ic_avatar_01: require('../../assets/avatar/ic_avatar_01.png'),
+  ic_avatar_02: require('../../assets/avatar/ic_avatar_02.png'),
+  ic_avatar_03: require('../../assets/avatar/ic_avatar_03.png'),
+  ic_avatar_04: require('../../assets/avatar/ic_avatar_04.png'),
+  ic_avatar_05: require('../../assets/avatar/ic_avatar_05.png'),
+  ic_avatar_06: require('../../assets/avatar/ic_avatar_06.png'),
+  newFriend: require('../../assets/avatar/NewFriend.png'),
+  newGroup: require('../../assets/avatar/NewGroup.png'),
+  myGroups: require('../../assets/avatar/MyGroups.png'),
+};
+
+const avatarImages: Record<string, any> = {
+  'ic_avatar_01': images.ic_avatar_01,
+  'ic_avatar_02': images.ic_avatar_02,
+  'ic_avatar_03': images.ic_avatar_03,
+  'ic_avatar_04': images.ic_avatar_04,
+  'ic_avatar_05': images.ic_avatar_05,
+  'ic_avatar_06': images.ic_avatar_06,
+  'New Friend': images.newFriend,
+  'New Group': images.newGroup,
+  'My Groups': images.myGroups,
+};
+
+const getAvatarImage = ({ nickname, faceURL }: { nickname: string, faceURL: string }) => {
+  if (faceURL === null) {
     return null; // Return null or a placeholder component if data is undefined
   }
-  if (faceURL==='') {
 
+  if (faceURL === '') {
     return (
       <LinearGradient
         colors={['#EAF27E', '#00D292']}
@@ -18,47 +42,19 @@ const Avatar = ({ nickname,faceURL }: {  nickname:string,faceURL:string}) => {
         <Text style={styles.textImageText}>{nickname.charAt(0).toUpperCase()}</Text>
       </LinearGradient>
     );
-  } 
-  else if (faceURL === "ic_avatar_01") {
-    return (
-      <Image style={styles.avatar} source={images.ic_avatar_01} />
-    );
-  } else if (faceURL === "ic_avatar_02") {
-    return (
-      <Image style={styles.avatar} source={images.ic_avatar_02} />
-    );
-  } else if (faceURL === "ic_avatar_03") {
-    return (
-      <Image style={styles.avatar} source={images.ic_avatar_03} />
-    );
-  } else if (faceURL === "ic_avatar_04") {
-    return (
-      <Image style={styles.avatar} source={images.ic_avatar_04} />
-    );
-  } else if (faceURL === "ic_avatar_05") {
-    return (
-      <Image style={styles.avatar} source={images.ic_avatar_05} />
-    );
-  } else if (faceURL === "ic_avatar_06") {
-    return (
-      <Image style={styles.avatar} source={images.ic_avatar_06} />
-    );
-  } else if (faceURL === "New Friend") {
-    return (
-      <Image style={styles.avatar} source={images.newFriend} />
-    );
-  } else if (faceURL === "New Group") {
-    return (
-      <Image style={styles.avatar} source={images.newGroup} />
-    );
-  } else if (faceURL === "My Groups") {
-    return (
-      <Image style={styles.avatar} source={images.myGroups} />
-    );
   }
-  return (
-    <Image style={styles.avatar} source={{ uri: faceURL }} />
-  );
+
+  const avatarSource = avatarImages[faceURL as keyof typeof avatarImages]; // Type assertion
+
+  if (avatarSource) {
+    return <Image style={styles.avatar} source={avatarSource} />;
+  }
+
+  return <Image style={styles.avatar} source={{ uri: faceURL }} />;
+};
+
+const Avatar = ({ nickname, faceURL }: { nickname: string; faceURL: string | null | undefined }) => {
+  return getAvatarImage({ nickname, faceURL });
 };
 
 const styles = StyleSheet.create({
@@ -87,7 +83,7 @@ const styles = StyleSheet.create({
   textImageText: {
     color: "white",
     textAlign: 'center',
-    fontSize:18,
+    fontSize: 18,
   }
 });
 
