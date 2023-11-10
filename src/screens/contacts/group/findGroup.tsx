@@ -36,12 +36,6 @@ const FindGroupPage = () => {
 
   return (
     <View style={styles.container}>
-      {/* Back Button */}
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => navigator.goBack()}>
-        <Image source={require('../../../../assets/imgs/back.png')} />
-      </TouchableOpacity>
 
       {/* Search Bar */}
       <View style={styles.searchContainer}>
