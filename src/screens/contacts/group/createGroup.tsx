@@ -135,11 +135,6 @@ const CreateGroupPage = () => {
       behavior="height"
       keyboardVerticalOffset={Platform.OS === 'android' ? -60 : -70}>
       <View style={styles.header}>
-        <View style={styles.topBar}>
-          <TouchableOpacity style={styles.button}>
-            <Text></Text>
-          </TouchableOpacity>
-        </View>
         <TouchableOpacity style={styles.searchBar} onPress={openDrawer}>
           <TextInput
             placeholder="Search"

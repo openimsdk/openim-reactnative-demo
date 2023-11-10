@@ -16,6 +16,8 @@ import SearchDrawer from '../../components/searchDrawer';
 import { useContactStore } from '../../../store/contact';
 import { FriendUserItem } from '../../../store/type.d';
 import ContactCard from './contactCard';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 const ContactListPage = () => {
   const [search, setSearch] = useState('');
@@ -133,7 +135,10 @@ const ContactListPage = () => {
   const closeDrawer = () => {
     setIsDrawerVisible(false);
   };
-
+  const navigator = useNavigation<NativeStackNavigationProp<any>>();
+  const handleAddFriend = () => {
+    navigator.navigate("AddFriend")
+}
   return (
     <KeyboardAvoidingView style={styles.container} behavior='height' keyboardVerticalOffset={Platform.OS === 'android' ? -60 : -70}>
       <View style={styles.header}>
@@ -142,7 +147,7 @@ const ContactListPage = () => {
             <Text></Text>
           </TouchableOpacity>
           <Text style={styles.title}>Contacts</Text>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleAddFriend}>
             <Text>Add Friend</Text>
           </TouchableOpacity>
         </View>
