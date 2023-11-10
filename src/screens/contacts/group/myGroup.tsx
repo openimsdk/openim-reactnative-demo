@@ -34,13 +34,7 @@ const MyGroupPage = () => {
   const data: GroupItem[] = rawData.sort((a: GroupItem, b: GroupItem) =>
     a.groupName.localeCompare(b.groupName),
   );
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  const handleConversation = async (currentGroup, type: number) => {
-    const item: ConversationItem = JSON.parse(
-      await GetOneConversation(currentGroup.groupID, type),
-    );
-    navigation.navigate('ChatRoom', {item});
-  };
+  
   useEffect(() => {
     const hints: string[] = Array.from(
       new Set(
@@ -170,7 +164,7 @@ const MyGroupPage = () => {
           return (
             <MyGroupCard
               nickname={item.groupName}
-              userID=""
+              groupID={item.groupID}
               faceURL={item.faceURL}
             />
           );
