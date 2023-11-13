@@ -35,8 +35,8 @@ const SignUpPage = () => {
         </TouchableOpacity>
         <Text style={styles.signUpTitle}>Sign Up</Text>
         <View style={styles.inputContainer}>
-          <Text style={styles.enterText}>Enter your email address</Text>
-          <TextInput style={styles.emailInput} placeholder="Email" value={email} onChangeText={setEmail}/>
+          <Text style={styles.enterText}>Enter your phone number</Text>
+          <TextInput style={styles.emailInput} placeholder="Phone Number" value={email} onChangeText={setEmail}/>
           <Text style={styles.error}>{error}</Text>
           <TouchableOpacity style={styles.nextButton} onPress={navigateToVeriCode}>
             <Text style={styles.nextButtonText}>Next</Text>

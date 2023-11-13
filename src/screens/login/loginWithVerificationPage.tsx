@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { CheckVerifyClient, LoginClient, SendVerifyClient } from '../api/requests';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack/lib/typescript/src/types';
 import { initStore } from '../../../store/useGlobalEvent';
+import { GetLoginStatus } from '../api/openimsdk';
 interface LoginWithVerificationPageProps{
   onLogin: (value:boolean) => void;
 }
@@ -43,7 +44,10 @@ const LoginWithVerificationPage:React.FC<LoginWithVerificationPageProps> = ({onL
     if(result.success){
       const result2 = await LoginClient({password:"",phoneNumber:email,verifyCode:password,areaCode:"+86"});
       if(result2.success){
-        onLogin(true)
+        const result = await GetLoginStatus();
+      if (result.status === 3) {
+        onLogin(true);
+      }
         initStore()
       }else{
         setError(result2.errorMsg)
@@ -86,10 +90,10 @@ const LoginWithVerificationPage:React.FC<LoginWithVerificationPageProps> = ({onL
         </View>
         <View style={styles.inputContainer}>
           <View style={styles.inputBox}>
-            <Text style={styles.enterText}>Enter your email</Text>
+            <Text style={styles.enterText}>Enter your phone number</Text>
             <View style={styles.emailContainer}>
               <View style={styles.emailInput}>
-                <TextInput  style={styles.emailTextInput} placeholder="Email" value={email} onChangeText={setEmail}/>
+                <TextInput  style={styles.emailTextInput} placeholder="Phone Number" value={email} onChangeText={setEmail}/>
                 <TouchableOpacity style={styles.clearButton} onPress={handleClearEmail}>
                   <Image
                     source={require('../../../assets/imgs/clear.png')} // Replace with your image file path

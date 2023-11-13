@@ -60,7 +60,10 @@ const LoginPage:React.FC<LoginPageProps> = ({onLogin}) => {
     const result = await LoginClient({password:md5.hex_md5(password),phoneNumber:email,verifyCode:"verify",areaCode:"+86"});
     if(result.success){
       setError("")
-      onLogin(true)
+      const result = await GetLoginStatus();
+      if (result.status === 3) {
+        onLogin(true);
+      }
       initStore()
     }else{
       setError(result.errorMsg)
@@ -86,10 +89,10 @@ const LoginPage:React.FC<LoginPageProps> = ({onLogin}) => {
         </View>
         <View style={styles.inputContainer}>
           <View style={styles.inputBox}>
-            <Text style={styles.enterText}>Enter your email</Text>
+            <Text style={styles.enterText}>Enter your phone number</Text>
             <View style={styles.emailContainer}>
               <View style={styles.emailInput}>
-                <TextInput  style={styles.emailTextInput} placeholder="Email" value={email} onChangeText={setEmail}/>
+                <TextInput  style={styles.emailTextInput} placeholder="Phone Number" value={email} onChangeText={setEmail}/>
                 <TouchableOpacity style={styles.clearButton} onPress={handleClearEmail}>
                   <Image
                     source={require('../../../assets/imgs/clear.png')} // Replace with your image file path
