@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Image,
   StyleSheet,
@@ -13,6 +13,7 @@ import {
   GetAdvancedHistoryMessageListReverse,
   GetSelfInfo,
   GetUsersInfo,
+  MarkConversationMessageAsRead,
   SendMessage,
 } from '../api/openimsdk';
 import {API} from '../api/typings';
@@ -35,12 +36,14 @@ const ChatRoom = (conversation: {
   const currentConversation = useConversationStore(
     state => state.currentConversation,
   );
+  const flatListRef = useRef<FlatList>(null);
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
   const {getHistoryMessageListByReq} = useMessageStore.getState();
   const [user, setUser] = useState({
     faceURL: '',
     nickname: '',
   });
+  
   useEffect(() => {
     updateCurrentConversation(conversation.route.params.item);
     getHistoryMessageListByReq();
@@ -61,7 +64,9 @@ const ChatRoom = (conversation: {
   }, []);
 
   const messages = useMessageStore(state => state.historyMessageList);
-
+  useEffect(() => {
+    MarkConversationMessageAsRead(conversation.route.params.item.conversationID)
+  }, [messages]);
   const [showModal, setShowModal] = useState(false);
   const toggleModal = () => {
     setShowModal(!showModal);
@@ -121,6 +126,7 @@ const ChatRoom = (conversation: {
       <FlatList
         style={styles.messageList}
         data={messages}
+        ref={flatListRef}
         renderItem={({item: message}) => {
           if (message.contentType === 101) {
             return <TextChatCard message={message} />;
@@ -130,6 +136,10 @@ const ChatRoom = (conversation: {
             // Return a placeholder component or an empty View for other cases
             return <View />;
           }
+        }}
+        onContentSizeChange={() => {
+          // Scroll to the bottom when content size changes
+          flatListRef.current?.scrollToEnd();
         }}
       />
       <View style={styles.inputContainer}>
