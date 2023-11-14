@@ -11,18 +11,22 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 const ChatPage = () => {
     const rawData:ConversationItem[] = useConversationStore((state) => state.conversationList);
-
     const navigator = useNavigation<NativeStackNavigationProp<any>>();
     const renderConversationItem = ({item}:{item:ConversationItem} ) => {
+        if (!JSON.parse(item).conversationID) {
+            return null; // or some placeholder component
+          }
         return (
             <View style={{}}>
-                <ConversationCard item={item}></ConversationCard>
+                <ConversationCard item={JSON.parse(item)}></ConversationCard>
             </View>
         );
     };
+    
     const handleAddFriend = () => {
         navigator.navigate("AddFriend")
     }
+
     return (
         <View>
             <View style={styles.header}>
@@ -39,7 +43,7 @@ const ChatPage = () => {
             </View>
             <FlatList
                 data={rawData}
-                keyExtractor={(item) => item.conversationID.toString()}
+                keyExtractor={(item) => (item.conversationID ? item.conversationID.toString() : String(item.groupID))}
                 renderItem={renderConversationItem}
             />
         </View>

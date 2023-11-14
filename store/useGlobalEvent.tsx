@@ -5,7 +5,7 @@ import { FriendUserItem, WSEvent } from "./type.d";
 import { useConversationStore } from "./conversation";
 import { ExMessageItem, useMessageStore } from "./message";
 import { MessageType } from "./types/enum";
-import { FriendApplicationItem, RevokedInfo } from "./types/entity";
+import { ConversationItem, FriendApplicationItem, RevokedInfo } from "./types/entity";
 import { useUserStore } from "./user";
 export const initStore = () => {
     const { getSelfInfoByReq } = useUserStore.getState();
@@ -50,8 +50,8 @@ export function useGlobalEvent() {
       });
     // const updateSelfInfo = useUserStore((state) => state.updateSelfInfo);
     // const userLogout = useUserStore((state) => state.userLogout);
-    // const updateConversationList = useConversationStore((state) => state.updateConversationList);
-    // const updateUnReadCount = useConversationStore((state) => state.updateUnReadCount);
+    const updateConversationList = useConversationStore((state) => state.updateConversationList);
+    const updateUnReadCount = useConversationStore((state) => state.updateUnReadCount);
     // const updateCurrentGroupInfo = useConversationStore((state) => state.updateCurrentGroupInfo);
     // const getCurrentGroupInfoByReq = useConversationStore((state) => state.getCurrentGroupInfoByReq);
     // const getCurrentMemberInGroupByReq = useConversationStore((state) => state.getCurrentMemberInGroupByReq);
@@ -112,9 +112,11 @@ export function useGlobalEvent() {
         }
     };
 
-    // const conversationChnageHandler = ({ data }: WSEvent<ConversationItem[]>) => updateConversationList(data, "filter");
-    // const newConversationHandler = ({ data }: WSEvent<ConversationItem[]>) => updateConversationList(data, "push");
-    // const totalUnreadChangeHandler = ({ data }: WSEvent<number>) => updateUnReadCount(data);
+    const conversationChangeHandler = ({ data }: WSEvent<ConversationItem[]>) => {
+        updateConversationList(data, "filter");
+      };
+    const newConversationHandler = ({ data }: WSEvent<ConversationItem[]>) => updateConversationList(data, "push");
+    const totalUnreadChangeHandler = ({ data }: WSEvent<number>) => updateUnReadCount(data);
 
     const friendInfoChangeHandler = ({ data }: WSEvent<FriendUserItem>) => updateFriend(data);
     const friendAddedHandler = ({ data }: WSEvent<FriendUserItem>) => pushNewFriend(data);
@@ -180,9 +182,11 @@ export function useGlobalEvent() {
         OpenIMEmitter.addListener('onRecvNewMessages',  newMessageHandler );
         OpenIMEmitter.addListener('onNewRecvMessageRevoked',revokedMessageHandler );
         // // conversation
-        // OpenIMEmitter.addListener('onConversationChanged', (v) => { conversationChnageHandler });
-        // OpenIMEmitter.addListener('onNewConversation', (v) => { newConversationHandler });
-        // OpenIMEmitter.addListener('onTotalUnreadMessageCountChanged', (v) => { totalUnreadChangeHandler });
+        OpenIMEmitter.addListener('onConversationChanged', (v) => {
+            conversationChangeHandler(v);
+          });
+        OpenIMEmitter.addListener('onNewConversation', (v) => { newConversationHandler });
+        OpenIMEmitter.addListener('onTotalUnreadMessageCountChanged', (v) => { totalUnreadChangeHandler });
         // // friend
         OpenIMEmitter.addListener('onFriendInfoChanged',  friendInfoChangeHandler );
         OpenIMEmitter.addListener('onFriendAdded', friendAddedHandler );

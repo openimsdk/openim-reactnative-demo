@@ -7,23 +7,27 @@ import { useNavigation } from "@react-navigation/native";
 import ChatRoom from "./chatRoom";
 import { GetAdvancedHistoryMessageListReverse } from "../api/openimsdk";
 import { ConversationItem } from "../../../store/types/entity";
+import { useConversationStore } from "../../../store/conversation";
 
 const ConversationCard = ({ item }:{item:ConversationItem}) => {
     
-    const [showMsg, setShowMsg] = useState("");
+    // const [showMsg, setShowMsg] = useState("");
     const [showMsgTime, setShowMsgTime] = useState("");
     const navigation = useNavigation<NativeStackNavigationProp<any>>();
+    const updateCurrentConversation = useConversationStore(
+        (state) => state.updateCurrentConversation,
+      );
     const handleConversation = async () =>  {
         navigation.navigate('ChatRoom',{item})
     }
     useEffect(() => {
         if (item) {
             const lastestMsgJson = JSON.parse(item.latestMsg);
-            if (lastestMsgJson.contentType === 101) {
-                setShowMsg(lastestMsgJson.textElem.content);
-            } else if (lastestMsgJson.contentType === 1201) {
-                setShowMsg("You have been added as friend");
-            }
+            // if (lastestMsgJson.contentType === 101) {
+            //     setShowMsg(lastestMsgJson.textElem.content);
+            // } else if (lastestMsgJson.contentType === 1201) {
+            //     setShowMsg("You have been added as friend");
+            // }
             const timestamp = item.latestMsgSendTime; // Replace with your timestamp
 
             // Create a Date object and pass the timestamp as an argument
@@ -71,7 +75,7 @@ const ConversationCard = ({ item }:{item:ConversationItem}) => {
                 </View>
 
                 <View style={{ flexDirection: "row", justifyContent: "space-between",marginTop:10}}>
-                    <Text>{showMsg}</Text>
+                    <Text>{JSON.parse(item.latestMsg).textElem?.content}</Text>
                     {item.unreadCount > 0  && (
                         <View style={{ backgroundColor: "red", borderRadius: 10, height: 20, width: 20,justifyContent:'center',alignItems:'center'}}>
                             <Text style={{ color: "white" }}>{item.unreadCount}</Text>
