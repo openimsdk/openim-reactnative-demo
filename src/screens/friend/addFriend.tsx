@@ -53,11 +53,11 @@ const AddFriendScreen = () => {
       </View>
 
       {/* Display search results as cards */}
-      {searchResults === null || searchResults.length === 0 || searchTerm === '' ? (
+      {searchResults === undefined || searchResults === null || searchResults.length === 0 || searchTerm === '' ? (
         <Text>No friend matches the search word.</Text>
       ) : (
         <FlatList
-          data={searchResults}
+          data={searchResults || []}
           keyExtractor={(friend) => friend.userID.toString()}
           renderItem={({ item: friend }) => (
             <FriendCard
