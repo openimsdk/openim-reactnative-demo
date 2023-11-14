@@ -9,6 +9,7 @@ export const conversationSort = (conversationList: ConversationItem[]) => {
     const arr: string[] = [];
     const filterArr = conversationList.filter(
         (c) => {
+   
             if(!arr.includes(c.conversationID)){
                 
                 arr.push(c.conversationID)
@@ -54,12 +55,13 @@ export const useConversationStore = create<ConversationStore>()((set, get) => ({
         
         let tmpConversationList = [] as ConversationItem[];
         try {
-            const { data }  = await OpenIMSDKRN.getConversationListSplit({
+            
+            const  data   = await OpenIMSDKRN.getConversationListSplit({
                 offset: isOffset ? get().conversationList.length : 0,
                 count: 20
             },"127368");
-            tmpConversationList = data;
-            
+            tmpConversationList = JSON.parse(data);
+
         } catch (error) {
             //   feedbackToast({ error, msg: t("toast.getConversationFailed") });
                 
@@ -77,27 +79,26 @@ export const useConversationStore = create<ConversationStore>()((set, get) => ({
         list: ConversationItem[],
         type: ConversationListUpdateType,
     ) => {
-        
-        const idx = list.findIndex(
-            (c) => c.conversationID === get().currentConversation?.conversationID,
-        );
-        if (idx > -1) get().updateCurrentConversation(list[idx]);
+        const parsedArray = list.map((listElem) => JSON.parse(listElem));
+        const idx = Array.isArray(parsedArray) ? parsedArray.findIndex((c) => c.conversationID === get().currentConversation?.conversationID) : -1;
+        if (idx > -1) get().updateCurrentConversation(parsedArray[idx]);
 
         if (type === "filter") {
+            
             set((state) =>{
                 return  ({
-                    conversationList: conversationSort([...list, ...state.conversationList]),
+                    conversationList: conversationSort([...parsedArray, ...state.conversationList]),
                 })
             });
             return;
         }
         let filterArr: ConversationItem[] = [];
-        const chids = list.map((ch) => ch.conversationID);
+        const chids = parsedArray.map((ch) => ch.conversationID);
         filterArr = get().conversationList.filter(
             (tc) => !chids.includes(tc.conversationID),
         );
         
-        set(() => ({ conversationList: conversationSort([...list, ...filterArr]) }));
+        set(() => ({ conversationList: conversationSort([...parsedArray, ...filterArr]) }));
     },
     delConversationByCID: (conversationID: string) => {
         const tmpConversationList = get().conversationList;

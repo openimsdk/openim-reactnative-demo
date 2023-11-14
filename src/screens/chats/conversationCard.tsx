@@ -10,7 +10,7 @@ import { ConversationItem } from "../../../store/types/entity";
 import { useConversationStore } from "../../../store/conversation";
 
 const ConversationCard = ({ item }:{item:ConversationItem}) => {
-    
+    console.error("item",item)
     // const [showMsg, setShowMsg] = useState("");
     const [showMsgTime, setShowMsgTime] = useState("");
     const navigation = useNavigation<NativeStackNavigationProp<any>>();

@@ -12,13 +12,14 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 const ChatPage = () => {
     const rawData:ConversationItem[] = useConversationStore((state) => state.conversationList);
     const navigator = useNavigation<NativeStackNavigationProp<any>>();
+    
     const renderConversationItem = ({item}:{item:ConversationItem} ) => {
-        if (!JSON.parse(item).conversationID) {
+        if (!item.conversationID) {
             return null; // or some placeholder component
           }
         return (
             <View style={{}}>
-                <ConversationCard item={JSON.parse(item)}></ConversationCard>
+                <ConversationCard item={item}></ConversationCard>
             </View>
         );
     };
