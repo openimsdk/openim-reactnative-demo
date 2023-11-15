@@ -74,8 +74,8 @@ export function useGlobalEvent() {
     const connectingHandler = () => console.log("connecting...");
     const connectFailedHandler = ({ errCode, errMsg }: WSEvent) => console.log(errCode, errMsg);
     const connectSuccessHandler = () => console.log("connect success...");
-    // const kickHandler = () => tryOut("您的账号已在其他设备登录,请重新登录");
-    // const expiredHandler = () => tryOut("当前登录已过期,请重新登录");
+    const kickHandler = (v) => console.error("您的账号已在其他设备登录,请重新登录");
+    const expiredHandler = (v) => console.error("当前登录已过期,请重新登录");
 
     // const tryOut = (msg: string) => feedbackToast({
     //     msg,
@@ -171,8 +171,8 @@ export function useGlobalEvent() {
         OpenIMEmitter.addListener('onConnecting', connectingHandler);
         OpenIMEmitter.addListener('onConnectFailed', connectFailedHandler);
         OpenIMEmitter.addListener('onConnectSuccess', connectSuccessHandler);
-        // OpenIMEmitter.addListener('onKickedOffline', (v) => { kickHandler });
-        // OpenIMEmitter.addListener('onUserTokenExpired', (v) => { expiredHandler });
+        OpenIMEmitter.addListener('onKickedOffline', (v) => { kickHandler(v) });
+        OpenIMEmitter.addListener('onUserTokenExpired', (v) => { expiredHandler(v) });
         // sync
         OpenIMEmitter.addListener('onSyncServerStart', syncStartHandler );
         OpenIMEmitter.addListener('onSyncServerFinish', syncFinishHandler );
