@@ -190,7 +190,7 @@ export function useGlobalEvent() {
         // message
         OpenIMEmitter.addListener('onRecvNewMessage',  newMessageHandler );
         OpenIMEmitter.addListener('onRecvNewMessages',  newMessageHandler );
-        OpenIMEmitter.addListener('onNewRecvMessageRevoked',revokedMessageHandler );
+        // OpenIMEmitter.addListener('onNewRecvMessageRevoked',revokedMessageHandler );bug!
         // // conversation
         OpenIMEmitter.addListener('onConversationChanged', (v) => {
             conversationChangeHandler(v);
