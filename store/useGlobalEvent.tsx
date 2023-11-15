@@ -7,6 +7,7 @@ import { ExMessageItem, useMessageStore } from "./message";
 import { MessageType } from "./types/enum";
 import { ConversationItem, FriendApplicationItem, RevokedInfo } from "./types/entity";
 import { useUserStore } from "./user";
+import { LogoutIM } from "../src/screens/api/openimsdk";
 export const initStore = () => {
     const { getSelfInfoByReq } = useUserStore.getState();
     const {
@@ -72,15 +73,24 @@ export function useGlobalEvent() {
 
     // const selfUpdateHandler = ({ data }: WSEvent<SelfUserInfo>) => updateSelfInfo(data);
     const connectingHandler = () => console.log("connecting...");
-    const connectFailedHandler = ({ errCode, errMsg }: WSEvent) => console.log(errCode, errMsg);
+    const connectFailedHandler = ({ errCode, errMsg }: WSEvent) => {
+        console.log(errCode, errMsg);
+        LogoutIM()
+    }
     const connectSuccessHandler = () => console.log("connect success...");
-    const kickHandler = (v) => console.error("您的账号已在其他设备登录,请重新登录");
-    const expiredHandler = (v) => console.error("当前登录已过期,请重新登录");
+    const kickHandler = (v) => {
+        console.error("您的账号已在其他设备登录,请重新登录");
+        LogoutIM()
+    }
+    const expiredHandler = (v) => {
+        console.error("当前登录已过期,请重新登录");
+        LogoutIM()
+    }
 
     // const tryOut = (msg: string) => feedbackToast({
     //     msg,
     //     error: msg,
-    //     onClose: () => userLogout(),
+        // onClose: () => userLogout(),
     // });
     const syncStartHandler = () => setConnectState((state) => ({ ...state, isSyncing: true }));
     const syncFinishHandler = () => setConnectState((state) => ({ ...state, isSyncing: false }));
