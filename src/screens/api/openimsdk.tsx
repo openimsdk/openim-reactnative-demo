@@ -242,3 +242,15 @@ export const JoinGroup = async (groupID:string,joinSource:number) => {
         console.error('Error joinGroup:', error);
     }
 }
+export const MarkConversationMessageAsRead = async (conversationID:string) => {
+    try {
+
+        const operationID = 'OperationID_value1231';
+    
+        const data = await OpenIMSDKRN.markConversationMessageAsRead(conversationID, operationID);
+    
+        console.log("markConversationMessageAsRead: conversationID", conversationID, "and received data", data);
+    } catch (error) {
+        console.error('Error markConversationMessageAsRead:', error);
+    }
+}

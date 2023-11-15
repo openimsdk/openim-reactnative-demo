@@ -70,6 +70,7 @@ export const useMessageStore = create<MessageStore>()((set, get) => ({
     }));
   },
   updateOneMessage: (message: ExMessageItem, fromSuccessCallBack = false) => {
+    
     const tmpList = [...get().historyMessageList];
     const idx = tmpList.findIndex((msg) => msg.clientMsgID === message.clientMsgID);
     if (idx < 0) {

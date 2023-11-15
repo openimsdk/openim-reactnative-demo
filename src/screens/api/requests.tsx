@@ -93,8 +93,9 @@ export const SignUpClient = async (params: { nickname?: string; phoneNumber: any
           platform:platform,
           areaCode: "+86",
         }),
+        
       });
-  
+      
       if (response.ok) {
         const data = await response.json();
         if(data.errCode!=0){

@@ -65,10 +65,10 @@ const ForgetPasswordPage = () => {
         </View>
         <View style={styles.inputContainer}>
           <View style={styles.inputBox}>
-            <Text style={styles.enterText}>Enter your email</Text>
+            <Text style={styles.enterText}>Enter your phone number</Text>
             <View style={styles.emailContainer}>
               <View style={styles.emailInput}>
-                <TextInput style={styles.emailTextInput} placeholder="Email" value={email} onChangeText={setEmail} />
+                <TextInput style={styles.emailTextInput} placeholder="Phone Number" value={email} onChangeText={setEmail} />
                 <TouchableOpacity style={styles.clearButton} onPress={handleClearEmail}>
                   <Image
                     source={require('../../../assets/imgs/clear.png')} 

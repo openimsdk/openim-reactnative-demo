@@ -9,6 +9,7 @@ import md5 from 'react-native-md5';
 import { LoginClient, ResetPasswordClient, SignUpClient } from "../api/requests";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
 import { initStore } from "../../../store/useGlobalEvent";
+import { GetLoginStatus } from "../api/openimsdk";
 interface SetPasswordPageProps {
   // props: {
     route: {
@@ -66,7 +67,10 @@ const SetPasswordPage: React.FC<SetPasswordPageProps> = ({ route, onLogin }) => 
       }
       const result = await LoginClient({ password: md5.hex_md5(newPassword), phoneNumber: route.params.email, verifyCode: "verify", areaCode: "+86" })
       if (result.success) {
+        const result = await GetLoginStatus();
+      if (result.status === 3) {
         onLogin(true);
+      }
         initStore()
       } else {
         setError(result.errorMsg)

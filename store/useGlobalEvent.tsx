@@ -5,8 +5,9 @@ import { FriendUserItem, WSEvent } from "./type.d";
 import { useConversationStore } from "./conversation";
 import { ExMessageItem, useMessageStore } from "./message";
 import { MessageType } from "./types/enum";
-import { FriendApplicationItem, RevokedInfo } from "./types/entity";
+import { ConversationItem, FriendApplicationItem, RevokedInfo } from "./types/entity";
 import { useUserStore } from "./user";
+import { LogoutIM } from "../src/screens/api/openimsdk";
 export const initStore = () => {
     const { getSelfInfoByReq } = useUserStore.getState();
     const {
@@ -50,8 +51,8 @@ export function useGlobalEvent() {
       });
     // const updateSelfInfo = useUserStore((state) => state.updateSelfInfo);
     // const userLogout = useUserStore((state) => state.userLogout);
-    // const updateConversationList = useConversationStore((state) => state.updateConversationList);
-    // const updateUnReadCount = useConversationStore((state) => state.updateUnReadCount);
+    const updateConversationList = useConversationStore((state) => state.updateConversationList);
+    const updateUnReadCount = useConversationStore((state) => state.updateUnReadCount);
     // const updateCurrentGroupInfo = useConversationStore((state) => state.updateCurrentGroupInfo);
     // const getCurrentGroupInfoByReq = useConversationStore((state) => state.getCurrentGroupInfoByReq);
     // const getCurrentMemberInGroupByReq = useConversationStore((state) => state.getCurrentMemberInGroupByReq);
@@ -72,15 +73,24 @@ export function useGlobalEvent() {
 
     // const selfUpdateHandler = ({ data }: WSEvent<SelfUserInfo>) => updateSelfInfo(data);
     const connectingHandler = () => console.log("connecting...");
-    const connectFailedHandler = ({ errCode, errMsg }: WSEvent) => console.log(errCode, errMsg);
+    const connectFailedHandler = ({ errCode, errMsg }: WSEvent) => {
+        console.log(errCode, errMsg);
+        LogoutIM()
+    }
     const connectSuccessHandler = () => console.log("connect success...");
-    // const kickHandler = () => tryOut("您的账号已在其他设备登录,请重新登录");
-    // const expiredHandler = () => tryOut("当前登录已过期,请重新登录");
+    const kickHandler = (v) => {
+        console.error("您的账号已在其他设备登录,请重新登录");
+        LogoutIM()
+    }
+    const expiredHandler = (v) => {
+        console.error("当前登录已过期,请重新登录");
+        LogoutIM()
+    }
 
     // const tryOut = (msg: string) => feedbackToast({
     //     msg,
     //     error: msg,
-    //     onClose: () => userLogout(),
+        // onClose: () => userLogout(),
     // });
     const syncStartHandler = () => setConnectState((state) => ({ ...state, isSyncing: true }));
     const syncFinishHandler = () => setConnectState((state) => ({ ...state, isSyncing: false }));
@@ -112,9 +122,11 @@ export function useGlobalEvent() {
         }
     };
 
-    // const conversationChnageHandler = ({ data }: WSEvent<ConversationItem[]>) => updateConversationList(data, "filter");
-    // const newConversationHandler = ({ data }: WSEvent<ConversationItem[]>) => updateConversationList(data, "push");
-    // const totalUnreadChangeHandler = ({ data }: WSEvent<number>) => updateUnReadCount(data);
+    const conversationChangeHandler = ({ data }: WSEvent<ConversationItem[]>) => {
+        updateConversationList(data, "filter");
+      };
+    const newConversationHandler = ({ data }: WSEvent<ConversationItem[]>) => updateConversationList(data, "push");
+    const totalUnreadChangeHandler = ({ data }: WSEvent<number>) => updateUnReadCount(data);
 
     const friendInfoChangeHandler = ({ data }: WSEvent<FriendUserItem>) => updateFriend(data);
     const friendAddedHandler = ({ data }: WSEvent<FriendUserItem>) => pushNewFriend(data);
@@ -169,8 +181,8 @@ export function useGlobalEvent() {
         OpenIMEmitter.addListener('onConnecting', connectingHandler);
         OpenIMEmitter.addListener('onConnectFailed', connectFailedHandler);
         OpenIMEmitter.addListener('onConnectSuccess', connectSuccessHandler);
-        // OpenIMEmitter.addListener('onKickedOffline', (v) => { kickHandler });
-        // OpenIMEmitter.addListener('onUserTokenExpired', (v) => { expiredHandler });
+        OpenIMEmitter.addListener('onKickedOffline', (v) => { kickHandler(v) });
+        OpenIMEmitter.addListener('onUserTokenExpired', (v) => { expiredHandler(v) });
         // sync
         OpenIMEmitter.addListener('onSyncServerStart', syncStartHandler );
         OpenIMEmitter.addListener('onSyncServerFinish', syncFinishHandler );
@@ -180,9 +192,11 @@ export function useGlobalEvent() {
         OpenIMEmitter.addListener('onRecvNewMessages',  newMessageHandler );
         // OpenIMEmitter.addListener('onNewRecvMessageRevoked',revokedMessageHandler );bug!
         // // conversation
-        // OpenIMEmitter.addListener('onConversationChanged', (v) => { conversationChnageHandler });
-        // OpenIMEmitter.addListener('onNewConversation', (v) => { newConversationHandler });
-        // OpenIMEmitter.addListener('onTotalUnreadMessageCountChanged', (v) => { totalUnreadChangeHandler });
+        OpenIMEmitter.addListener('onConversationChanged', (v) => {
+            conversationChangeHandler(v);
+          });
+        OpenIMEmitter.addListener('onNewConversation', (v) => { newConversationHandler });
+        OpenIMEmitter.addListener('onTotalUnreadMessageCountChanged', (v) => { totalUnreadChangeHandler });
         // // friend
         OpenIMEmitter.addListener('onFriendInfoChanged',  friendInfoChangeHandler );
         OpenIMEmitter.addListener('onFriendAdded', friendAddedHandler );
