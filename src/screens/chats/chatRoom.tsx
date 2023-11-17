@@ -1,5 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
+  FlatList,
   Image,
   StyleSheet,
   Text,
@@ -20,12 +21,12 @@ import {API} from '../api/typings';
 import {useMessageStore} from '../../../store/message';
 import {useConversationStore} from '../../../store/conversation';
 import {ConversationItem} from '../../../store/types/entity';
-import {FlatList} from 'react-native-gesture-handler';
 import OpenIMSDKRN from 'open-im-sdk-rn';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import ImageCard from './chatCards/imageCard';
 import OptionModalView from './optionsModalView';
+import { RefreshControl } from 'react-native-gesture-handler';
 
 
 const ChatRoom = (conversation: {
@@ -40,7 +41,7 @@ const ChatRoom = (conversation: {
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
   const getHistoryMessageList = useMessageStore((state) => state.getHistoryMessageListByReq);
   const [isAtTop, setIsAtTop] = useState(false);
-  // const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
 
 
@@ -115,40 +116,31 @@ const ChatRoom = (conversation: {
     setInputMessage(''); // Clear the input field after sending
   };
   
-  const handleScroll = (event) => {
-    const y = event.nativeEvent.contentOffset.y;
-    if (y === 0 && !isAtTop) {
-      
-      setIsAtTop(true);
-      loadMoreMessages();
-    } else if (y !== 0 && isAtTop) {
-      setIsAtTop(false);
-    }
-  };
+
 
 
   const loadMoreMessages = async () => {
-    setInitialLoadDone(true)
+    
     // if (!isLoadingMore) {
+      
       const previousLength = messages.length;
       await getHistoryMessageList(true); // Load more messages
       const newLength = useMessageStore.getState().historyMessageList.length;
       const newMessagesCount = newLength - previousLength;
       if (newMessagesCount > 0) {
-        console.error("scroll")
         // Adjust scroll position based on number of new messages
-        flatListRef.current?.scrollToIndex({ index: newMessagesCount, animated: true });
+        flatListRef.current?.scrollToIndex({ index: newMessagesCount, animated: false });
       }
+      setIsLoadingMore(false)
     // }
   };
+  const onRefresh = useCallback(async () => {
+    setIsLoadingMore(true);
+    await loadMoreMessages(); // Assuming this function fetches new messages
+    setIsLoadingMore(false);
+  }, [loadMoreMessages]);  
 
-  // useEffect(() => {
-  //   if (!initialLoadDone && messages.length > 0) {
-  //     flatListRef.current?.scrollToEnd({ animated: false });
-  //     setInitialLoadDone(true);
-  //   }
-  // }, [messages]);
-
+ 
 
   return (
     <View style={{flex: 1}}>
@@ -172,7 +164,14 @@ const ChatRoom = (conversation: {
         style={styles.messageList}
         data={messages}
         ref={flatListRef}
-        onScroll={handleScroll}
+        // onScroll={handleScroll}
+        initialScrollIndex={0}  
+        onScrollToIndexFailed={info => {
+          const wait = new Promise(resolve => setTimeout(resolve, 500));
+          wait.then(() => {
+            flatListRef.current?.scrollToIndex({ index: info.index, animated: false });
+          });
+        }}
         renderItem={({item: message}) => {
           if (message.contentType === 101) {
             return <TextChatCard message={message} />;
@@ -187,7 +186,18 @@ const ChatRoom = (conversation: {
           // Scroll to the bottom when content size changes
           if(!initialLoadDone)
             flatListRef.current?.scrollToEnd({animated:false});
+            setInitialLoadDone(true)
         }}
+        refreshControl={
+          <RefreshControl
+              title={"Loading"} //android中设置无效
+              colors={["red"]} //android
+              tintColor={"red"} //ios
+              titleColor={"red"}
+              refreshing={isLoadingMore}
+              onRefresh={onRefresh}
+          />
+      }
       />
       <View style={styles.inputContainer}>
         <TouchableOpacity
