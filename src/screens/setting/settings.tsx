@@ -27,46 +27,11 @@ let curretnUserInfo = useUserStore((state) => state.selfInfo)
         <Avatar nickname={curretnUserInfo.nickname} faceURL={curretnUserInfo.faceURL} />
         <Text style={styles.name}>{curretnUserInfo.nickname}</Text>
         <Text style={styles.email}>{curretnUserInfo.userID}</Text>
-        <View style={styles.buttonRow}>
-          <TouchableOpacity style={styles.button}>
-            {/* Message button with icon */}
-            <Text>Message</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            {/* Audio & Video button with icon */}
-            <Text>Audio & Video</Text>
-          </TouchableOpacity>
+
           <TouchableOpacity style={styles.button} onPress={handleLogout}>
             {/* Search button with icon */}
             <Text>Log out</Text>
           </TouchableOpacity>
-        </View>
-        <View style={styles.settings}>
-          <View style={styles.settingItem}>
-            <Text>Pin this contact</Text>
-            {/* On/Off switch for pinning */}
-          </View>
-          <View style={styles.settingItem}>
-            <Text>Mute</Text>
-            {/* On/Off switch for muting */}
-          </View>
-          <View style={styles.settingItem}>
-            <Text>Destroy after reading</Text>
-            {/* On/Off switch for destroying after reading */}
-          </View>
-          <View style={styles.settingItem}>
-            <Text>Clear history regularly</Text>
-            {/* On/Off switch for clearing history regularly */}
-          </View>
-          <View style={styles.settingItem}>
-            <Text>Wallpaper</Text>
-            {/* On/Off switch for changing wallpaper */}
-          </View>
-          <View style={styles.settingItem}>
-            <Text>Friend settings</Text>
-            {/* On/Off switch for friend settings */}
-          </View>
-        </View>
       </View>
     </View>
   );
