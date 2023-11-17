@@ -13,23 +13,26 @@ import SetPasswordPage from './src/screens/login/setPasswordPage';
 import SetVerificationPage from './src/screens/login/setVerificationPage';
 import SignUpPage from './src/screens/login/signUpPage';
 import OpenIMSDKRN, { OpenIMEmitter } from 'open-im-sdk-rn';
-import RNFS from 'react-native-fs';
-import { useState, useEffect } from 'react';
+
+import { useState, useEffect, lazy, Suspense} from 'react';
 import BottomTabBar from './BottomTabBar';
-import { GetLoginStatus, LoginIM } from './src/screens/api/openimsdk';
+import { GetLoginStatus, Init, LoginIM, LogoutIM } from './src/screens/api/openimsdk';
 import { LoginClient } from './src/screens/api/requests';
 import FriendRequestPage from './src/screens/contacts/friendRequestPage';
 import FriendRequestVerifyPage from './src/screens/contacts/friendRequestVerifyPage';
 import ChatRoom from './src/screens/chats/chatRoom';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { initStore, useGlobalEvent } from './store/useGlobalEvent';
-import { API_URL, WS_URL } from './src/config/config';
+
 import AddFriendScreen from './src/screens/friend/addFriend';
 import NewGroup from './src/screens/contacts/group/newGroup';
 import FindGroupPage from './src/screens/contacts/group/findGroup';
 import CreateGroupPage from './src/screens/contacts/group/createGroup';
 import FriendSettingPage from './src/screens/contacts/friendSetting';
 import MyGroupPage from './src/screens/contacts/group/myGroup';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { adaptViewConfig } from 'react-native-reanimated/lib/typescript/ConfigHelper';
+import { AuthContext } from './AuthContext';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -37,37 +40,12 @@ export default function App() {
   useGlobalEvent()
 
   useEffect(() => {
-    let platform = 1;
-    if (Platform.OS === 'android') {
-      platform = 2; // Android
-    } else if (Platform.OS === 'ios') {
-      platform = 1;
-    }
-    const Init = async () => {
-      await RNFS.mkdir(RNFS.DocumentDirectoryPath + '/tmp');
-      const config = {
-        platformID: platform,
-        apiAddr: API_URL,
-        wsAddr: WS_URL,
-
-        dataDir: RNFS.DocumentDirectoryPath + '/tmp',
-        logLevel: 6,
-        isLogStandardOutput: true,
-      };
-      try {
-        const opid = "123456";
-        const result = await OpenIMSDKRN.initSDK(config, opid);
-
-      } catch (error) {
-        console.error('Error initializing SDK:', error); // Log the error
-      }
-    };
+    
+    
     const checkLogin = async () => {
-      const status = (await GetLoginStatus()).status;
-      if (status == 3){
-        setIsLoggedIn(true)
-        initStore()
-      }
+      const storedLoginState = await AsyncStorage.getItem("isLoggedIn")
+      setIsLoggedIn(storedLoginState === true)
+
         
     }
     // Call the Init function when the component mounts
@@ -77,12 +55,25 @@ export default function App() {
 
   }, []); // The empty dependency array ensures that this effect runs once on mount
 
-  const handleLogin = (loggedIn: boolean | ((prevState: boolean) => boolean)) => {
+  const handleLogin = async (loggedIn: boolean | ((prevState: boolean) => boolean)) => {
+    await AsyncStorage.setItem("isLoggedIn",loggedIn.toString())
     setIsLoggedIn(loggedIn);
   };
-
+  const handleLogout = async () => {
+    setIsLoggedIn(false);
+    await AsyncStorage.removeItem("isLoggedIn")
+    LogoutIM();
+    const navigation = useNavigation<NativeStackNavigationProp<any>>();
+    
+    
+    navigation.navigate("LoginPage")
+    
+    
+  }
   return (
+    
     <NavigationContainer>
+      <AuthContext.Provider value = {{handleLogout}}>
       <Stack.Navigator screenOptions={{ animationEnabled: false }}>
         {!isLoggedIn ? (
           <>
@@ -173,7 +164,7 @@ export default function App() {
           </>
         )}
       </Stack.Navigator>
-
+      </AuthContext.Provider>
     </NavigationContainer>
   );
 }

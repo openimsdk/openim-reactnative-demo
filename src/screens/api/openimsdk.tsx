@@ -1,6 +1,33 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import OpenIMSDKRN from "open-im-sdk-rn";
+import RNFS from 'react-native-fs';
+import { API_URL, WS_URL } from '../../config/config';
+import { Platform } from "react-native";
+export const Init = async () => {
+    let platform = 1;
+    if (Platform.OS === 'android') {
+      platform = 2; // Android
+    } else if (Platform.OS === 'ios') {
+      platform = 1;
+    }
+    await RNFS.mkdir(RNFS.DocumentDirectoryPath + '/tmp');
+    const config = {
+      platformID: platform,
+      apiAddr: API_URL,
+      wsAddr: WS_URL,
 
+      dataDir: RNFS.DocumentDirectoryPath + '/tmp',
+      logLevel: 6,
+      isLogStandardOutput: true,
+    };
+    try {
+      const opid = "123456";
+      const result = await OpenIMSDKRN.initSDK(config, opid);
+
+    } catch (error) {
+      console.error('Error initializing SDK:', error); // Log the error
+    }
+  };
 export const LoginIM = async () => {
     const tk = await AsyncStorage.getItem('imToken');
     const id = await AsyncStorage.getItem('userID');
