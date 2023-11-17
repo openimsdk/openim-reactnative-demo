@@ -6,7 +6,7 @@ import { useConversationStore } from "./conversation";
 import { MessageType } from "./types/enum";
 
 
-const GET_HISTORY_MESSAGE_COUNT = 40;
+const GET_HISTORY_MESSAGE_COUNT = 20;
 
 export interface ExType {
   checked?: boolean;
