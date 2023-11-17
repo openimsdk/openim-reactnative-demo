@@ -27,18 +27,27 @@ import {useNavigation} from '@react-navigation/native';
 import ImageCard from './chatCards/imageCard';
 import OptionModalView from './optionsModalView';
 
+
 const ChatRoom = (conversation: {
   route: {params: {item: ConversationItem}};
 }) => {
-  const updateCurrentConversation = useConversationStore(
-    state => state.updateCurrentConversation,
-  );
   const currentConversation = useConversationStore(
     state => state.currentConversation,
   );
+  
+
   const flatListRef = useRef<FlatList>(null);
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
-  const {getHistoryMessageListByReq} = useMessageStore.getState();
+  const getHistoryMessageList = useMessageStore((state) => state.getHistoryMessageListByReq);
+  const [isAtTop, setIsAtTop] = useState(false);
+  // const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
+
+
+
+  const updateCurrentConversation = useConversationStore(
+    (state) => state.updateCurrentConversation,
+  );
   const [user, setUser] = useState({
     faceURL: '',
     nickname: '',
@@ -46,13 +55,14 @@ const ChatRoom = (conversation: {
   
   useEffect(() => {
     updateCurrentConversation(conversation.route.params.item);
-    getHistoryMessageListByReq();
+    getHistoryMessageList()
     if (currentConversation?.conversationType === 1) {
       const getUser = async () => {
         try {
           const data = await GetUsersInfo([
-            conversation.route.params.item!.userID,
+            conversation.route.params.item.userID,
           ]);
+          
           setUser(JSON.parse(data!.data)[0].friendInfo);
         } catch (error) {
           // Handle errors here
@@ -104,6 +114,41 @@ const ChatRoom = (conversation: {
     pushNewMessage(msg);
     setInputMessage(''); // Clear the input field after sending
   };
+  
+  const handleScroll = (event) => {
+    const y = event.nativeEvent.contentOffset.y;
+    if (y === 0 && !isAtTop) {
+      
+      setIsAtTop(true);
+      loadMoreMessages();
+    } else if (y !== 0 && isAtTop) {
+      setIsAtTop(false);
+    }
+  };
+
+
+  const loadMoreMessages = async () => {
+    setInitialLoadDone(true)
+    // if (!isLoadingMore) {
+      const previousLength = messages.length;
+      await getHistoryMessageList(true); // Load more messages
+      const newLength = useMessageStore.getState().historyMessageList.length;
+      const newMessagesCount = newLength - previousLength;
+      if (newMessagesCount > 0) {
+        console.error("scroll")
+        // Adjust scroll position based on number of new messages
+        flatListRef.current?.scrollToIndex({ index: newMessagesCount, animated: true });
+      }
+    // }
+  };
+
+  // useEffect(() => {
+  //   if (!initialLoadDone && messages.length > 0) {
+  //     flatListRef.current?.scrollToEnd({ animated: false });
+  //     setInitialLoadDone(true);
+  //   }
+  // }, [messages]);
+
 
   return (
     <View style={{flex: 1}}>
@@ -118,7 +163,7 @@ const ChatRoom = (conversation: {
             <Avatar faceURL={user.faceURL} nickname={user.nickname} />
             <View style={styles.userDetails}>
               <Text style={styles.userName}>{user.nickname}</Text>
-              {/* <Text style={styles.onlineStatus}>{user.onlineStatus}</Text> */}
+              {/* <Text style={styles.onlineStatus}>{}</Text> */}
             </View>
           </View>
         ) : null}
@@ -127,6 +172,7 @@ const ChatRoom = (conversation: {
         style={styles.messageList}
         data={messages}
         ref={flatListRef}
+        onScroll={handleScroll}
         renderItem={({item: message}) => {
           if (message.contentType === 101) {
             return <TextChatCard message={message} />;
@@ -139,7 +185,8 @@ const ChatRoom = (conversation: {
         }}
         onContentSizeChange={() => {
           // Scroll to the bottom when content size changes
-          flatListRef.current?.scrollToEnd();
+          if(!initialLoadDone)
+            flatListRef.current?.scrollToEnd({animated:false});
         }}
       />
       <View style={styles.inputContainer}>
