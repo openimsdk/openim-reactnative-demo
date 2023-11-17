@@ -3,10 +3,11 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Avatar from '../../components/avatar';
 import { useUserStore } from '../../../store/user';
 import { getBusinessUserInfo } from '../api/requests';
+import { useAuth } from '../../../AuthContext';
 
 
 const SettingPage = () => {
-
+const {handleLogout} = useAuth();
 let curretnUserInfo = useUserStore((state) => state.selfInfo)
 
   return (
@@ -35,9 +36,9 @@ let curretnUserInfo = useUserStore((state) => state.selfInfo)
             {/* Audio & Video button with icon */}
             <Text>Audio & Video</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleLogout}>
             {/* Search button with icon */}
-            <Text>Search</Text>
+            <Text>Log out</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.settings}>

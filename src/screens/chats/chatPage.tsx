@@ -8,11 +8,11 @@ import { useConversationStore } from "../../../store/conversation";
 import { ConversationItem } from "../../../store/types/entity";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import OpenIMSDKRN from "open-im-sdk-rn";
 
 const ChatPage = () => {
     const rawData:ConversationItem[] = useConversationStore((state) => state.conversationList);
     const navigator = useNavigation<NativeStackNavigationProp<any>>();
-    
     const renderConversationItem = ({item}:{item:ConversationItem} ) => {
         if (!item.conversationID) {
             return null; // or some placeholder component

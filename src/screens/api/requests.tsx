@@ -5,6 +5,7 @@ import { LoginIM } from "./openimsdk";
 import { criticallyDampedSpringCalculations } from "react-native-reanimated/lib/typescript/reanimated2/animation/springUtils";
 import { BusinessUserInfo } from "../../../store/user";
 import axios from 'axios';
+
 export const LoginClient = async (params: { password: string; phoneNumber: any; verifyCode: string; areaCode: string; }) => {
   let platform = 1;
   if (Platform.OS === 'android') {

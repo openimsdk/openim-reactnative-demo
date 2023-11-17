@@ -7,6 +7,7 @@ import { LoginClient } from '../api/requests';
 import { GetLoginStatus } from '../api/openimsdk';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack/lib/typescript/src/types';
 import { initStore } from '../../../store/useGlobalEvent';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 interface LoginPageProps{
   onLogin: (value:boolean) => void;
 }
@@ -19,7 +20,7 @@ const LoginPage:React.FC<LoginPageProps> = ({onLogin}) => {
   useEffect(() => {
     const checkLoginStatus = async () => {
       const result = await GetLoginStatus();
-      if (result.status === 3) {
+      if (result.status === 3 && await AsyncStorage.getItem("LoggedIn")) {
         onLogin(true);
       }
     };
