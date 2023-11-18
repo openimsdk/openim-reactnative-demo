@@ -65,7 +65,7 @@ const MyGroupPage = () => {
     });
 
     setContactSections(sectionsWithOffset);
-  }, [data]);
+  }, [rawData]);
 
   const scrollToSection = (sectionIndex: number) => {
     if (sectionListRef.current) {

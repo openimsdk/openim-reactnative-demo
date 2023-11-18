@@ -75,7 +75,7 @@ const ContactListPage = () => {
       offset:0,
     },
     ...sectionsWithOffset]);
-  }, [data]);
+  }, [rawData]);
   
   const scrollToSection = (sectionIndex: number) => {
     if (sectionListRef.current) {

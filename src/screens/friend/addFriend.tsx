@@ -8,20 +8,19 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import { useUserStore } from '../../../store/user';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import FriendCard from './friendCard';
 import { searchBusinessUserInfo } from '../api/requests';
 import { FlatList } from 'react-native-gesture-handler';
+import { FriendUserItem } from '../../../store/type.d';
 
 const AddFriendScreen = () => {
-  const currentId = useUserStore((state) => state.selfInfo);
-  const [otherUserId, setOtherUserId] = useState('');
+ 
   const [searchTerm, setSearchTerm] = useState('');
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState<FriendUserItem[]>([]);
 
   useEffect(() => {
     searchBusinessUserInfo(searchTerm)
@@ -65,7 +64,7 @@ const AddFriendScreen = () => {
               nickname={friend.nickname}
               faceURL={friend.faceURL}
               userID={friend.userID}
-              style={styles.friendCard} // Add a style prop to your FriendCard component
+              //style={styles.friendCard} // Add a style prop to your FriendCard component
             />
           )}
           contentContainerStyle={styles.flatList} // Style the FlatList items

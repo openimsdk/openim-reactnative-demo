@@ -37,6 +37,9 @@ const CreateGroupPage = () => {
       a.nickname.localeCompare(b.nickname),
   );
   const [selectedFriend, setSelectedFriend] = useState<string[]>([]);
+  const initializeSections = () => {
+    // ... initialization logic ...
+  };
 
   useEffect(() => {
     const hints: string[] = Array.from(
@@ -100,7 +103,7 @@ const CreateGroupPage = () => {
     });
 
     setContactSections(sectionsWithOffset);
-  }, [data]);
+  }, [rawData]);
 
   const scrollToSection = (sectionIndex: number) => {
     if (sectionListRef.current) {
