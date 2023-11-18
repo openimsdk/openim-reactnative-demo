@@ -1,55 +1,46 @@
-import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { GetAllConversationList } from "../api/openimsdk";
-import { useEffect, useState } from "react";
+import React from "react";
+import { FlatList, ListRenderItem, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ConversationCard from "./conversationCard";
-import { API } from "../api/typings";
-import { useMessageStore } from "../../../store/message";
 import { useConversationStore } from "../../../store/conversation";
-import { ConversationItem } from "../../../store/types/entity";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import OpenIMSDKRN from "open-im-sdk-rn";
+import { ConversationItem } from "../../../store/types/entity";
 
 const ChatPage = () => {
-    const rawData:ConversationItem[] = useConversationStore((state) => state.conversationList);
+    const conversationList = useConversationStore(state => state.conversationList);
     const navigator = useNavigation<NativeStackNavigationProp<any>>();
-    const renderConversationItem = ({item}:{item:ConversationItem} ) => {
+
+    const renderConversationItem: ListRenderItem<ConversationItem> = ({ item, index }) => {
         if (!item.conversationID) {
             return null; // or some placeholder component
-          }
-        return (
-            <View style={{}}>
-                <ConversationCard item={item}></ConversationCard>
-            </View>
-        );
+        }
+        return <ConversationCard item={item} />;
     };
-    
+
     const handleAddFriend = () => {
-        navigator.navigate("AddFriend")
+        navigator.navigate("AddFriend");
     }
 
     return (
-        <View>
+        <View style={styles.container}>
             <View style={styles.header}>
-                <View style={styles.topBar}>
-                    <TouchableOpacity style={styles.button}>
-                        <Text>Edit</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.title}>Contacts</Text>
-                    <TouchableOpacity style={styles.button} onPress={handleAddFriend}>
-                        <Text>Add Friend</Text>
-                    </TouchableOpacity>
-                </View>
-
+                <TouchableOpacity style={styles.button}>
+                    <Text>Edit</Text>
+                </TouchableOpacity>
+                <Text style={styles.title}>Contacts</Text>
+                <TouchableOpacity style={styles.button} onPress={handleAddFriend}>
+                    <Text>Add Friend</Text>
+                </TouchableOpacity>
             </View>
             <FlatList
-                data={rawData}
-                keyExtractor={(item) => (item.conversationID ? item.conversationID.toString() : String(item.groupID))}
+                data={conversationList}
+                keyExtractor={(item) => item.conversationID.toString()}
                 renderItem={renderConversationItem}
             />
         </View>
-    )
+    );
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,

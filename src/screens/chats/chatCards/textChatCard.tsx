@@ -1,49 +1,38 @@
+import React, { memo } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Avatar from "../../../components/avatar";
-import { GetSelfInfo, GetUsersInfo } from "../../api/openimsdk";
-import { useEffect, useState } from "react";
 import { useUserStore } from "../../../../store/user";
 import { ExMessageItem } from "../../../../store/message";
 
-const TextChatCard = ({ message }:{message:ExMessageItem}) => {
-  const [selfID, setSelfID] = useState(false);
+const TextChatCard = memo(({ message }: { message: ExMessageItem }) => {
+  const isSelf = useUserStore(state => state.selfInfo.userID === message.sendID);
   if (message.contentType !== 101) return null;
-  const currentID = useUserStore((state) => state.selfInfo);
-  
-  useEffect(() => {
-      if (currentID.userID === message.sendID) {
-        setSelfID(true);
-    }
-  }, [message.contentType, message.sendID]);
-  
-  
-  if (selfID) {
-    return (
-      <View style={styles.chatContainerSelf}>
-        
-        <View style={styles.messageContainerSelf}>
-          <Text style={styles.messageText}> </Text>
-          <Text style={styles.messageText}>{message.textElem.content}</Text>
-        </View>
-        <View style={styles.avatarContainer}>
-          <Avatar nickname={message.senderNickname} faceURL={message.senderFaceUrl ?? ''}/>
-        </View>
-      </View>
-    );
-  }
 
-  return (
-    <View style={styles.chatContainerOther}>
-      <View style={styles.avatarContainer}>
-        <Avatar nickname={message.senderNickname} faceURL={message.senderFaceUrl ?? ''}/>
-      </View>
-      <View style={styles.messageContainerOther}>
-        <Text style={styles.messageText}>{message.senderNickname}</Text>
-        <Text style={styles.messageText}>{message.textElem.content}</Text>
-      </View>
+  return isSelf ? <SelfTextMessage message={message} /> : <OtherTextMessage message={message} />;
+});
+
+const SelfTextMessage = ({ message }: { message: ExMessageItem }) => (
+  <View style={styles.chatContainerSelf}>
+    <View style={styles.messageContainer}>
+      <Text style={styles.messageText}>{message.textElem.content}</Text>
     </View>
-  );
-};
+    <View style={styles.avatarContainer}>
+      <Avatar nickname={message.senderNickname} faceURL={message.senderFaceUrl ?? ''}/>
+    </View>
+  </View>
+);
+
+const OtherTextMessage = ({ message }: { message: ExMessageItem }) => (
+  <View style={styles.chatContainerOther}>
+    <View style={styles.avatarContainer}>
+      <Avatar nickname={message.senderNickname} faceURL={message.senderFaceUrl ?? ''}/>
+    </View>
+    <View style={styles.messageContainer}>
+      <Text style={styles.messageText}>{message.senderNickname}</Text>
+      <Text style={styles.messageText}>{message.textElem.content}</Text>
+    </View>
+  </View>
+);
 
 const styles = StyleSheet.create({
   chatContainerSelf: {
@@ -58,10 +47,7 @@ const styles = StyleSheet.create({
   avatarContainer: {
     marginHorizontal: 10,
   },
-  messageContainerSelf: {
-    maxWidth: "80%",
-  },
-  messageContainerOther: {
+  messageContainer: {
     maxWidth: "80%",
   },
   messageText: {

@@ -20,6 +20,7 @@ import {GetOneConversation} from '../../api/openimsdk';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import MyGroupCard from './myGroupCard';
+import { groupContactsByFirstCharacter } from '../../../components/contactUtils';
 const MyGroupPage = () => {
   const [search, setSearch] = useState('');
   const [alphabetHints, setAlphabetHints] = useState<string[]>([]);
@@ -48,43 +49,7 @@ const MyGroupPage = () => {
     hints.push(modifiedHints[0]);
     setAlphabetHints(hints);
 
-    const groupContactsByFirstCharacter = (contacts: GroupItem[]) => {
-      const grouped: {[key: string]: GroupItem[]} = {};
-      let hasNonAlphabet = false;
-
-      contacts.forEach(contact => {
-        let firstChar = contact.groupName.charAt(0).toUpperCase();
-
-        if (!firstChar.match(/[A-Z]/)) {
-          firstChar = '#';
-          hasNonAlphabet = true;
-        }
-
-        if (!grouped[firstChar]) {
-          grouped[firstChar] = [];
-        }
-        grouped[firstChar].push(contact);
-      });
-
-      const sections = Object.keys(grouped).map(key => ({
-        title: key,
-        data: grouped[key],
-      }));
-
-      sections.sort((a, b) => {
-        if (a.title === '#') {
-          return hasNonAlphabet ? 1 : -1;
-        }
-        if (b.title === '#') {
-          return hasNonAlphabet ? -1 : 1;
-        }
-        return a.title.localeCompare(b.title);
-      });
-
-      return sections;
-    };
-
-    const groupedContacts = groupContactsByFirstCharacter(data);
+    const groupedContacts = groupContactsByFirstCharacter(data,'groupName');
 
     let totalOffset = 0;
     const sectionsWithOffset = groupedContacts.map(section => {

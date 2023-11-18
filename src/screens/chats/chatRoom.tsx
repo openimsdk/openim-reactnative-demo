@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   Image,
@@ -16,21 +16,66 @@ import {
   GetUsersInfo,
   MarkConversationMessageAsRead,
   SendMessage,
+  CreateMessage,
 } from '../api/openimsdk';
-import {API} from '../api/typings';
-import {useMessageStore} from '../../../store/message';
-import {useConversationStore} from '../../../store/conversation';
-import {ConversationItem} from '../../../store/types/entity';
+import { API } from '../api/typings';
+import { useMessageStore } from '../../../store/message';
+import { useConversationStore } from '../../../store/conversation';
+import { ConversationItem } from '../../../store/types/entity';
 import OpenIMSDKRN from 'open-im-sdk-rn';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {useNavigation} from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 import ImageCard from './chatCards/imageCard';
 import OptionModalView from './optionsModalView';
 import { RefreshControl } from 'react-native-gesture-handler';
 
+const ITEM_HEIGHT = 50;
+interface ChatHeaderInputProps {
+  onBack: () => void;
+  onAddFriend: () => void;
+};
+interface MessageInputProps {
+  onSubmit: () => void;
+  value: string;
+  onChangeText: (text: string) => void;
+};
+// Header Component
+const ChatHeader = ({ onBack, onAddFriend }:ChatHeaderInputProps) => (
+  <View style={styles.header}>
+    <TouchableOpacity style={styles.button} onPress={onBack}>
+      <Image source={require('../../../assets/imgs/back.png')} />
+    </TouchableOpacity>
+    <Text style={styles.title}>Contacts</Text>
+    <TouchableOpacity style={styles.button} onPress={onAddFriend}>
+      <Text>Add Friend</Text>
+    </TouchableOpacity>
+  </View>
+);
 
+// Message Input Component
+const MessageInput = ({ onSubmit, value, onChangeText }:MessageInputProps) => (
+  <View style={styles.inputContainer}>
+    <TouchableOpacity
+      style={styles.moreOptionsButton}
+      onPress={onSubmit}>
+      <Image
+        style={styles.moreOptionsButtonImage}
+        source={require('../../../assets/imgs/options.png')}
+      />
+    </TouchableOpacity>
+    <TextInput
+      style={styles.input}
+      placeholder="Type your message..."
+      value={value}
+      onChangeText={onChangeText}
+    />
+    <TouchableOpacity style={styles.sendButton} onPress={onSubmit}>
+      <Text style={styles.sendButtonText}>Send</Text>
+    </TouchableOpacity>
+  </View>
+);
 const ChatRoom = (conversation: {
-  route: {params: {item: ConversationItem}};
+  route: { params: { item: ConversationItem } };
 }) => {
   const currentConversation = useConversationStore(
     state => state.currentConversation,
@@ -40,10 +85,10 @@ const ChatRoom = (conversation: {
   const flatListRef = useRef<FlatList>(null);
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
   const getHistoryMessageList = useMessageStore((state) => state.getHistoryMessageListByReq);
-  const [isAtTop, setIsAtTop] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [initialLoadDone, setInitialLoadDone] = useState(false);
-
+  const [inputMessage, setInputMessage] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
 
   const updateCurrentConversation = useConversationStore(
@@ -53,7 +98,7 @@ const ChatRoom = (conversation: {
     faceURL: '',
     nickname: '',
   });
-  
+
   useEffect(() => {
     updateCurrentConversation(conversation.route.params.item);
     getHistoryMessageList()
@@ -63,7 +108,7 @@ const ChatRoom = (conversation: {
           const data = await GetUsersInfo([
             conversation.route.params.item.userID,
           ]);
-          
+
           setUser(JSON.parse(data!.data)[0].friendInfo);
         } catch (error) {
           // Handle errors here
@@ -78,24 +123,24 @@ const ChatRoom = (conversation: {
   useEffect(() => {
     MarkConversationMessageAsRead(conversation.route.params.item.conversationID)
   }, [messages]);
-  const [showModal, setShowModal] = useState(false);
+
   const toggleModal = () => {
     setShowModal(!showModal);
   };
 
   const pushNewMessage = useMessageStore(state => state.pushNewMessage);
-  const updateOneMessage = useMessageStore(state => state.updateOneMessage);
-  const [inputMessage, setInputMessage] = useState(''); // State to hold the input message
+
   // Function to handle sending a message
-  const sendMessage = async () => {
-    // Add your logic to send the message here
+  const sendMessage = useCallback(async () => {
+    if (inputMessage.trim() === '') return; // Prevent sending empty messages
+
+    // Create message asynchronously
     let text;
     try {
-      const data = await OpenIMSDKRN.createTextMessage(inputMessage, '289893');
-
-      text = data;
+      text = await CreateMessage(inputMessage);
     } catch (error) {
-      console.error('Error CreateTextMsg:', error); // Log the error
+      console.error('Error CreateTextMsg:', error);
+      return;
     }
 
     const offlinePushInfo = {
@@ -105,74 +150,69 @@ const ChatRoom = (conversation: {
       iOSPushSound: '+1',
       iOSBadgeCount: true,
     };
-    const options = {
-      message: text,
-      recvID: currentConversation?.userID,
-      groupID: currentConversation?.groupID,
-      offlinePushInfo,
-    };
-    const msg = await SendMessage(options);
-    pushNewMessage(msg);
-    setInputMessage(''); // Clear the input field after sending
-  };
-  
+
+    // Send message asynchronously
+    try {
+      const options = {
+        message: text,
+        recvID: currentConversation?.userID,
+        groupID: currentConversation?.groupID,
+        offlinePushInfo,
+      };
+      const msg = await SendMessage(options);
+      pushNewMessage(msg);
+    } catch (error) {
+      console.error('Error SendMessage:', error);
+    } finally {
+      setInputMessage(''); // Clear the input field after sending
+    }
+  }, [inputMessage, currentConversation, pushNewMessage]);
+
 
 
 
   const loadMoreMessages = async () => {
-    
-    // if (!isLoadingMore) {
-      
-      const previousLength = messages.length;
-      await getHistoryMessageList(true); // Load more messages
-      const newLength = useMessageStore.getState().historyMessageList.length;
-      const newMessagesCount = newLength - previousLength;
-      if (newMessagesCount > 0) {
-        // Adjust scroll position based on number of new messages
-        flatListRef.current?.scrollToIndex({ index: newMessagesCount, animated: false });
-      }
-      setIsLoadingMore(false)
-    // }
+    const previousLength = messages.length;
+    await getHistoryMessageList(true); // Load more messages
+    const newLength = useMessageStore.getState().historyMessageList.length;
+    const newMessagesCount = newLength - previousLength;
+    if (newMessagesCount > 0) {
+      // Adjust scroll position based on number of new messages
+      flatListRef.current?.scrollToIndex({ index: newMessagesCount, animated: false });
+    }
+    setIsLoadingMore(false)
   };
   const onRefresh = useCallback(async () => {
     setIsLoadingMore(true);
     await loadMoreMessages(); // Assuming this function fetches new messages
     setIsLoadingMore(false);
-  }, [loadMoreMessages]);  
+  }, [loadMoreMessages]);
 
- 
+
 
   return (
-    <View style={{flex: 1}}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigator.goBack()}>
-          <Image source={require('../../../assets/imgs/back.png')} />
-        </TouchableOpacity>
-        {currentConversation?.conversationType === 1 ? (
-          <View style={styles.userInfo}>
-            <Avatar faceURL={user.faceURL} nickname={user.nickname} />
-            <View style={styles.userDetails}>
-              <Text style={styles.userName}>{user.nickname}</Text>
-              {/* <Text style={styles.onlineStatus}>{}</Text> */}
-            </View>
-          </View>
-        ) : null}
-      </View>
+    <View style={{ flex: 1 }}>
+      <ChatHeader
+        onBack={() => navigator.goBack()}
+        onAddFriend={() => navigator.navigate("AddFriend")}
+      />
       <FlatList
         style={styles.messageList}
         data={messages}
         ref={flatListRef}
         // onScroll={handleScroll}
-        initialScrollIndex={0}  
+        initialScrollIndex={0}
         onScrollToIndexFailed={info => {
           const wait = new Promise(resolve => setTimeout(resolve, 500));
           wait.then(() => {
             flatListRef.current?.scrollToIndex({ index: info.index, animated: false });
           });
         }}
-        renderItem={({item: message}) => {
+        windowSize={5}
+        getItemLayout={(data, index) => (
+          { length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index }
+        )}
+        renderItem={({ item: message }) => {
           if (message.contentType === 101) {
             return <TextChatCard message={message} />;
           } else if (message.contentType === 102) {
@@ -184,40 +224,27 @@ const ChatRoom = (conversation: {
         }}
         onContentSizeChange={() => {
           // Scroll to the bottom when content size changes
-          if(!initialLoadDone)
-            flatListRef.current?.scrollToEnd({animated:false});
-            setInitialLoadDone(true)
+          if (!initialLoadDone)
+            flatListRef.current?.scrollToEnd({ animated: false });
+          setInitialLoadDone(true)
         }}
         refreshControl={
           <RefreshControl
-              title={"Loading"} //android中设置无效
-              colors={["red"]} //android
-              tintColor={"red"} //ios
-              titleColor={"red"}
-              refreshing={isLoadingMore}
-              onRefresh={onRefresh}
+            title={"Loading"} //android中设置无效
+            colors={["red"]} //android
+            tintColor={"red"} //ios
+            titleColor={"red"}
+            refreshing={isLoadingMore}
+            onRefresh={onRefresh}
           />
-      }
+        }
       />
-      <View style={styles.inputContainer}>
-        <TouchableOpacity
-          style={styles.moreOptionsButton}
-          onPress={toggleModal}>
-          <Image
-            style={styles.moreOptionsButtonImage}
-            source={require('../../../assets/imgs/options.png')}></Image>
-        </TouchableOpacity>
-        <TextInput
-          style={styles.input}
-          placeholder="Type your message..."
-          value={inputMessage}
-          onChangeText={text => setInputMessage(text)}
-        />
-        <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
-          <Text style={styles.sendButtonText}>Send</Text>
-        </TouchableOpacity>
-        <OptionModalView isVisible={showModal} onClose={toggleModal} />
-      </View>
+      <MessageInput
+        onSubmit={sendMessage}
+        value={inputMessage}
+        onChangeText={setInputMessage}
+      />
+      {showModal && <OptionModalView onClose={() => setShowModal(false)} isVisible={showModal} />}
     </View>
   );
 };
@@ -230,9 +257,14 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     backgroundColor: '#ffffff', // Set your desired background color
   },
-  backButton: {
-    // Define your back button styles here
+  button: {
+    padding: 8,
   },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+
   userInfo: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -276,6 +308,12 @@ const styles = StyleSheet.create({
   },
   sendButtonText: {
     color: '#fff', // Set your desired button text color
+  },
+  moreOptionsButton: {
+    // Add styling for the options button image
+  },
+  moreOptionsButtonImage: {
+    // Add styling for the options button image
   },
 });
 

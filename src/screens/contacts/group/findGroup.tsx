@@ -24,7 +24,7 @@ const FindGroupPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await SearchGroup([searchTerm]);
+        const result = await SearchGroup([searchTerm],true,false);
         setSearchResults(result);
       } catch (error) {
         console.error('Error fetching search results:', error);

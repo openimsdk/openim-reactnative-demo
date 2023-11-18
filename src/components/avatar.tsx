@@ -26,8 +26,8 @@ const avatarImages: Record<string, any> = {
   'My Groups': images.myGroups,
 };
 
-const getAvatarImage = ({ nickname, faceURL }: { nickname: string, faceURL: string }) => {
-  if (faceURL === null) {
+const getAvatarImage = ({ nickname, faceURL }: { nickname: string, faceURL: string | null | undefined }) => {
+  if (faceURL === null || faceURL == undefined) {
     return null; // Return null or a placeholder component if data is undefined
   }
 

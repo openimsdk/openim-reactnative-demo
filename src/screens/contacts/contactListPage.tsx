@@ -18,6 +18,7 @@ import { FriendUserItem } from '../../../store/type.d';
 import ContactCard from './contactCard';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { groupContactsByFirstCharacter } from '../../components/contactUtils';
 
 const ContactListPage = () => {
   const [search, setSearch] = useState('');
@@ -39,43 +40,7 @@ const ContactListPage = () => {
     hints.push(modifiedHints[0])
     setAlphabetHints(hints);
 
-    const groupContactsByFirstCharacter = (contacts: FriendUserItem[]) => {
-      const grouped: { [key: string]: FriendUserItem[] } = {};
-      let hasNonAlphabet = false;
-
-      contacts.forEach((contact) => {
-        let firstChar = contact.nickname.charAt(0).toUpperCase();
-
-        if (!firstChar.match(/[A-Z]/)) {
-          firstChar = '#';
-          hasNonAlphabet = true;
-        }
-
-        if (!grouped[firstChar]) {
-          grouped[firstChar] = [];
-        }
-        grouped[firstChar].push(contact);
-      });
-
-      const sections = Object.keys(grouped).map((key) => ({
-        title: key,
-        data: grouped[key],
-      }));
-
-      sections.sort((a, b) => {
-        if (a.title === '#') {
-          return hasNonAlphabet ? 1 : -1;
-        }
-        if (b.title === '#') {
-          return hasNonAlphabet ? -1 : 1;
-        }
-        return a.title.localeCompare(b.title);
-      });
-
-      return sections;
-    };
-
-    const groupedContacts = groupContactsByFirstCharacter(data);
+    const groupedContacts = groupContactsByFirstCharacter(data, 'nickname');
 
     let totalOffset = 0;
     const sectionsWithOffset = groupedContacts.map((section) => {
@@ -90,18 +55,18 @@ const ContactListPage = () => {
     setContactSections([{
       title: '',
       data: [{
-          "addSource": 2, "attachedInfo": "", "createTime": 1694072100, "ex": "", "faceURL": "New Friend", "nickname": "New Friend", "operatorUserID": "4458656648",
-          "ownerUserID": "6960562805", "remark": "", "userID": "newFriend"
+          "addSource": 2, "attachedInfo": "", "createTime": 0, "ex": "", "faceURL": "New Friend", "nickname": "New Friend", "operatorUserID": "0",
+          "ownerUserID": "0", "remark": "", "userID": "newFriend"
       }, {
-          "addSource": 2, "attachedInfo": "", "createTime": 1694072100, "ex": "", "faceURL": "New Group", "nickname": "New Group", "operatorUserID": "4458656648",
-          "ownerUserID": "6960562805", "remark": "", "userID": "newGroup"
+          "addSource": 2, "attachedInfo": "", "createTime": 0, "ex": "", "faceURL": "New Group", "nickname": "New Group", "operatorUserID": "0",
+          "ownerUserID": "0", "remark": "", "userID": "newGroup"
       },
       ],
     }, {
       title: ' ',
       data: [{
-          "addSource": 2, "attachedInfo": "", "createTime": 1694072100, "ex": "", "faceURL": "My Groups", "nickname": "My Groups", "operatorUserID": "4458656648",
-          "ownerUserID": "6960562805", "remark": "", "userID": "myGroup"
+          "addSource": 2, "attachedInfo": "", "createTime": 0, "ex": "", "faceURL": "My Groups", "nickname": "My Groups", "operatorUserID": "0",
+          "ownerUserID": "0", "remark": "", "userID": "myGroup"
       }],
     },
     ...sectionsWithOffset]);
