@@ -9,7 +9,7 @@ import { GetAdvancedHistoryMessageListReverse, MarkConversationMessageAsRead } f
 import { ConversationItem, MessageItem } from "../../../store/types/entity";
 import { useConversationStore } from "../../../store/conversation";
 import { formatMessageByType } from "../../components/formatMsg";
-const formatDate = (timestamp:string) => {
+const formatDate = (timestamp:number) => {
     // Your date formatting logic here
     // Consider using a library like date-fns for simplicity
     const date = new Date(timestamp);
@@ -56,7 +56,7 @@ const ConversationCard = ({ item }: { item: ConversationItem }) => {
         return "";
       };
     const showMsgTime = useMemo(() => formatDate(item.latestMsgSendTime), [item.latestMsgSendTime]);
-    const latestMessageContent = useMemo(() => getLatestMessageContent(item), [item]);
+    const latestMessageContent = useMemo(() => getLatestMessageContent(), [item]);
 
     if (!item) {
         return null;

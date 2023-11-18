@@ -3,6 +3,7 @@ import OpenIMSDKRN from "open-im-sdk-rn";
 import RNFS from 'react-native-fs';
 import { API_URL, WS_URL } from '../../config/config';
 import { Platform } from "react-native";
+import { SendMsgParams } from "../../../store/types/params";
 export const Init = async () => {
     let platform = 1;
     if (Platform.OS === 'android') {
@@ -157,7 +158,7 @@ export const GetSelfInfo = async () => {
     }
 }
 
-export const SendMessage = async (options) => {
+export const SendMessage = async (options:SendMsgParams) => {
     try {
         console.log(options)
         const data = await OpenIMSDKRN.sendMessage(options, "01342199")

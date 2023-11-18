@@ -155,8 +155,8 @@ const ChatRoom = (conversation: {
     try {
       const options = {
         message: text,
-        recvID: currentConversation?.userID,
-        groupID: currentConversation?.groupID,
+        recvID: currentConversation!.userID,
+        groupID: currentConversation!.groupID,
         offlinePushInfo,
       };
       const msg = await SendMessage(options);
