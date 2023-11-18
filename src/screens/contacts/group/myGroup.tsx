@@ -13,19 +13,22 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {useContactStore} from '../../../../store/contact';
-import {ConversationItem, GroupItem} from '../../../../store/types/entity';
-import ContactCard from '../contactCard';
 import SearchDrawer from '../../../components/searchDrawer';
-import {GetOneConversation} from '../../api/openimsdk';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {useNavigation} from '@react-navigation/native';
 import MyGroupCard from './myGroupCard';
 import { groupContactsByFirstCharacter } from '../../../components/contactUtils';
+import { GroupItem } from '../../../../store/types/entity';
+
+interface SectionWithOffset {
+  title: string;
+  data: GroupItem[];
+  offset: number;
+}
+
 const MyGroupPage = () => {
   const [search, setSearch] = useState('');
   const [alphabetHints, setAlphabetHints] = useState<string[]>([]);
   const [contactSections, setContactSections] = useState<
-    {title: string; data: GroupItem[]}[]
+  SectionWithOffset[]
   >([]);
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const sectionListRef: RefObject<SectionList> = useRef(null);

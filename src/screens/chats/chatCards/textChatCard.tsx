@@ -17,7 +17,7 @@ const SelfTextMessage = ({ message }: { message: ExMessageItem }) => (
       <Text style={styles.messageText}>{message.textElem.content}</Text>
     </View>
     <View style={styles.avatarContainer}>
-      <Avatar nickname={message.senderNickname} faceURL={message.senderFaceUrl ?? ''}/>
+      <Avatar nickname={message.senderNickname} faceURL={message.senderFaceUrl ?? ''} />
     </View>
   </View>
 );
@@ -25,7 +25,7 @@ const SelfTextMessage = ({ message }: { message: ExMessageItem }) => (
 const OtherTextMessage = ({ message }: { message: ExMessageItem }) => (
   <View style={styles.chatContainerOther}>
     <View style={styles.avatarContainer}>
-      <Avatar nickname={message.senderNickname} faceURL={message.senderFaceUrl ?? ''}/>
+      <Avatar nickname={message.senderNickname} faceURL={message.senderFaceUrl ?? ''} />
     </View>
     <View style={styles.messageContainer}>
       <Text style={styles.messageText}>{message.senderNickname}</Text>

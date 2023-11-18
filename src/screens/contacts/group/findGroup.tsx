@@ -15,11 +15,12 @@ import {FlatList} from 'react-native-gesture-handler';
 import {SearchGroup} from '../../api/openimsdk';
 import FriendCard from '../../friend/friendCard';
 import GroupCard from './findGroupCard';
+import { GroupItem } from '../../../../store/types/entity';
 
 const FindGroupPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState<GroupItem[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,7 +64,7 @@ const FindGroupPage = () => {
               nickname={group.groupName}
               faceURL={group.faceURL}
               groupID={group.groupID}
-              style={styles.friendCard} // Add a style prop to your FriendCard component
+              // style={styles.friendCard} // Add a style prop to your FriendCard component
             />
           )}
           contentContainerStyle={styles.flatList} // Style the FlatList items

@@ -1,29 +1,31 @@
-import React, {useState, useEffect, useRef, RefObject} from 'react';
+import React, { useState, useEffect, useRef, RefObject } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   TextInput,
   StyleSheet,
-  FlatList,
   SectionList,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import {useContactStore} from '../../../../store/contact';
-import {FriendUserItem} from '../../../../store/type.d';
-import ContactCard from '../contactCard';
+import { useContactStore } from '../../../../store/contact';
+import { FriendUserItem } from '../../../../store/type.d';
 import SearchDrawer from '../../../components/searchDrawer';
 import Avatar from '../../../components/avatar';
-import {CreateGroup} from '../../api/openimsdk';
-
+import { CreateGroup } from '../../api/openimsdk';
+interface SectionWithOffset {
+  title: string;
+  data: FriendUserItem[];
+  offset: number;
+}
 const CreateGroupPage = () => {
   const [search, setSearch] = useState('');
   const [alphabetHints, setAlphabetHints] = useState<string[]>([]);
   const [contactSections, setContactSections] = useState<
-    {title: string; data: FriendUserItem[]}[]
+    SectionWithOffset[]
   >([]);
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const sectionListRef: RefObject<SectionList> = useRef(null);
@@ -34,7 +36,7 @@ const CreateGroupPage = () => {
     (a: FriendUserItem, b: FriendUserItem) =>
       a.nickname.localeCompare(b.nickname),
   );
-  const [selectedFriend, setSelectedFriend] = useState([]);
+  const [selectedFriend, setSelectedFriend] = useState<string[]>([]);
 
   useEffect(() => {
     const hints: string[] = Array.from(
@@ -50,7 +52,7 @@ const CreateGroupPage = () => {
     setAlphabetHints(hints);
 
     const groupContactsByFirstCharacter = (contacts: FriendUserItem[]) => {
-      const grouped: {[key: string]: FriendUserItem[]} = {};
+      const grouped: { [key: string]: FriendUserItem[] } = {};
       let hasNonAlphabet = false;
 
       contacts.forEach(contact => {
@@ -92,8 +94,8 @@ const CreateGroupPage = () => {
       const sectionWithOffset = {
         ...section,
         offset: totalOffset,
-      };
-      totalOffset += section.data.length;
+      }; const headerHeight = 16; const itemHeight = 32;
+      totalOffset += section.data.length * itemHeight + headerHeight;
       return sectionWithOffset;
     });
 
@@ -152,7 +154,7 @@ const CreateGroupPage = () => {
             : index.toString()
         }
         bounces={false}
-        renderItem={({item}) => {
+        renderItem={({ item }) => {
           const isSelected = selectedFriend.includes(item.userID);
 
           return (
@@ -177,7 +179,7 @@ const CreateGroupPage = () => {
             </TouchableOpacity>
           );
         }}
-        renderSectionHeader={({section}) => {
+        renderSectionHeader={({ section }) => {
           if (section.title !== '')
             return <Text style={styles.sectionHeader}>{section.title}</Text>;
           else return null;

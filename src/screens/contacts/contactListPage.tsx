@@ -19,11 +19,15 @@ import ContactCard from './contactCard';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { groupContactsByFirstCharacter } from '../../components/contactUtils';
-
+interface SectionWithOffset {
+  title: string;
+  data: FriendUserItem[];
+  offset: number;
+}
 const ContactListPage = () => {
   const [search, setSearch] = useState('');
   const [alphabetHints, setAlphabetHints] = useState<string[]>([]);
-  const [contactSections, setContactSections] = useState<{ title: string, data: FriendUserItem[] }[]>([]);
+  const [contactSections, setContactSections] = useState<SectionWithOffset[]>([]);
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const sectionListRef: RefObject<SectionList> = useRef(null);
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
@@ -42,6 +46,7 @@ const ContactListPage = () => {
 
     const groupedContacts = groupContactsByFirstCharacter(data, 'nickname');
 
+    
     let totalOffset = 0;
     const sectionsWithOffset = groupedContacts.map((section) => {
       const sectionWithOffset = {
@@ -51,7 +56,6 @@ const ContactListPage = () => {
       totalOffset += section.data.length;
       return sectionWithOffset;
     });
-
     setContactSections([{
       title: '',
       data: [{
@@ -60,18 +64,19 @@ const ContactListPage = () => {
       }, {
           "addSource": 2, "attachedInfo": "", "createTime": 0, "ex": "", "faceURL": "New Group", "nickname": "New Group", "operatorUserID": "0",
           "ownerUserID": "0", "remark": "", "userID": "newGroup"
-      },
-      ],
+      }],
+      offset:0,
     }, {
       title: ' ',
       data: [{
           "addSource": 2, "attachedInfo": "", "createTime": 0, "ex": "", "faceURL": "My Groups", "nickname": "My Groups", "operatorUserID": "0",
           "ownerUserID": "0", "remark": "", "userID": "myGroup"
       }],
+      offset:0,
     },
     ...sectionsWithOffset]);
   }, [data]);
-
+  
   const scrollToSection = (sectionIndex: number) => {
     if (sectionListRef.current) {
       sectionListRef.current.scrollToLocation({
