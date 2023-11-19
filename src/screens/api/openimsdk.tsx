@@ -36,7 +36,6 @@ export const LoginIM = async () => {
     userID: id,
     token: tk,
   };
-  console.log(options)
   try {
     const data = await OpenIMSDKRN.login(options, "12322111137");
     console.log("login", data);
@@ -54,7 +53,7 @@ export const LogoutIM = async () => {
     return { success: true, errorMsg: "" };
   }
   catch (error) {
-    console.error('Error login:', error); // Log the error
+    console.error('Error logout:', error); // Log the error
     return { success: false, errorMsg: "Logout failed" };
   }
 }

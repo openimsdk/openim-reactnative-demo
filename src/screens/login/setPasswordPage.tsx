@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Modal, Platform } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from '@react-navigation/native';
@@ -10,6 +10,7 @@ import { LoginClient, ResetPasswordClient, SignUpClient } from "../api/requests"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
 import { initStore } from "../../../store/useGlobalEvent";
 import { GetLoginStatus } from "../api/openimsdk";
+import { AuthContext } from "../../../AuthContext";
 interface SetPasswordPageProps {
   route: {
     params: {
@@ -18,10 +19,9 @@ interface SetPasswordPageProps {
       verifyCode: any;
     };
   };
-  onLogin: (loggedIn: boolean) => void;
 }
 
-const SetPasswordPage: React.FC<SetPasswordPageProps> = ({ route, onLogin }) => {
+const SetPasswordPage: React.FC<SetPasswordPageProps> = ({ route }) => {
   const [name, setName] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
@@ -31,6 +31,7 @@ const SetPasswordPage: React.FC<SetPasswordPageProps> = ({ route, onLogin }) => 
   const navigateBack = () => {
     navigator.navigate("SignUpPage");
   }
+  const { setLoginState } = useContext(AuthContext);
   useEffect(() => {
     if (newPassword === repeatPassword) {
       setNext(true);
@@ -65,11 +66,7 @@ const SetPasswordPage: React.FC<SetPasswordPageProps> = ({ route, onLogin }) => 
       }
       const result = await LoginClient({ password: md5.hex_md5(newPassword), phoneNumber: route.params.email, verifyCode: "verify", areaCode: "+86" })
       if (result.success) {
-        const result = await GetLoginStatus();
-        if (result.status === 3) {
-          onLogin(true);
-        }
-        initStore()
+        setLoginState(true)
       } else {
         setError(result.errorMsg)
       }

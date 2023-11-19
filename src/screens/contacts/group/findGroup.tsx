@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  Platform,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -24,7 +25,7 @@ const FindGroupPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
+      try { 
         const result = await SearchGroup([searchTerm],true,false);
         setSearchResults(result);
       } catch (error) {
@@ -78,6 +79,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    marginTop: Platform.OS === 'ios' ? 50 : 0
   },
   searchContainer: {
     marginTop: 20,

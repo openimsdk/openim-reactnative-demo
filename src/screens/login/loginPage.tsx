@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
@@ -8,25 +8,26 @@ import { GetLoginStatus } from '../api/openimsdk';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack/lib/typescript/src/types';
 import { initStore } from '../../../store/useGlobalEvent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-interface LoginPageProps {
-  onLogin: (value: boolean) => void;
-}
-const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
+import { AuthContext } from '../../../AuthContext';
+
+const LoginPage = () => {
+  const { setLoginState } = useContext(AuthContext);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordHidden, setPasswordHidden] = useState(true);
   const [error, setError] = useState("");
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  useEffect(() => {
-    const checkLoginStatus = async () => {
-      const result = await GetLoginStatus();
-      if (result.status === 3 && await AsyncStorage.getItem("LoggedIn")) {
-        onLogin(true);
-      }
-    };
+  // useEffect(() => {
+  //   const checkLoginStatus = async () => {
+  //     const result = await GetLoginStatus();
+  //     if (result.status === 3 && await AsyncStorage.getItem("LoggedIn")) {
+  //       setLoginState(true);
+  //     }
+  //   };
 
-    checkLoginStatus();
-  }, []);
+  //   checkLoginStatus();
+  // }, []);
 
   const navigateToForgetPwd = () => {
     navigation.navigate('ForgetPasswordPage');
@@ -60,12 +61,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const handleSignIn = async () => {
     const result = await LoginClient({ password: md5.hex_md5(password), phoneNumber: email, verifyCode: "verify", areaCode: "+86" });
     if (result.success) {
-      setError("")
-      const result = await GetLoginStatus();
-      if (result.status === 3) {
-        onLogin(true);
-      }
-      initStore()
+      setLoginState(true)
+      
     } else {
       setError(result.errorMsg)
     }

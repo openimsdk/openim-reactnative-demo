@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { OpenIMEmitter } from 'open-im-sdk-rn';
 import { useContactStore } from "./contact";
 import { FriendUserItem, WSEvent } from "./type.d";
@@ -7,9 +7,12 @@ import { ExMessageItem, useMessageStore } from "./message";
 import { MessageType } from "./types/enum";
 import { ConversationItem, FriendApplicationItem, RevokedInfo } from "./types/entity";
 import { useUserStore } from "./user";
-import { LogoutIM } from "../src/screens/api/openimsdk";
+import { Init, LogoutIM } from "../src/screens/api/openimsdk";
+import { AuthContext } from "../AuthContext";
 export const initStore = () => {
+
   const { getSelfInfoByReq } = useUserStore.getState();
+  
   const {
     getFriendListByReq,
     //   getBlackListByReq,
@@ -34,11 +37,13 @@ export const initStore = () => {
   // getSendGroupApplicationListByReq();
 };
 export function useGlobalEvent() {
+  const { setLoginState } = useContext(AuthContext);
   useEffect(() => {
-
+    Init();
     setIMListener();
 
     return () => {
+      //unInit() //TODO
       disposeIMListener();
     };
   }, []);
@@ -77,7 +82,11 @@ export function useGlobalEvent() {
     console.log(errCode, errMsg);
     LogoutIM()
   }
-  const connectSuccessHandler = () => console.log("connect success...");
+  const connectSuccessHandler = () => {
+    console.log("connect success...")
+    setLoginState(true);
+    initStore();
+  };
   const kickHandler = (v) => {
     console.error("您的账号已在其他设备登录,请重新登录");
     LogoutIM()

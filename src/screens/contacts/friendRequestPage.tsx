@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, Image } from "react-native";
+import { Text, View, StyleSheet, Image, Platform } from "react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import { GetFriendApplicationListAsRecipient } from "../api/openimsdk";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
+    marginTop: Platform.OS === 'ios' ? 50 : 0
   },
   header: {
     flexDirection: "row",

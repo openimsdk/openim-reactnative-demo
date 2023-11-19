@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   Image,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -109,7 +110,7 @@ const ChatRoom = (conversation: {
             conversation.route.params.item.userID,
           ]);
 
-          setUser(JSON.parse(data!.data)[0].friendInfo);
+          setUser(JSON.parse(data!).data[0].friendInfo);
         } catch (error) {
           // Handle errors here
           console.error(error);
@@ -127,7 +128,6 @@ const ChatRoom = (conversation: {
   const toggleModal = () => {
     setShowModal(!showModal);
   };
-
   const pushNewMessage = useMessageStore(state => state.pushNewMessage);
 
   // Function to handle sending a message
@@ -184,7 +184,7 @@ const ChatRoom = (conversation: {
   }, [loadMoreMessages]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, marginTop: Platform.OS === 'ios' ? 50 : 0}}>
       <ChatHeader
         onBack={() => navigator.goBack()}
         onAddFriend={() => navigator.navigate("AddFriend")}
@@ -193,7 +193,7 @@ const ChatRoom = (conversation: {
         style={styles.messageList}
         data={messages}
         ref={flatListRef}
-        // onScroll={handleScroll}
+        keyExtractor={(item, index) => item.id || index.toString()}
         initialScrollIndex={0}
         onScrollToIndexFailed={info => {
           const wait = new Promise(resolve => setTimeout(resolve, 500));
@@ -201,7 +201,7 @@ const ChatRoom = (conversation: {
             flatListRef.current?.scrollToIndex({ index: info.index, animated: false });
           });
         }}
-        windowSize={5}
+        onContentSizeChange={()=> flatListRef.current?.scrollToEnd()}
         getItemLayout={(data, index) => (
           { length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index }
         )}
@@ -214,12 +214,6 @@ const ChatRoom = (conversation: {
             // Return a placeholder component or an empty View for other cases
             return <View />;
           }
-        }}
-        onContentSizeChange={() => {
-          // Scroll to the bottom when content size changes
-          if (!initialLoadDone)
-            flatListRef.current?.scrollToEnd({ animated: false });
-          setInitialLoadDone(true)
         }}
         refreshControl={
           <RefreshControl

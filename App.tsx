@@ -40,19 +40,17 @@ export default function App() {
   useGlobalEvent()
 
   useEffect(() => {
-
-
     const checkLogin = async () => {
       const storedLoginState = await AsyncStorage.getItem("isLoggedIn")
-      setIsLoggedIn(storedLoginState === "true")
+      setIsLoggedIn(storedLoginState != null)
     }
-    // Call the Init function when the component mounts
-    Init();
-
-    checkLogin();
-
+    checkLogin()
+    
   }, []); // The empty dependency array ensures that this effect runs once on mount
-
+  useEffect(() => {
+    if(isLoggedIn)
+      handleLogin
+  }, [isLoggedIn]); 
   const handleLogin = async (loggedIn: boolean | ((prevState: boolean) => boolean)) => {
     await AsyncStorage.setItem("isLoggedIn", loggedIn.toString())
     setIsLoggedIn(loggedIn);
@@ -61,26 +59,25 @@ export default function App() {
     setIsLoggedIn(false);
     await AsyncStorage.removeItem("isLoggedIn")
     LogoutIM();
+    // unInit();//TODO
     const navigation = useNavigation<NativeStackNavigationProp<any>>();
     navigation.navigate("LoginPage")
-
-
   }
   return (
 
     <NavigationContainer>
-      <AuthContext.Provider value={{ handleLogout:()=>void }}>
+      <AuthContext.Provider value={{ isLoggedIn, setLoginState: setIsLoggedIn, handleLogout }}>
         <Stack.Navigator screenOptions={{ animationEnabled: false }}>
           {!isLoggedIn ? (
             <>
               <Stack.Screen
                 name="LoginPage"
-                component={() => <LoginPage onLogin={handleLogin} />}
+                component={LoginPage} 
                 options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="LoginWithVerificationPage"
-                component={() => <LoginWithVerificationPage onLogin={handleLogin} />}
+                component={LoginWithVerificationPage} 
                 options={{ headerShown: false }}
               />
               <Stack.Screen
@@ -92,7 +89,7 @@ export default function App() {
                 name="SetPasswordPage"
                 options={{ headerShown: false }}
               >
-                {props => <SetPasswordPage {...props} onLogin={handleLogin} />}
+                {props => <SetPasswordPage {...props} />}
               </Stack.Screen>
               <Stack.Screen
                 name="SetVerificationPage"

@@ -266,37 +266,32 @@ export const ResetPasswordClient = async (params: { phoneNumber: any; password: 
 }
 
 export const getBusinessUserInfo = async (userIDs: string[], isSelfInfo = false) => {
-  const token = await AsyncStorage.getItem('chatToken');
+  try {
+    const token = await AsyncStorage.getItem('chatToken');
 
-  return axios.post<{ users: BusinessUserInfo[] }>(
-    USER_URL + "/user/find/full",
-    {
-      userIDs: userIDs,
-    },
-    {
-      headers: {
-        operationID: '923821',
-        token: token,
-      },
-    },
-  );
+    return await axios.post<{ users: BusinessUserInfo[] }>(
+      `${USER_URL}/user/find/full`,
+      { userIDs },
+      { headers: { operationID: '923821', token } }
+    );
+  } catch (error) {
+    console.error('Error in getBusinessUserInfo:', error);
+  }
 };
+
 export const searchBusinessUserInfo = async (keyword: string) => {
-  const token = await AsyncStorage.getItem('chatToken');
-  return axios.post<{ total: number; users: BusinessUserInfo[] }>(
-    USER_URL + "/user/search/full",
-    {
-      keyword,
-      pagination: {
-        pageNumber: 1,
-        showNumber: 10,
+  try {
+    const token = await AsyncStorage.getItem('chatToken');
+
+    return await axios.post<{ total: number; users: BusinessUserInfo[] }>(
+      `${USER_URL}/user/search/full`,
+      {
+        keyword,
+        pagination: { pageNumber: 1, showNumber: 10 },
       },
-    },
-    {
-      headers: {
-        operationID: '9347234',
-        token,
-      },
-    },
-  );
+      { headers: { operationID: '9347234', token } }
+    );
+  } catch (error) {
+    console.error('Error in searchBusinessUserInfo:', error);
+  }
 };

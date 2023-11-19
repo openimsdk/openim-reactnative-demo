@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
@@ -6,10 +6,10 @@ import { CheckVerifyClient, LoginClient, SendVerifyClient } from '../api/request
 import { NativeStackNavigationProp } from '@react-navigation/native-stack/lib/typescript/src/types';
 import { initStore } from '../../../store/useGlobalEvent';
 import { GetLoginStatus } from '../api/openimsdk';
-interface LoginWithVerificationPageProps {
-  onLogin: (value: boolean) => void;
-}
-const LoginWithVerificationPage: React.FC<LoginWithVerificationPageProps> = ({ onLogin }) => {
+import { AuthContext } from '../../../AuthContext';
+
+const LoginWithVerificationPage = ( ) => {
+  const { setLoginState } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordHidden, setPasswordHidden] = useState(true);
@@ -44,11 +44,7 @@ const LoginWithVerificationPage: React.FC<LoginWithVerificationPageProps> = ({ o
     if (result.success) {
       const result2 = await LoginClient({ password: "", phoneNumber: email, verifyCode: password, areaCode: "+86" });
       if (result2.success) {
-        const result = await GetLoginStatus();
-        if (result.status === 3) {
-          onLogin(true);
-        }
-        initStore()
+        setLoginState(true)
       } else {
         setError(result2.errorMsg)
       }

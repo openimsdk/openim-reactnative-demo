@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, ListRenderItem, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, ListRenderItem, Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ConversationCard from "./conversationCard";
 import { useConversationStore } from "../../../store/conversation";
 import { useNavigation } from "@react-navigation/native";
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+    marginTop: Platform.OS === 'ios' ? 50 : 0
   },
   header: {
     backgroundColor: '#F6F6F6FF',

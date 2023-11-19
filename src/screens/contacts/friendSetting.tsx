@@ -8,12 +8,16 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { GetOneConversation } from '../api/openimsdk';
 import { ConversationItem } from '../../../store/types/entity';
 
-
-const FriendSettingPage = (route:any) => { //TODO seperate views
+interface SetVerificationPageProps {
+  route: {
+      params: string;
+  };
+}
+const FriendSettingPage = (route:SetVerificationPageProps) => { //TODO seperate views
   const [currentUserInfo,setCurrentUserInfo] = useState({nickname:'',faceURL:'',userID:''})
   getBusinessUserInfo([route.route.params]).then((response) => {
-    // Handle the response here
-    setCurrentUserInfo(response.data.users[0])
+    // Handle the response here  
+    setCurrentUserInfo(response.data.data.users[0])
   })
   .catch((error) => {
     // Handle errors here

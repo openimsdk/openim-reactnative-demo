@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import Avatar from '../../components/avatar';
 import { useUserStore } from '../../../store/user';
 import { getBusinessUserInfo } from '../api/requests';
@@ -40,6 +40,7 @@ const SettingPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: Platform.OS === 'ios' ? 50 : 0
   },
   header: {
     flexDirection: 'row',
