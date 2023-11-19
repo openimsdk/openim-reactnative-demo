@@ -7,8 +7,8 @@ import { useAuth } from '../../../AuthContext';
 
 
 const SettingPage = () => {
-const {handleLogout} = useAuth();
-let curretnUserInfo = useUserStore((state) => state.selfInfo)
+  const { handleLogout } = useAuth();
+  let curretnUserInfo = useUserStore((state) => state.selfInfo)
 
   return (
     <View style={styles.container}>
@@ -28,10 +28,10 @@ let curretnUserInfo = useUserStore((state) => state.selfInfo)
         <Text style={styles.name}>{curretnUserInfo.nickname}</Text>
         <Text style={styles.email}>{curretnUserInfo.userID}</Text>
 
-          <TouchableOpacity style={styles.button} onPress={handleLogout}>
-            {/* Search button with icon */}
-            <Text>Log out</Text>
-          </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleLogout}>
+          {/* Search button with icon */}
+          <Text>Log out</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

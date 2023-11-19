@@ -9,21 +9,21 @@ const SetVerificationPage = (props: { route: { params: { email: string }; }; }) 
   const digitInputs = Array.from({ length: totalDigits }, (_, index) => index);
   const digitRefs = useRef<TextInput[]>([]);
   const [digits, setDigits] = useState(Array(totalDigits).fill(''));
-  const [error,setError] = useState("")
+  const [error, setError] = useState("")
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
   const navigateBack = () => {
     navigator.navigate("SignUpPage");
-}
-const navigateToSetPwd = async () => {
-  const result = await CheckVerifyClient({ phoneNumber: props.route.params.email, verifyCode: digits.join("") })
-    if(result.success)
-        navigator.navigate("SetPasswordPage",{email:props.route.params.email,verifyCode:digits.join(""),type:"register"});
-    else{
-      setDigits(['','','','','','',''])
+  }
+  const navigateToSetPwd = async () => {
+    const result = await CheckVerifyClient({ phoneNumber: props.route.params.email, verifyCode: digits.join("") })
+    if (result.success)
+      navigator.navigate("SetPasswordPage", { email: props.route.params.email, verifyCode: digits.join(""), type: "register" });
+    else {
+      setDigits(['', '', '', '', '', '', ''])
       setError(result.errorMsg)
-      }
     }
-        
+  }
+
   const handleDigitChange = (index: number, value: string) => {
     const newDigits = [...digits];
     newDigits[index] = value;
@@ -41,7 +41,7 @@ const navigateToSetPwd = async () => {
     setDigits(newDigits);
   };
   const sendVeriCode = () => {
-    SendVerifyClient({usedFor:1,phoneNumber:props.route.params.email});
+    SendVerifyClient({ usedFor: 1, phoneNumber: props.route.params.email });
   }
   return (
     <LinearGradient
@@ -75,12 +75,12 @@ const navigateToSetPwd = async () => {
           </View>
           <View style={styles.didnotReceivedCodeContainer}>
             <Text >Did't received code?</Text>
-            <TouchableOpacity style={styles.didnotReceivedCodeButton} onPress={()=>{sendVeriCode()}}>
-                <Text style={styles.didnotReceivedCodeButtonText}>Resend Code</Text>
+            <TouchableOpacity style={styles.didnotReceivedCodeButton} onPress={() => { sendVeriCode() }}>
+              <Text style={styles.didnotReceivedCodeButtonText}>Resend Code</Text>
             </TouchableOpacity>
           </View>
           <Text style={styles.error}>{error}</Text>
-          <TouchableOpacity style={styles.nextButton} onPress={()=>navigateToSetPwd()}>
+          <TouchableOpacity style={styles.nextButton} onPress={() => navigateToSetPwd()}>
             <Text style={styles.nextButtonText}>Next</Text>
           </TouchableOpacity>
         </View>
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingLeft: 20,
-    paddingRight:20,
+    paddingRight: 20,
   },
   backButton: {
     marginTop: 100,
@@ -142,20 +142,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginRight: 10,
   },
-  didnotReceivedCodeContainer:{
-    flexDirection:"row",
-    justifyContent:"center"
+  didnotReceivedCodeContainer: {
+    flexDirection: "row",
+    justifyContent: "center"
   },
-  didnotReceivedCodeButton:{
-    
+  didnotReceivedCodeButton: {
+
   },
-  didnotReceivedCodeButtonText:{
+  didnotReceivedCodeButtonText: {
     color: '#0089FF',
   },
-  error:{
-    fontSize:11,
-    textAlign:"center",
-    color:"red"
+  error: {
+    fontSize: 11,
+    textAlign: "center",
+    color: "red"
   },
   nextButton: {
     backgroundColor: "#0089FF",

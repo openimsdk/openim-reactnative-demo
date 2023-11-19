@@ -17,7 +17,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { FriendUserItem } from '../../../store/type.d';
 
 const AddFriendScreen = () => {
- 
+
   const [searchTerm, setSearchTerm] = useState('');
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
   const [searchResults, setSearchResults] = useState<FriendUserItem[]>([]);
@@ -64,7 +64,7 @@ const AddFriendScreen = () => {
               nickname={friend.nickname}
               faceURL={friend.faceURL}
               userID={friend.userID}
-              //style={styles.friendCard} // Add a style prop to your FriendCard component
+            //style={styles.friendCard} // Add a style prop to your FriendCard component
             />
           )}
           contentContainerStyle={styles.flatList} // Style the FlatList items
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   searchContainer: {
-    marginTop:20,
+    marginTop: 20,
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,

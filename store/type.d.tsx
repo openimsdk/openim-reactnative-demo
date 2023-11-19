@@ -1,4 +1,4 @@
-import {ExMessageItem} from './message';
+import { ExMessageItem } from './message';
 import {
   ConversationItem,
   GroupApplicationItem,
@@ -88,9 +88,9 @@ export interface ContactStore {
   getSendFriendApplicationListByReq: () => Promise<void>;
   updateRecvFriendApplication: (application: FriendApplicationItem) => void;
   updateSendFriendApplication: (application: FriendApplicationItem) => void;
-//   getRecvGroupApplicationListByReq: () => Promise<void>;
-//   updateRecvGroupApplication: (application: GroupApplicationItem) => void;
-//   getSendGroupApplicationListByReq: () => Promise<void>;
+  //   getRecvGroupApplicationListByReq: () => Promise<void>;
+  //   updateRecvGroupApplication: (application: GroupApplicationItem) => void;
+  //   getSendGroupApplicationListByReq: () => Promise<void>;
   clearContactStore: () => void;
 }
 export interface UserStore {

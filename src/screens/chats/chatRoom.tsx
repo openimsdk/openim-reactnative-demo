@@ -40,7 +40,7 @@ interface MessageInputProps {
   onChangeText: (text: string) => void;
 };
 // Header Component
-const ChatHeader = ({ onBack, onAddFriend }:ChatHeaderInputProps) => (
+const ChatHeader = ({ onBack, onAddFriend }: ChatHeaderInputProps) => (
   <View style={styles.header}>
     <TouchableOpacity style={styles.button} onPress={onBack}>
       <Image source={require('../../../assets/imgs/back.png')} />
@@ -53,7 +53,7 @@ const ChatHeader = ({ onBack, onAddFriend }:ChatHeaderInputProps) => (
 );
 
 // Message Input Component
-const MessageInput = ({ onSubmit, value, onChangeText }:MessageInputProps) => (
+const MessageInput = ({ onSubmit, value, onChangeText }: MessageInputProps) => (
   <View style={styles.inputContainer}>
     <TouchableOpacity
       style={styles.moreOptionsButton}
@@ -80,7 +80,7 @@ const ChatRoom = (conversation: {
   const currentConversation = useConversationStore(
     state => state.currentConversation,
   );
-  
+
 
   const flatListRef = useRef<FlatList>(null);
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
