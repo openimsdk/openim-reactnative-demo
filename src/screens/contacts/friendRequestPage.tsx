@@ -13,8 +13,10 @@ const FriendRequestPage = () => {
   const recvFriendApplicationList: FriendApplicationItem[] = useContactStore(
     (state) => state.recvFriendApplicationList,
   );
+  const sendFriendApplicationList: FriendApplicationItem[] = useContactStore(
+    (state) => state.sendFriendApplicationList,
+  );
 
-  const sendFriendApplicationList: FriendApplicationItem[] = []; //TODO
   const applicationList: FriendApplicationItem[] = [...recvFriendApplicationList, ...sendFriendApplicationList]
   applicationList.sort((a, b) => b.createTime - a.createTime);
 
