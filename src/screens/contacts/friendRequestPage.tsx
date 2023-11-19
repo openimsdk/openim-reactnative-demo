@@ -14,10 +14,20 @@ const FriendRequestPage = () => {
         (state) => state.recvFriendApplicationList,
     );
 
-    const sendFriendApplicationList:FriendApplicationItem[] = [];
+    const sendFriendApplicationList:FriendApplicationItem[] = []; //TODO
     const applicationList:FriendApplicationItem[] = [...recvFriendApplicationList,...sendFriendApplicationList]
     applicationList.sort((a, b) => b.createTime - a.createTime);
     
+    const renderFriendRequest = ({ item }: { item: FriendApplicationItem } ) => (
+        <FriendRequestCard 
+            nickname={item.fromNickname} 
+            faceURL={item.fromFaceURL} 
+            handleResult={item.handleResult} 
+            reqMsg={item.reqMsg} 
+            fromUserID={item.fromUserID} 
+        />
+    );
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -30,12 +40,8 @@ const FriendRequestPage = () => {
             <Text style={styles.friendApplicationText}>Friends Application</Text>
             <FlatList
                 data={applicationList}
-                renderItem={( {item} ) => {
-                    return (
-                        <FriendRequestCard nickname={item.fromNickname} faceURL={item.fromFaceURL} handleResult={item.handleResult} reqMsg={item.reqMsg} fromUserID={item.fromUserID} />
-                    )
-                }}
-                // keyExtractor={(item) => item.createTime.toString()} // Use a unique key
+                renderItem={renderFriendRequest}
+                keyExtractor={(item) => item.createTime.toString()} // Use a unique key
             />
         </View>
     );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
@@ -18,23 +18,18 @@ const ForgetPasswordPage = () => {
     setEmail('');
   };
 
-  const handleSendVerification = async () => {
-    if (countdownSeconds === 0) {
-      const result = await SendVerifyClient({usedFor:2,phoneNumber:email})
-      if(result.success)
-        setCountdownSeconds(60);
-      else
-        setError(result.errorMsg)
+  const handleSendVerification = useCallback(async () => {
+    if (countdownSeconds === 0 && email) {
+      const result = await SendVerifyClient({ usedFor: 2, phoneNumber: email });
+      result.success ? setCountdownSeconds(60) : setError(result.errorMsg);
     }
-  };
-  const handleSavePwd = async () => {
-    const result = await CheckVerifyClient({ phoneNumber: email, verifyCode: password})
-    if(result.success){
-      navigator.navigate("SetPasswordPage",{type:"resetPwd"});
-    }else{
-      setError(result.errorMsg)
-    }
-  }
+  }, [email, countdownSeconds]);
+
+  const handleSavePwd = useCallback(async () => {
+    const result = await CheckVerifyClient({ phoneNumber: email, verifyCode: password });
+    result.success ? navigator.navigate('SetPasswordPage', { type: 'resetPwd' }) : setError(result.errorMsg);
+  }, [email, password, navigator]);
+  
   useEffect(() => {
     // Decrease the countdown every second
     const interval = setInterval(() => {

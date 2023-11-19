@@ -11,7 +11,6 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/ty
 import { initStore } from "../../../store/useGlobalEvent";
 import { GetLoginStatus } from "../api/openimsdk";
 interface SetPasswordPageProps {
-  // props: {
     route: {
       params: {
         type: string;
@@ -19,7 +18,6 @@ interface SetPasswordPageProps {
         verifyCode: any;
       };
     };
-  // }
   onLogin: (loggedIn: boolean) => void;
 }
 
