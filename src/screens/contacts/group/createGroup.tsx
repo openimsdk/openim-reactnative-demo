@@ -9,6 +9,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  SectionListData,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { useContactStore } from '../../../../store/contact';
@@ -16,6 +17,59 @@ import { FriendUserItem } from '../../../../store/type.d';
 import SearchDrawer from '../../../components/searchDrawer';
 import Avatar from '../../../components/avatar';
 import { CreateGroup } from '../../api/openimsdk';
+import { groupContactsByFirstCharacter } from '../../../components/contactUtils';
+
+interface SearchBarProps {
+  search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+  onPress: () => void;
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({ search, setSearch, onPress }) => (
+  <TouchableOpacity style={styles.searchBar} onPress={onPress}>
+    <TextInput
+      placeholder="Search"
+      value={search}
+      onChangeText={setSearch}
+    />
+  </TouchableOpacity>
+);
+interface FriendItemProps {
+  item: FriendUserItem;
+  isSelected: boolean;
+  onPress: () => void;
+}
+
+const FriendItem: React.FC<FriendItemProps> = ({ item, isSelected, onPress }) => (
+  <TouchableOpacity
+    style={styles.friendSelect}
+    onPress={onPress}>
+    <Avatar nickname={item.nickname} faceURL={item.faceURL} />
+    <Text>{item.nickname}</Text>
+    {isSelected && <Text> Selected</Text>}
+  </TouchableOpacity>
+);
+interface AlphabetHintListProps {
+  hints: string[];
+  onPressItem: (index: number) => void;
+}
+
+const AlphabetHintList: React.FC<AlphabetHintListProps> = ({ hints, onPressItem }) => (
+  <ScrollView
+    style={styles.hintContainer}
+    contentContainerStyle={styles.hintContentContainer}>
+    {hints.map((hint, index) => (
+      <TouchableOpacity
+        key={index}
+        style={styles.hintItem}
+        onPress={() => onPressItem(index)}>
+        <Text>{hint}</Text>
+      </TouchableOpacity>
+    ))}
+  </ScrollView>
+);
+
+// Include appropriate styles for SearchBar in your styles object.
 interface SectionWithOffset {
   title: string;
   data: FriendUserItem[];
@@ -28,7 +82,7 @@ const CreateGroupPage = () => {
     SectionWithOffset[]
   >([]);
   const [scrollEnabled, setScrollEnabled] = useState(true);
-  const sectionListRef: RefObject<SectionList> = useRef(null);
+  const sectionListRef = useRef<SectionList<FriendUserItem, SectionWithOffset>>(null);
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const popupSearchInputRef = useRef<TextInput | null>(null);
   const rawData = useContactStore(state => state.friendList);
@@ -37,9 +91,6 @@ const CreateGroupPage = () => {
       a.nickname.localeCompare(b.nickname),
   );
   const [selectedFriend, setSelectedFriend] = useState<string[]>([]);
-  const initializeSections = () => {
-    // ... initialization logic ...
-  };
 
   useEffect(() => {
     const hints: string[] = Array.from(
@@ -54,43 +105,7 @@ const CreateGroupPage = () => {
     hints.push(modifiedHints[0]);
     setAlphabetHints(hints);
 
-    const groupContactsByFirstCharacter = (contacts: FriendUserItem[]) => {
-      const grouped: { [key: string]: FriendUserItem[] } = {};
-      let hasNonAlphabet = false;
-
-      contacts.forEach(contact => {
-        let firstChar = contact.nickname.charAt(0).toUpperCase();
-
-        if (!firstChar.match(/[A-Z]/)) {
-          firstChar = '#';
-          hasNonAlphabet = true;
-        }
-
-        if (!grouped[firstChar]) {
-          grouped[firstChar] = [];
-        }
-        grouped[firstChar].push(contact);
-      });
-
-      const sections = Object.keys(grouped).map(key => ({
-        title: key,
-        data: grouped[key],
-      }));
-
-      sections.sort((a, b) => {
-        if (a.title === '#') {
-          return hasNonAlphabet ? 1 : -1;
-        }
-        if (b.title === '#') {
-          return hasNonAlphabet ? -1 : 1;
-        }
-        return a.title.localeCompare(b.title);
-      });
-
-      return sections;
-    };
-
-    const groupedContacts = groupContactsByFirstCharacter(data);
+    const groupedContacts = groupContactsByFirstCharacter(data, 'groupName');
 
     let totalOffset = 0;
     const sectionsWithOffset = groupedContacts.map(section => {
@@ -134,59 +149,47 @@ const CreateGroupPage = () => {
     setIsDrawerVisible(false);
   };
 
+  const toggleSelectFriend = (userID: string) => {
+    if (selectedFriend.includes(userID)) {
+      setSelectedFriend(selectedFriend.filter(id => id !== userID));
+    } else {
+      setSelectedFriend([...selectedFriend, userID]);
+    }
+  };
+  const renderSectionHeader = ({ section }: { section: SectionListData<FriendUserItem, SectionWithOffset> }) => {
+    return section.title !== '' ? (
+      <Text style={styles.sectionHeader}>{section.title}</Text>
+    ) : null;
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior="height"
       keyboardVerticalOffset={Platform.OS === 'android' ? -60 : -70}>
+
       <View style={styles.header}>
-        <TouchableOpacity style={styles.searchBar} onPress={openDrawer}>
-          <TextInput
-            placeholder="Search"
-            value={search}
-            onChangeText={setSearch} // Update the 'search' state
-          />
-        </TouchableOpacity>
+        <SearchBar search={search} setSearch={setSearch} onPress={openDrawer} />
       </View>
       <SectionList
         ref={sectionListRef}
         sections={contactSections}
         keyExtractor={(item, index) =>
-          item.friendInfo && item.friendInfo.userID
-            ? item.friendInfo.userID + index.toString()
+          item && item.userID
+            ? item.userID + index.toString()
             : index.toString()
         }
         bounces={false}
         renderItem={({ item }) => {
           const isSelected = selectedFriend.includes(item.userID);
-
           return (
-            <TouchableOpacity
-              style={styles.friendSelect}
-              onPress={() => {
-                const isSelected = selectedFriend.includes(item.userID);
-                if (!isSelected) {
-                  setSelectedFriend(prevSelectedItems => [
-                    ...prevSelectedItems,
-                    item.userID,
-                  ]);
-                } else {
-                  setSelectedFriend(prevSelectedItems =>
-                    prevSelectedItems.filter(id => id !== item.userID),
-                  );
-                }
-              }}>
-              <Avatar nickname={item.nickname} faceURL={item.faceURL}></Avatar>
-              <Text>{item.nickname}</Text>
-              {isSelected && <Text> Selected</Text>}
-            </TouchableOpacity>
+            <FriendItem
+              item={item}
+              isSelected={isSelected}
+              onPress={() => toggleSelectFriend(item.userID)} />
           );
         }}
-        renderSectionHeader={({ section }) => {
-          if (section.title !== '')
-            return <Text style={styles.sectionHeader}>{section.title}</Text>;
-          else return null;
-        }}
+        renderSectionHeader={renderSectionHeader}
         onScroll={event => {
           const offsetY = event.nativeEvent.contentOffset.y;
           const sectionIndex = contactSections.findIndex(
@@ -198,18 +201,8 @@ const CreateGroupPage = () => {
         }}
         scrollEnabled={scrollEnabled}
       />
-      <ScrollView
-        style={styles.hintContainer}
-        contentContainerStyle={styles.hintContentContainer}>
-        {alphabetHints.map((hint, index) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.hintItem}
-            onPress={() => handleHintItemPress(index)}>
-            <Text>{hint}</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+      <AlphabetHintList hints={alphabetHints} onPressItem={handleHintItemPress} />
+
       <TouchableOpacity
         onPress={() => {
           console.log(selectedFriend);

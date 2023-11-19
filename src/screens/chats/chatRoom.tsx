@@ -133,7 +133,6 @@ const ChatRoom = (conversation: {
   // Function to handle sending a message
   const sendMessage = useCallback(async () => {
     if (inputMessage.trim() === '') return; // Prevent sending empty messages
-
     // Create message asynchronously
     let text;
     try {
@@ -142,7 +141,6 @@ const ChatRoom = (conversation: {
       console.error('Error CreateTextMsg:', error);
       return;
     }
-
     const offlinePushInfo = {
       title: 'you have a new message',
       desc: 'new message',
@@ -150,7 +148,6 @@ const ChatRoom = (conversation: {
       iOSPushSound: '+1',
       iOSBadgeCount: true,
     };
-
     // Send message asynchronously
     try {
       const options = {
@@ -168,9 +165,6 @@ const ChatRoom = (conversation: {
     }
   }, [inputMessage, currentConversation, pushNewMessage]);
 
-
-
-
   const loadMoreMessages = async () => {
     const previousLength = messages.length;
     await getHistoryMessageList(true); // Load more messages
@@ -182,13 +176,12 @@ const ChatRoom = (conversation: {
     }
     setIsLoadingMore(false)
   };
+
   const onRefresh = useCallback(async () => {
     setIsLoadingMore(true);
     await loadMoreMessages(); // Assuming this function fetches new messages
     setIsLoadingMore(false);
   }, [loadMoreMessages]);
-
-
 
   return (
     <View style={{ flex: 1 }}>

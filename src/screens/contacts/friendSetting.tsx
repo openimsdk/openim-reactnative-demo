@@ -9,7 +9,7 @@ import { GetOneConversation } from '../api/openimsdk';
 import { ConversationItem } from '../../../store/types/entity';
 
 
-const FriendSettingPage = (route:any) => {
+const FriendSettingPage = (route:any) => { //TODO seperate views
   const [currentUserInfo,setCurrentUserInfo] = useState({nickname:'',faceURL:'',userID:''})
   getBusinessUserInfo([route.route.params]).then((response) => {
     // Handle the response here

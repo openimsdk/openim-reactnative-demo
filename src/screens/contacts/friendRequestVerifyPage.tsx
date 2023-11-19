@@ -10,7 +10,7 @@ interface FriendRequestItem {
   nickname: string;
   reqMsg: string;
 }
-const FriendRequestVerifyPage = (props: { route: { params: FriendRequestItem }; }) => {
+const FriendRequestVerifyPage = (props: { route: { params: FriendRequestItem }; }) => { //TODO props, seperate views
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
   const friendRequestInfo = props.route.params
   const onhandleAccept = () => {
