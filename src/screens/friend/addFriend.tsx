@@ -14,19 +14,19 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import FriendCard from './friendCard';
 import { searchBusinessUserInfo } from '../api/requests';
 import { FlatList } from 'react-native-gesture-handler';
-import { FriendUserItem } from '../../../store/type.d';
+import { BusinessUserInfo } from '../../../store/user';
 
 const AddFriendScreen = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
-  const [searchResults, setSearchResults] = useState<FriendUserItem[]>([]);
+  const [searchResults, setSearchResults] = useState<BusinessUserInfo[]>([]);
 
   useEffect(() => {
     searchBusinessUserInfo(searchTerm)
       .then((response) => {
         // Handle the response here
-        setSearchResults(response.data.data.users);
+        setSearchResults(response.data.users);
       })
       .catch((error) => {
         // Handle errors here

@@ -13,7 +13,7 @@ const FriendSettingPage = (route:any) => { //TODO seperate views
   const [currentUserInfo,setCurrentUserInfo] = useState({nickname:'',faceURL:'',userID:''})
   getBusinessUserInfo([route.route.params]).then((response) => {
     // Handle the response here
-    setCurrentUserInfo(response.data.data.users[0])
+    setCurrentUserInfo(response.data.users[0])
   })
   .catch((error) => {
     // Handle errors here

@@ -44,9 +44,7 @@ export default function App() {
 
     const checkLogin = async () => {
       const storedLoginState = await AsyncStorage.getItem("isLoggedIn")
-      setIsLoggedIn(storedLoginState === true)
-
-
+      setIsLoggedIn(storedLoginState === "true")
     }
     // Call the Init function when the component mounts
     Init();
@@ -71,7 +69,7 @@ export default function App() {
   return (
 
     <NavigationContainer>
-      <AuthContext.Provider value={{ handleLogout }}>
+      <AuthContext.Provider value={{ handleLogout:()=>void }}>
         <Stack.Navigator screenOptions={{ animationEnabled: false }}>
           {!isLoggedIn ? (
             <>

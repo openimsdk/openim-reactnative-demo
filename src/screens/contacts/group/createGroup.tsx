@@ -105,7 +105,7 @@ const CreateGroupPage = () => {
     hints.push(modifiedHints[0]);
     setAlphabetHints(hints);
 
-    const groupedContacts = groupContactsByFirstCharacter(data, 'groupName');
+    const groupedContacts = groupContactsByFirstCharacter(data, "nickname");
 
     let totalOffset = 0;
     const sectionsWithOffset = groupedContacts.map(section => {

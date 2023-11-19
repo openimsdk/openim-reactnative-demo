@@ -4,10 +4,17 @@ import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from '@react-navigation/native';
 import { SendVerifyClient, CheckVerifyClient } from "../api/requests";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
-const SetVerificationPage = (props: { route: { params: { email: string }; }; }) => {
+interface SetVerificationPageProps {
+  route: {
+    params: {
+      email: string;
+    };
+  };
+}
+const SetVerificationPage = (props:  SetVerificationPageProps ) => {
   const totalDigits = 6;
   const digitInputs = Array.from({ length: totalDigits }, (_, index) => index);
-  const digitRefs = useRef<TextInput[]>([]);
+  const digitRefs = useRef<(TextInput | null)[]>([]);
   const [digits, setDigits] = useState(Array(totalDigits).fill(''));
   const [error, setError] = useState("")
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
@@ -31,11 +38,11 @@ const SetVerificationPage = (props: { route: { params: { email: string }; }; }) 
     if (value === '') {
       // If a digit is deleted, move to the previous input
       if (index > 0) {
-        digitRefs.current[index - 1].focus();
+        digitRefs.current[index - 1]!.focus();
       }
     } else if (index < totalDigits - 1) {
       // If a digit is entered, move to the next input
-      digitRefs.current[index + 1].focus();
+      digitRefs.current[index + 1]!.focus();
     }
 
     setDigits(newDigits);
