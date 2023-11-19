@@ -7,10 +7,10 @@ import { useNavigation } from "@react-navigation/native";
 interface FriendRequestItem {
   faceURL: string;
   fromUserID: string;
-  nickname: string; 
-  reqMsg: string; 
+  nickname: string;
+  reqMsg: string;
 }
-const FriendRequestVerifyPage = (props: { route: { params: FriendRequestItem  }; }) => {
+const FriendRequestVerifyPage = (props: { route: { params: FriendRequestItem }; }) => {
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
   const friendRequestInfo = props.route.params
   const onhandleAccept = () => {
