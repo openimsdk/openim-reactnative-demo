@@ -4,29 +4,27 @@ import RNFS from 'react-native-fs';
 import { API_URL, WS_URL } from '../../config/config';
 import { Platform } from "react-native";
 import { SendMsgParams } from "../../../store/types/params";
+import { useContext } from "react";
+import { AuthContext } from "../../../AuthContext";
+import { initStore } from "../../../store/useGlobalEvent";
 export const Init = async () => {
-  let platform = 1;
-  if (Platform.OS === 'android') {
-    platform = 2; // Android
-  } else if (Platform.OS === 'ios') {
-    platform = 1;
-  }
+  let platform = Platform.OS === 'android' ? 2 : 1; // Simplified platform determination
   await RNFS.mkdir(RNFS.DocumentDirectoryPath + '/tmp');
   const config = {
     platformID: platform,
     apiAddr: API_URL,
     wsAddr: WS_URL,
-
     dataDir: RNFS.DocumentDirectoryPath + '/tmp',
     logLevel: 6,
     isLogStandardOutput: true,
   };
+
   try {
     const opid = "123456" + Date.now();
-    const result = await OpenIMSDKRN.initSDK(config, opid);
-
+    return await OpenIMSDKRN.initSDK(config, opid);
   } catch (error) {
-    console.error('Error initializing SDK:', error); // Log the error
+    console.error('Error initializing SDK:', error);
+    throw error; // Throw the error to be handled by the caller
   }
 };
 export const LoginIM = async () => {
@@ -36,126 +34,128 @@ export const LoginIM = async () => {
     userID: id,
     token: tk,
   };
+
   try {
     const data = await OpenIMSDKRN.login(options, "12322111137");
+    initStore();
     console.log("login", data);
-    return { success: true, errorMsg: "" };
-  }
-  catch (error) {
-    console.error('Error login:', error); // Log the error
-    return { success: false, errorMsg: "Login failed" };
+    return data; // Return data directly on successful login
+  } catch (error) {
+    console.error('Error login:', error);
+    throw error; // Throw the error to be handled by the caller
   }
 };
 export const LogoutIM = async () => {
+  await AsyncStorage.clear()
+  
   try {
-    const data = await OpenIMSDKRN.logout("1232211737");
+    const data = await OpenIMSDKRN.logout("12322111137");
     console.log("logout", data);
-    return { success: true, errorMsg: "" };
+
+    return data; // Return data directly on successful login
+  } catch (error) {
+    console.error('Error logout:', error);
+    throw error; // Throw the error to be handled by the caller
   }
-  catch (error) {
-    console.error('Error logout:', error); // Log the error
-    return { success: false, errorMsg: "Logout failed" };
-  }
-}
+};
+
 export const GetLoginStatus = async () => {
   try {
     const data = await OpenIMSDKRN.getLoginStatus("12321737");
     console.log("getLoginStatus", data);
-    return { success: true, errorMsg: "", status: data };
+    return data; // Return data directly
+  } catch (error) {
+    console.error('Error getLoginStatus:', error);
+    throw error;
   }
-  catch (error) {
-    console.error('Error getLoginStatus:', error); // Log the error
-    return { success: false, errorMsg: "getLoginStatus failed", status: "" };
-  }
-}
+};
+
 export const GetAllConversationList = async () => {
   try {
     const data = await OpenIMSDKRN.getAllConversationList("12737");
     console.log("getAllConversationList", data);
-    return { success: true, errorMsg: "", data: data };
+    return data; // Return data directly
+  } catch (error) {
+    console.error('Error GetAllConversationList:', error);
+    throw error;
   }
-  catch (error) {
-    console.error('Error getLoginStatus:', error); // Log the error
-    return { success: false, errorMsg: "getAllConversationList  failed", data: [] };
-  }
-}
+};
 export const GetFriendList = async () => {
   try {
     const data = await OpenIMSDKRN.getFriendList("12837");
     console.log("GetFriendList", data);
-    return { success: true, errorMsg: "", data: data };
+    return data; // Return data directly
+  } catch (error) {
+    console.error('Error GetFriendList:', error);
+    throw error;
   }
-  catch (error) {
-    console.error('Error GetFriendList:', error); // Log the error
-    return { success: false, errorMsg: "GetFriendList  failed", data: [] };
-  }
-}
+};
+
 export const GetFriendApplicationListAsRecipient = async () => {
   try {
-    const data = await OpenIMSDKRN.getFriendApplicationListAsRecipient("01229")
-    console.log("GetFriendApplicationListAsRecipient", data)
-    return { success: true, errorMsg: "", data: data };
+    const data = await OpenIMSDKRN.getFriendApplicationListAsRecipient("01229");
+    console.log("GetFriendApplicationListAsRecipient", data);
+    return data; // Return data directly
+  } catch (error) {
+    console.error('Error GetFriendApplicationListAsRecipient:', error);
+    throw error;
   }
-  catch (error) {
-    console.error('Error GetFriendApplicationListAsRecipient:', error); // Log the error
-    return { success: false, errorMsg: "GetFriendApplicationListAsRecipient  failed", data: [] };
-  }
-}
+};
+
 export const AcceptFriendApplication = async (options: { toUserID: any; handleMsg: string; }) => {
   try {
-    const data = await OpenIMSDKRN.acceptFriendApplication(options, "012219")
-    console.log("AcceptFriendApplication", data)
-    return { success: true, errorMsg: "", data: data };
+    const data = await OpenIMSDKRN.acceptFriendApplication(options, "012219");
+    console.log("AcceptFriendApplication", data);
+    return data; // Return data directly
+  } catch (error) {
+    console.error('Error AcceptFriendApplication:', error);
+    throw error;
   }
-  catch (error) {
-    console.error('Error AcceptFriendApplication:', error); // Log the error
-    return { success: false, errorMsg: "AcceptFriendApplication  failed", data: [] };
-  }
-}
+};
+
 export const RefuseFriendApplication = async (options: { toUserID: any; handleMsg: string; }) => {
   try {
-    const data = await OpenIMSDKRN.refuseFriendApplication(options, "01221119")
-    console.log("RefuseFriendApplication", data)
-    return { success: true, errorMsg: "", data: data };
+    const data = await OpenIMSDKRN.refuseFriendApplication(options, "01221119");
+    console.log("RefuseFriendApplication", data);
+    return data; // Return data directly
+  } catch (error) {
+    console.error('Error RefuseFriendApplication:', error);
+    throw error;
   }
-  catch (error) {
-    console.error('Error RefuseFriendApplication:', error); // Log the error
-    return { success: false, errorMsg: "RefuseFriendApplication  failed", data: [] };
-  }
-}
+};
 export const GetAdvancedHistoryMessageListReverse = async (options: { lastMinSeq: number; count: number; startClientMsgID: string; conversationID: string; }) => {
   try {
-    const data = await OpenIMSDKRN.getAdvancedHistoryMessageListReverse(options, "01221119")
-    console.log("GetAdvancedHistoryMessageListReverse", data)
-    return { success: true, errorMsg: "", data: data };
+    const data = await OpenIMSDKRN.getAdvancedHistoryMessageListReverse(options, "01221119");
+    console.log("GetAdvancedHistoryMessageListReverse", data);
+    return data; // Directly return the data
+  } catch (error) {
+    console.error('Error GetAdvancedHistoryMessageListReverse:', error);
+    throw error; // Propagate the error for the caller to handle
   }
-  catch (error) {
-    console.error('Error GetAdvancedHistoryMessageListReverse:', error); // Log the error
-    return { success: false, errorMsg: "GetAdvancedHistoryMessageListReverse  failed", data: [] };
-  }
-}
+};
+
 export const GetUsersInfo = async (userIDList: string[]) => {
   try {
-    const data = await OpenIMSDKRN.getUsersInfo(userIDList, "012211129")
-    console.log("GetUsersInfo", data)
-    return { success: true, errorMsg: "", data: data };
+    const data = await OpenIMSDKRN.getUsersInfo(userIDList, "012211129");
+    console.log("GetUsersInfo", data);
+    return data; // Directly return the data
+  } catch (error) {
+    console.error('Error GetUsersInfo:', error);
+    throw error; // Propagate the error for the caller to handle
   }
-  catch (error) {
-    console.error('Error GetUsersInfo:', error); // Log the error
-    return { success: false, errorMsg: "GetUsersInfo  failed", data: [] };
-  }
-}
+};
+
 export const GetSelfInfo = async () => {
   try {
-    const data = await OpenIMSDKRN.getSelfUserInfo("012211199")
-    console.log("GetSelfInfo", data)
-    return { success: true, errorMsg: "", data: data };
+    const data = await OpenIMSDKRN.getSelfUserInfo("012211199");
+    console.log("GetSelfInfo", data);
+    return data; // Directly return the data
+  } catch (error) {
+    console.error('Error GetSelfInfo:', error);
+    throw error; // Propagate the error for the caller to handle
   }
-  catch (error) {
-    console.error('Error GetSelfInfo:', error); // Log the error
-    return { success: false, errorMsg: "GetSelfInfo  failed", data: [] };
-  }
-}
+};
+
 
 export const SendMessage = async (options: SendMsgParams) => {
   try {

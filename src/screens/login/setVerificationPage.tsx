@@ -22,12 +22,11 @@ const SetVerificationPage = (props:  SetVerificationPageProps ) => {
     navigator.navigate("SignUpPage");
   }
   const navigateToSetPwd = async () => {
-    const result = await CheckVerifyClient({ phoneNumber: props.route.params.email, verifyCode: digits.join("") })
-    if (result.success)
+    try {
+      await CheckVerifyClient({ phoneNumber: props.route.params.email, verifyCode: digits.join("") })
       navigator.navigate("SetPasswordPage", { email: props.route.params.email, verifyCode: digits.join(""), type: "register" });
-    else {
-      setDigits(['', '', '', '', '', '', ''])
-      setError(result.errorMsg)
+    } catch (error) {
+      setError(error.errorMsg)
     }
   }
 

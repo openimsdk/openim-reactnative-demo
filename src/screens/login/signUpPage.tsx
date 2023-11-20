@@ -12,11 +12,12 @@ const SignUpPage = () => {
     navigator.navigate("LoginPage")
   }
   const navigateToVeriCode = async () => {
-    const result = await SendVerifyClient({ usedFor: 1, phoneNumber: email })
-    if (result.success) {
+    try {
+      await SendVerifyClient({ usedFor: 1, phoneNumber: email })
       navigator.navigate("SetVerificationPage", { email });
-    } else
-      setError(result.errorMsg)
+    } catch (error) {
+      setError(error.errorMsg)
+    }
 
   }
 

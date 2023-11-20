@@ -7,7 +7,7 @@ import { ExMessageItem, useMessageStore } from "./message";
 import { MessageType } from "./types/enum";
 import { ConversationItem, FriendApplicationItem, RevokedInfo } from "./types/entity";
 import { useUserStore } from "./user";
-import { Init, LogoutIM } from "../src/screens/api/openimsdk";
+import { Init, LoginIM, LogoutIM } from "../src/screens/api/openimsdk";
 import { AuthContext } from "../AuthContext";
 export const initStore = () => {
 
@@ -39,9 +39,8 @@ export const initStore = () => {
 export function useGlobalEvent() {
   const { setLoginState } = useContext(AuthContext);
   useEffect(() => {
-    Init();
     setIMListener();
-
+    
     return () => {
       //unInit() //TODO
       disposeIMListener();
@@ -80,20 +79,21 @@ export function useGlobalEvent() {
   const connectingHandler = () => console.log("connecting...");
   const connectFailedHandler = ({ errCode, errMsg }: WSEvent) => {
     console.log(errCode, errMsg);
-    LogoutIM()
   }
   const connectSuccessHandler = () => {
     console.log("connect success...")
-    setLoginState(true);
-    initStore();
+    
+    
   };
-  const kickHandler = (v) => {
+  const kickHandler = async (v) => {
     console.error("您的账号已在其他设备登录,请重新登录");
-    LogoutIM()
+    setLoginState(false)
+    await LogoutIM()
   }
-  const expiredHandler = (v) => {
+  const expiredHandler = async (v) => {
     console.error("当前登录已过期,请重新登录");
-    LogoutIM()
+    setLoginState(false)
+    await LogoutIM()
   }
 
   // const tryOut = (msg: string) => feedbackToast({

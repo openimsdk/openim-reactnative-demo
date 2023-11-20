@@ -36,7 +36,6 @@ const ContactListPage = () => {
   const data: FriendUserItem[] = rawData.sort((a: FriendUserItem, b: FriendUserItem) => a.nickname.localeCompare(b.nickname));
   
   useEffect(() => {
-    console.error("hey")
     const hints: string[] = Array.from(new Set(data.map((item: FriendUserItem) => {
       const firstChar = item.nickname.charAt(0).toUpperCase();
       return firstChar.match(/[A-Z]/) ? firstChar : '#';

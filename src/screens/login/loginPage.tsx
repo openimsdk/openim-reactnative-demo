@@ -3,31 +3,19 @@ import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Platform } 
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import md5 from 'react-native-md5';
-import { LoginClient } from '../api/requests';
-import { GetLoginStatus } from '../api/openimsdk';
+import { LoginClient } from '../api/requests';;
 import { NativeStackNavigationProp } from '@react-navigation/native-stack/lib/typescript/src/types';
-import { initStore } from '../../../store/useGlobalEvent';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../../../AuthContext';
+import { LoginIM, LogoutIM } from '../api/openimsdk';
 
 const LoginPage = () => {
   const { setLoginState } = useContext(AuthContext);
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordHidden, setPasswordHidden] = useState(true);
   const [error, setError] = useState("");
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  // useEffect(() => {
-  //   const checkLoginStatus = async () => {
-  //     const result = await GetLoginStatus();
-  //     if (result.status === 3 && await AsyncStorage.getItem("LoggedIn")) {
-  //       setLoginState(true);
-  //     }
-  //   };
 
-  //   checkLoginStatus();
-  // }, []);
 
   const navigateToForgetPwd = () => {
     navigation.navigate('ForgetPasswordPage');
@@ -59,13 +47,16 @@ const LoginPage = () => {
     navigateToSignUp();
   }
   const handleSignIn = async () => {
-    const result = await LoginClient({ password: md5.hex_md5(password), phoneNumber: email, verifyCode: "verify", areaCode: "+86" });
-    if (result.success) {
+    try{
+      await LoginClient({ password: md5.hex_md5(password), phoneNumber: email, verifyCode: "verify", areaCode: "+86" });
+      await LoginIM()
       setLoginState(true)
-      
-    } else {
-      setError(result.errorMsg)
     }
+    catch{
+      console.error("login error")
+    }
+    
+    
   };
 
   return (

@@ -4,9 +4,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import { CheckVerifyClient, LoginClient, SendVerifyClient } from '../api/requests';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack/lib/typescript/src/types';
-import { initStore } from '../../../store/useGlobalEvent';
-import { GetLoginStatus } from '../api/openimsdk';
 import { AuthContext } from '../../../AuthContext';
+import { LoginIM } from '../api/openimsdk';
 
 const LoginWithVerificationPage = ( ) => {
   const { setLoginState } = useContext(AuthContext);
@@ -29,10 +28,11 @@ const LoginWithVerificationPage = ( ) => {
   const handleSendVerification = async () => {
     if (seconds == 0) {
       setSeconds(60)
-      const result = await SendVerifyClient({ usedFor: 3, phoneNumber: email })
-      if (!result.success) {
-        setError(result.errorMsg)
-      }
+      try {
+        await SendVerifyClient({ usedFor: 3, phoneNumber: email })
+      } catch (error) {
+        setError(error.errorMsg)
+      } 
     }
 
   }
@@ -40,18 +40,16 @@ const LoginWithVerificationPage = ( ) => {
     navigateToLogin();
   }
   const handleSignIn = async () => {
-    const result = await CheckVerifyClient({ phoneNumber: email, verifyCode: password });
-    if (result.success) {
-      const result2 = await LoginClient({ password: "", phoneNumber: email, verifyCode: password, areaCode: "+86" });
-      if (result2.success) {
-        setLoginState(true)
-      } else {
-        setError(result2.errorMsg)
-      }
-    } else {
-      setError(result.errorMsg)
+    try {
+      await CheckVerifyClient({ phoneNumber: email, verifyCode: password });
+      await LoginClient({ password: "", phoneNumber: email, verifyCode: password, areaCode: "+86" });
+      await LoginIM()
+      setLoginState(true)
+    } catch (error) {
+      setError(error.message);
     }
-  }
+  };
+  
   const handleSignUpPage = () => {
     navigateToSignUp();
   }

@@ -4,12 +4,25 @@ import Avatar from '../../components/avatar';
 import { useUserStore } from '../../../store/user';
 import { getBusinessUserInfo } from '../api/requests';
 import { useAuth } from '../../../AuthContext';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { LogoutIM } from '../api/openimsdk';
 
 
 const SettingPage = () => {
-  const { handleLogout } = useAuth();
+  const { setLoginState } = useAuth();;
   let curretnUserInfo = useUserStore((state) => state.selfInfo)
-
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  
+  const handleLogout = async () => {
+    try {
+      await LogoutIM();
+      setLoginState(false); // Update the login state after successful logout
+      navigation.navigate('LoginPage'); // Navigate to the login page
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>

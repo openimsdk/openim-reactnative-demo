@@ -20,14 +20,24 @@ const ForgetPasswordPage = () => {
 
   const handleSendVerification = useCallback(async () => {
     if (countdownSeconds === 0 && email) {
-      const result = await SendVerifyClient({ usedFor: 2, phoneNumber: email });
-      result.success ? setCountdownSeconds(60) : setError(result.errorMsg);
+      try {
+        setCountdownSeconds(60) 
+        await SendVerifyClient({ usedFor: 2, phoneNumber: email });
+       
+      } catch (error) {
+        setError(error.errorMsg);
+      }
+
     }
   }, [email, countdownSeconds]);
 
   const handleSavePwd = useCallback(async () => {
-    const result = await CheckVerifyClient({ phoneNumber: email, verifyCode: password });
-    result.success ? navigator.navigate('SetPasswordPage', { type: 'resetPwd' }) : setError(result.errorMsg);
+    try {
+      await CheckVerifyClient({ phoneNumber: email, verifyCode: password });
+      navigator.navigate('SetPasswordPage', { type: 'resetPwd' })
+    } catch (error) {
+      setError(error.errorMsg)
+    }
   }, [email, password, navigator]);
 
   useEffect(() => {
