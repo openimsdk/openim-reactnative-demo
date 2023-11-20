@@ -169,7 +169,7 @@ const ChatRoom = (conversation: {
         onScrollToIndexFailed={info => {
           const wait = new Promise(resolve => setTimeout(resolve, 500));
           wait.then(() => {
-            flatListRef.current?.scrollToIndex({ index: info.index, animated: false });
+            flatListRef.current?.scrollToIndex({ index: info.index - 1, animated: false });
           });
         }}
         renderItem={({item: message}) => {
@@ -184,9 +184,11 @@ const ChatRoom = (conversation: {
         }}
         onContentSizeChange={() => {
           // Scroll to the bottom when content size changes
-          if(!initialLoadDone)
-            flatListRef.current?.scrollToEnd({animated:false});
+          if(!initialLoadDone){
+            flatListRef.current?.scrollToEnd({animated:true});
             setInitialLoadDone(true)
+          }
+            
         }}
         refreshControl={
           <RefreshControl

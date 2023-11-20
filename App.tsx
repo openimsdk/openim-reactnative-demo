@@ -61,7 +61,6 @@ export default function App() {
   };
   const handleLogout = async () => {
     setIsLoggedIn(false);
-    await AsyncStorage.removeItem("isLoggedIn")
     LogoutIM();
     const navigation = useNavigation<NativeStackNavigationProp<any>>();
     navigation.navigate("LoginPage")

@@ -48,6 +48,7 @@ export const LoginIM = async () => {
 };
 export const LogoutIM = async () => {
     try {
+        await AsyncStorage.removeItem("isLoggedIn")
         const data = await OpenIMSDKRN.logout("1232211737");
         console.log("logout", data);
         return { success: true, errorMsg: "" };
