@@ -8,6 +8,7 @@ import { MessageType } from "./types/enum";
 import { ConversationItem, FriendApplicationItem, RevokedInfo } from "./types/entity";
 import { useUserStore } from "./user";
 import { LogoutIM } from "../src/screens/api/openimsdk";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export const initStore = () => {
     const { getSelfInfoByReq } = useUserStore.getState();
     const {
