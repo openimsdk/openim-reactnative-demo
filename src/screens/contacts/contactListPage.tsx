@@ -18,11 +18,16 @@ import { FriendUserItem } from '../../../store/type.d';
 import ContactCard from './contactCard';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
+import { groupContactsByFirstCharacter } from '../../components/contactUtils';
+interface SectionWithOffset {
+  title: string;
+  data: FriendUserItem[];
+  offset: number;
+}
 const ContactListPage = () => {
   const [search, setSearch] = useState('');
   const [alphabetHints, setAlphabetHints] = useState<string[]>([]);
-  const [contactSections, setContactSections] = useState<{ title: string, data: FriendUserItem[] }[]>([]);
+  const [contactSections, setContactSections] = useState<SectionWithOffset[]>([]);
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const sectionListRef: RefObject<SectionList> = useRef(null);
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
@@ -39,44 +44,9 @@ const ContactListPage = () => {
     hints.push(modifiedHints[0])
     setAlphabetHints(hints);
 
-    const groupContactsByFirstCharacter = (contacts: FriendUserItem[]) => {
-      const grouped: { [key: string]: FriendUserItem[] } = {};
-      let hasNonAlphabet = false;
+    const groupedContacts = groupContactsByFirstCharacter(data, 'nickname');
 
-      contacts.forEach((contact) => {
-        let firstChar = contact.nickname.charAt(0).toUpperCase();
-
-        if (!firstChar.match(/[A-Z]/)) {
-          firstChar = '#';
-          hasNonAlphabet = true;
-        }
-
-        if (!grouped[firstChar]) {
-          grouped[firstChar] = [];
-        }
-        grouped[firstChar].push(contact);
-      });
-
-      const sections = Object.keys(grouped).map((key) => ({
-        title: key,
-        data: grouped[key],
-      }));
-
-      sections.sort((a, b) => {
-        if (a.title === '#') {
-          return hasNonAlphabet ? 1 : -1;
-        }
-        if (b.title === '#') {
-          return hasNonAlphabet ? -1 : 1;
-        }
-        return a.title.localeCompare(b.title);
-      });
-
-      return sections;
-    };
-
-    const groupedContacts = groupContactsByFirstCharacter(data);
-
+    
     let totalOffset = 0;
     const sectionsWithOffset = groupedContacts.map((section) => {
       const sectionWithOffset = {
@@ -86,27 +56,27 @@ const ContactListPage = () => {
       totalOffset += section.data.length;
       return sectionWithOffset;
     });
-
     setContactSections([{
       title: '',
       data: [{
-          "addSource": 2, "attachedInfo": "", "createTime": 1694072100, "ex": "", "faceURL": "New Friend", "nickname": "New Friend", "operatorUserID": "4458656648",
-          "ownerUserID": "6960562805", "remark": "", "userID": "newFriend"
+          "addSource": 2, "attachedInfo": "", "createTime": 0, "ex": "", "faceURL": "New Friend", "nickname": "New Friend", "operatorUserID": "0",
+          "ownerUserID": "0", "remark": "", "userID": "newFriend"
       }, {
-          "addSource": 2, "attachedInfo": "", "createTime": 1694072100, "ex": "", "faceURL": "New Group", "nickname": "New Group", "operatorUserID": "4458656648",
-          "ownerUserID": "6960562805", "remark": "", "userID": "newGroup"
-      },
-      ],
+          "addSource": 2, "attachedInfo": "", "createTime": 0, "ex": "", "faceURL": "New Group", "nickname": "New Group", "operatorUserID": "0",
+          "ownerUserID": "0", "remark": "", "userID": "newGroup"
+      }],
+      offset:0,
     }, {
       title: ' ',
       data: [{
-          "addSource": 2, "attachedInfo": "", "createTime": 1694072100, "ex": "", "faceURL": "My Groups", "nickname": "My Groups", "operatorUserID": "4458656648",
-          "ownerUserID": "6960562805", "remark": "", "userID": "myGroup"
+          "addSource": 2, "attachedInfo": "", "createTime": 0, "ex": "", "faceURL": "My Groups", "nickname": "My Groups", "operatorUserID": "0",
+          "ownerUserID": "0", "remark": "", "userID": "myGroup"
       }],
+      offset:0,
     },
     ...sectionsWithOffset]);
-  }, [data]);
-
+  }, [rawData]);
+  
   const scrollToSection = (sectionIndex: number) => {
     if (sectionListRef.current) {
       sectionListRef.current.scrollToLocation({
@@ -223,6 +193,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+    marginTop: Platform.OS === 'ios' ? 50 : 0
   },
   header: {
     backgroundColor: '#F6F6F6FF',

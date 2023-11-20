@@ -13,18 +13,22 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {useContactStore} from '../../../../store/contact';
-import {ConversationItem, GroupItem} from '../../../../store/types/entity';
-import ContactCard from '../contactCard';
 import SearchDrawer from '../../../components/searchDrawer';
-import {GetOneConversation} from '../../api/openimsdk';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {useNavigation} from '@react-navigation/native';
 import MyGroupCard from './myGroupCard';
+import { groupContactsByFirstCharacter } from '../../../components/contactUtils';
+import { GroupItem } from '../../../../store/types/entity';
+
+interface SectionWithOffset {
+  title: string;
+  data: GroupItem[];
+  offset: number;
+}
+
 const MyGroupPage = () => {
   const [search, setSearch] = useState('');
   const [alphabetHints, setAlphabetHints] = useState<string[]>([]);
   const [contactSections, setContactSections] = useState<
-    {title: string; data: GroupItem[]}[]
+  SectionWithOffset[]
   >([]);
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const sectionListRef: RefObject<SectionList> = useRef(null);
@@ -48,43 +52,7 @@ const MyGroupPage = () => {
     hints.push(modifiedHints[0]);
     setAlphabetHints(hints);
 
-    const groupContactsByFirstCharacter = (contacts: GroupItem[]) => {
-      const grouped: {[key: string]: GroupItem[]} = {};
-      let hasNonAlphabet = false;
-
-      contacts.forEach(contact => {
-        let firstChar = contact.groupName.charAt(0).toUpperCase();
-
-        if (!firstChar.match(/[A-Z]/)) {
-          firstChar = '#';
-          hasNonAlphabet = true;
-        }
-
-        if (!grouped[firstChar]) {
-          grouped[firstChar] = [];
-        }
-        grouped[firstChar].push(contact);
-      });
-
-      const sections = Object.keys(grouped).map(key => ({
-        title: key,
-        data: grouped[key],
-      }));
-
-      sections.sort((a, b) => {
-        if (a.title === '#') {
-          return hasNonAlphabet ? 1 : -1;
-        }
-        if (b.title === '#') {
-          return hasNonAlphabet ? -1 : 1;
-        }
-        return a.title.localeCompare(b.title);
-      });
-
-      return sections;
-    };
-
-    const groupedContacts = groupContactsByFirstCharacter(data);
+    const groupedContacts = groupContactsByFirstCharacter(data,'groupName');
 
     let totalOffset = 0;
     const sectionsWithOffset = groupedContacts.map(section => {
@@ -97,7 +65,7 @@ const MyGroupPage = () => {
     });
 
     setContactSections(sectionsWithOffset);
-  }, [data]);
+  }, [rawData]);
 
   const scrollToSection = (sectionIndex: number) => {
     if (sectionListRef.current) {
@@ -203,6 +171,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+    marginTop: Platform.OS === 'ios' ? 50 : 0
   },
   header: {
     backgroundColor: '#F6F6F6FF',

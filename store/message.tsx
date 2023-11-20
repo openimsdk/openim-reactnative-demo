@@ -33,7 +33,7 @@ export const useMessageStore = create<MessageStore>()((set, get) => ({
     if (!conversationID) return;
     try {
       const prevList = [...get().historyMessageList];
-      const  rawData =
+      const rawData =
         await OpenIMSDKRN.getAdvancedHistoryMessageList({
           userID: "",
           groupID: "",
@@ -41,7 +41,7 @@ export const useMessageStore = create<MessageStore>()((set, get) => ({
           lastMinSeq: loadMore ? get().lastMinSeq : 0,
           startClientMsgID: loadMore ? prevList[0]?.clientMsgID : "",
           conversationID,
-        },"09820");
+        }, "09820");
       const data = JSON.parse(rawData)
       const nextList = [...data.messageList, ...(loadMore ? prevList : [])];
 
@@ -59,7 +59,7 @@ export const useMessageStore = create<MessageStore>()((set, get) => ({
       }));
       return data.messageList.length;
     } catch (error) {
-    //   feedbackToast({ error, msg: t("toast.getHistoryMessageFailed") });
+      //   feedbackToast({ error, msg: t("toast.getHistoryMessageFailed") });
       return 0;
     }
   },
@@ -70,7 +70,7 @@ export const useMessageStore = create<MessageStore>()((set, get) => ({
     }));
   },
   updateOneMessage: (message: ExMessageItem, fromSuccessCallBack = false) => {
-    
+
     const tmpList = [...get().historyMessageList];
     const idx = tmpList.findIndex((msg) => msg.clientMsgID === message.clientMsgID);
     if (idx < 0) {

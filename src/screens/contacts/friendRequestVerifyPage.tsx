@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Avatar from "../../components/avatar";
 import { AcceptFriendApplication, RefuseFriendApplication } from "../api/openimsdk";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -7,10 +7,10 @@ import { useNavigation } from "@react-navigation/native";
 interface FriendRequestItem {
   faceURL: string;
   fromUserID: string;
-  nickname: string; 
-  reqMsg: string; 
+  nickname: string;
+  reqMsg: string;
 }
-const FriendRequestVerifyPage = (props: { route: { params: FriendRequestItem  }; }) => {
+const FriendRequestVerifyPage = (props: { route: { params: FriendRequestItem }; }) => { //TODO props, seperate views
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
   const friendRequestInfo = props.route.params
   const onhandleAccept = () => {
@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    marginTop: Platform.OS === 'ios' ? 50 : 0
   },
   header: {
     flexDirection: "row",

@@ -6,53 +6,32 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import Avatar from "../../components/avatar";
 const ContactCard = ({ nickname,faceURL,userID}:{nickname:string,faceURL:string,userID:string}) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  const onhandlePressFriend = () => {
-    navigation.navigate('FriendSettingPage',userID)
-  }
-  if (!nickname)
-    return null
- 
-  if (userID === "newFriend") {
 
-    const onhandlePressNewFriend = () => {
-
-      navigation.navigate("Friends")
+  // Single function to handle various navigation paths
+  const handlePress = () => {
+    switch (userID) {
+      case 'newFriend':
+        navigation.navigate('Friends');
+        break;
+      case 'newGroup':
+        navigation.navigate('NewGroup');
+        break;
+      case 'myGroup':
+        navigation.navigate('MyGroup');
+        break;
+      default:
+        navigation.navigate('FriendSettingPage', userID);
+        break;
     }
-    return (
-      <TouchableOpacity style={styles.contactItem} onPress={onhandlePressNewFriend}>
-        <Avatar nickname={nickname} faceURL={faceURL} />
-        <Text>{nickname}</Text>
-      </TouchableOpacity>
-    )
-  }
-  if (userID === "newGroup") {
+  };
 
-    const onhandlePressNewGroup = () => {
-      navigation.navigate("NewGroup")
-    }
-    return (
-      <TouchableOpacity style={styles.contactItem} onPress={onhandlePressNewGroup}>
-        <Avatar nickname={nickname} faceURL={faceURL} />
-        <Text>{nickname}</Text>
-      </TouchableOpacity>
-    )
-  }
-  if (userID === "myGroup") {
+  // If no nickname is provided, return null
+  if (!nickname) return null;
 
-    const onhandlePressMyGroup = () => {
-      navigation.navigate("MyGroup")
-    }
-    return (
-      <TouchableOpacity style={styles.contactItem} onPress={onhandlePressMyGroup}>
-        <Avatar nickname={nickname} faceURL={faceURL} />
-        <Text>{nickname}</Text>
-      </TouchableOpacity>
-    )
-  }
-
+  // Repeated JSX structure
   return (
-    <TouchableOpacity style={styles.contactItem} onPress={onhandlePressFriend}>
-      <Avatar nickname={nickname}  faceURL={faceURL} />
+    <TouchableOpacity style={styles.contactItem} onPress={handlePress}>
+      <Avatar nickname={nickname} faceURL={faceURL} />
       <Text>{nickname}</Text>
     </TouchableOpacity>
   );

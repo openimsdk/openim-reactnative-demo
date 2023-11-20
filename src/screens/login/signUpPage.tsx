@@ -5,21 +5,22 @@ import { useNavigation } from '@react-navigation/native';
 import { SendVerifyClient } from "../api/requests";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 const SignUpPage = () => {
-    const [email,setEmail] = useState("")
-    const [error,setError] = useState("")
-    const navigator = useNavigation<NativeStackNavigationProp<any>>();
-    const navigateBack = () => {
-        navigator.navigate("LoginPage")
+  const [email, setEmail] = useState("")
+  const [error, setError] = useState("")
+  const navigator = useNavigation<NativeStackNavigationProp<any>>();
+  const navigateBack = () => {
+    navigator.navigate("LoginPage")
+  }
+  const navigateToVeriCode = async () => {
+    try {
+      await SendVerifyClient({ usedFor: 1, phoneNumber: email })
+      navigator.navigate("SetVerificationPage", { email });
+    } catch (error) {
+      setError(error.errorMsg)
     }
-    const navigateToVeriCode = async () => {
-      const result = await SendVerifyClient({usedFor:1,phoneNumber:email})
-        if(result.success){
-          navigator.navigate("SetVerificationPage",{email});        
-        }else
-          setError(result.errorMsg)
-           
-    }
-    
+
+  }
+
   return (
     <LinearGradient
       colors={["#0E6CBE28", "#C6C6C621"]}
@@ -29,14 +30,14 @@ const SignUpPage = () => {
     >
       <View style={styles.container}>
         <TouchableOpacity style={styles.backButton} onPress={navigateBack}>
-            <Image
-                source={require('../../../assets/imgs/back.png')} // Replace with your image file path
-            />
+          <Image
+            source={require('../../../assets/imgs/back.png')} // Replace with your image file path
+          />
         </TouchableOpacity>
         <Text style={styles.signUpTitle}>Sign Up</Text>
         <View style={styles.inputContainer}>
           <Text style={styles.enterText}>Enter your phone number</Text>
-          <TextInput style={styles.emailInput} placeholder="Phone Number" value={email} onChangeText={setEmail}/>
+          <TextInput style={styles.emailInput} placeholder="Phone Number" value={email} onChangeText={setEmail} />
           <Text style={styles.error}>{error}</Text>
           <TouchableOpacity style={styles.nextButton} onPress={navigateToVeriCode}>
             <Text style={styles.nextButtonText}>Next</Text>
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingLeft: 20,
-    paddingRight:20,
+    paddingRight: 20,
   },
   backButton: {
     marginTop: 100,
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#0089FF",
     marginBottom: 20,
-    marginTop:40,
+    marginTop: 40,
   },
   inputContainer: {
     width: "100%",
@@ -72,10 +73,10 @@ const styles = StyleSheet.create({
     borderRadius: 11,
     padding: 20,
     marginTop: 20,
-  },  
-  enterText:{
-    marginTop:30,
-    fontSize:14,
+  },
+  enterText: {
+    marginTop: 30,
+    fontSize: 14,
   },
   emailInput: {
     borderWidth: 1,
@@ -84,10 +85,10 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 10,
   },
-  error:{
-    fontSize:11,
-    textAlign:"center",
-    color:"red"
+  error: {
+    fontSize: 11,
+    textAlign: "center",
+    color: "red"
   },
   nextButton: {
     backgroundColor: "#0089FF",
@@ -96,10 +97,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 60,
   },
-  nextButtonText:{
+  nextButtonText: {
     color: 'white',
-    fontSize:18,
-    fontWeight:'bold'
+    fontSize: 18,
+    fontWeight: 'bold'
   }
 });
 

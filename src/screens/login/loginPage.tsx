@@ -1,41 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet,Platform} from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import md5 from 'react-native-md5';
-import { LoginClient } from '../api/requests';
-import { GetLoginStatus } from '../api/openimsdk';
+import { LoginClient } from '../api/requests';;
 import { NativeStackNavigationProp } from '@react-navigation/native-stack/lib/typescript/src/types';
-import { initStore } from '../../../store/useGlobalEvent';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-interface LoginPageProps{
-  onLogin: (value:boolean) => void;
-}
-const LoginPage:React.FC<LoginPageProps> = ({onLogin}) => {
-  const [email,setEmail] = useState("");
-  const [password,setPassword] = useState("");
-  const [passwordHidden,setPasswordHidden] = useState(true);
-  const [error,setError] = useState("");
+import { AuthContext } from '../../../AuthContext';
+import { LoginIM, LogoutIM } from '../api/openimsdk';
+
+const LoginPage = () => {
+  const { setLoginState } = useContext(AuthContext);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordHidden, setPasswordHidden] = useState(true);
+  const [error, setError] = useState("");
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  useEffect(() => {
-    const checkLoginStatus = async () => {
-      const result = await GetLoginStatus();
-      if (result.status === 3 && await AsyncStorage.getItem("LoggedIn")) {
-        onLogin(true);
-      }
-    };
-  
-    checkLoginStatus();
-  }, []);
-  
+
+
   const navigateToForgetPwd = () => {
     navigation.navigate('ForgetPasswordPage');
   };
   const navigateToVeri = () => {
-    navigation.navigate('LoginWithVerificationPage'); 
+    navigation.navigate('LoginWithVerificationPage');
   };
   const navigateToSignUp = () => {
-    navigation.navigate('SignUpPage'); 
+    navigation.navigate('SignUpPage');
   };
 
   const handleClearEmail = () => {
@@ -44,7 +33,7 @@ const LoginPage:React.FC<LoginPageProps> = ({onLogin}) => {
   const handleClearPassword = () => {
     setPassword('');
   };
-  
+
   const handleShowPassword = () => {
     setPasswordHidden(!passwordHidden);
   };
@@ -58,19 +47,18 @@ const LoginPage:React.FC<LoginPageProps> = ({onLogin}) => {
     navigateToSignUp();
   }
   const handleSignIn = async () => {
-    const result = await LoginClient({password:md5.hex_md5(password),phoneNumber:email,verifyCode:"verify",areaCode:"+86"});
-    if(result.success){
-      setError("")
-      const result = await GetLoginStatus();
-      if (result.status === 3) {
-        onLogin(true);
-      }
-      initStore()
-    }else{
-      setError(result.errorMsg)
+    try{
+      await LoginClient({ password: md5.hex_md5(password), phoneNumber: email, verifyCode: "verify", areaCode: "+86" });
+      await LoginIM()
+      setLoginState(true)
     }
+    catch{
+      console.error("login error")
+    }
+    
+    
   };
-  
+
   return (
     <LinearGradient
       colors={['#0E6CBE28', '#C6C6C621']}
@@ -93,7 +81,7 @@ const LoginPage:React.FC<LoginPageProps> = ({onLogin}) => {
             <Text style={styles.enterText}>Enter your phone number</Text>
             <View style={styles.emailContainer}>
               <View style={styles.emailInput}>
-                <TextInput  style={styles.emailTextInput} placeholder="Phone Number" value={email} onChangeText={setEmail}/>
+                <TextInput style={styles.emailTextInput} placeholder="Phone Number" value={email} onChangeText={setEmail} />
                 <TouchableOpacity style={styles.clearButton} onPress={handleClearEmail}>
                   <Image
                     source={require('../../../assets/imgs/clear.png')} // Replace with your image file path
@@ -105,7 +93,7 @@ const LoginPage:React.FC<LoginPageProps> = ({onLogin}) => {
           <View style={styles.inputBox}>
             <Text style={styles.enterText}>Enter your password</Text>
             <View style={styles.passwordInput}>
-              <TextInput  style={styles.passwordTextInput} placeholder="Password" secureTextEntry={passwordHidden} value={password} onChangeText={setPassword}/>
+              <TextInput style={styles.passwordTextInput} placeholder="Password" secureTextEntry={passwordHidden} value={password} onChangeText={setPassword} />
               <TouchableOpacity style={styles.clearButton} onPress={handleClearPassword}>
                 <Image
                   source={require('../../../assets/imgs/clear.png')} // Replace with your image file path
@@ -133,22 +121,22 @@ const LoginPage:React.FC<LoginPageProps> = ({onLogin}) => {
 
         </View>
         <View style={styles.signUpText}>
-          <Text style={{fontSize:11,fontStyle: 'italic',}}>Don't have an account yet?</Text>
+          <Text style={{ fontSize: 11, fontStyle: 'italic', }}>Don't have an account yet?</Text>
           <View style={styles.clickToSignUpContainer}>
-            <Text style={{fontSize:11,fontStyle: 'italic',}}>Click to  </Text>
+            <Text style={{ fontSize: 11, fontStyle: 'italic', }}>Click to  </Text>
             <TouchableOpacity>
               <Text style={styles.signUpButtonText} onPress={handleSignUp}>Sign Up</Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
-    </LinearGradient> 
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
-  linearGradient:{
-    flex:1,
+  linearGradient: {
+    flex: 1,
   },
   container: {
     flex: 1,
@@ -165,15 +153,15 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   welcomeText: {
-    color:"#0089FF",
+    color: "#0089FF",
     marginBottom: 20,
   },
   signInText: {
     marginBottom: 20,
-    alignSelf:'flex-start',
+    alignSelf: 'flex-start',
   },
   signInTitle: {
-    marginLeft:10,
+    marginLeft: 10,
     fontSize: 24,
     fontWeight: 'bold',
     color: '#0089FF'
@@ -181,17 +169,17 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: '100%',
     backgroundColor: 'white',
-    borderRadius:11,
-    paddingLeft:25,
-    paddingRight:25,
-    paddingBottom:31,
+    borderRadius: 11,
+    paddingLeft: 25,
+    paddingRight: 25,
+    paddingBottom: 31,
   },
   inputBox: {
     // marginBottom: 10,
   },
-  enterText:{
-    marginTop:25,
-    fontSize:14,
+  enterText: {
+    marginTop: 25,
+    fontSize: 14,
   },
   emailContainer: {
     flexDirection: 'row',
@@ -203,7 +191,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#CBCBCB',
     borderRadius: 5,
-    paddingRight:10,
+    paddingRight: 10,
     marginTop: 10,
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -216,13 +204,13 @@ const styles = StyleSheet.create({
     borderColor: '#CBCBCB',
     borderRadius: 5,
     marginTop: 10,
-    paddingRight:10,
+    paddingRight: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  passwordTextInput:{
-    flex:1,
+  passwordTextInput: {
+    flex: 1,
   },
   clearButton: {
     marginLeft: 'auto',
@@ -235,19 +223,19 @@ const styles = StyleSheet.create({
     color: '#1E1E1E8A',
     textDecorationLine: 'underline',
     marginBottom: 10,
-    fontSize:11,
+    fontSize: 11,
   },
   verificationLoginText: {
     color: '#0089FF',
     textDecorationLine: 'underline',
     marginBottom: 10,
-    marginLeft:10,
-    fontSize:11,
+    marginLeft: 10,
+    fontSize: 11,
   },
-  error:{
-    fontSize:11,
-    textAlign:"center",
-    color:"red"
+  error: {
+    fontSize: 11,
+    textAlign: "center",
+    color: "red"
   },
   signInButton: {
 
@@ -255,27 +243,27 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop:35,
+    marginTop: 35,
   },
   signInButtonText: {
     color: 'white',
-    fontSize:18,
-    fontWeight:'bold',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   signUpText: {
     marginTop: 35,
     textDecorationLine: 'underline',
     color: 'blue',
-    marginLeft:'auto',
+    marginLeft: 'auto',
   },
-  clickToSignUpContainer:{
-    flexDirection:'row',
-    marginLeft:'auto',
+  clickToSignUpContainer: {
+    flexDirection: 'row',
+    marginLeft: 'auto',
     alignItems: 'baseline',
   },
-  signUpButtonText:{
+  signUpButtonText: {
     color: '#0089FF',
-    fontSize:14,
+    fontSize: 14,
     fontStyle: 'italic',
   }
 });

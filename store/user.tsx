@@ -5,27 +5,27 @@ import { AppConfig, UserStore } from "./type.d";
 import OpenIMSDKRN from "open-im-sdk-rn";
 
 export interface BusinessUserInfo {
-    userID: string;
-    password: string;
-    account: string;
-    phoneNumber: string;
-    areaCode: string;
-    email: string;
-    nickname: string;
-    faceURL: string;
-    gender: number;
-    level: number;
-    birth: number;
-    allowAddFriend: BusinessAllowType;
-    allowBeep: BusinessAllowType;
-    allowVibration: BusinessAllowType;
-    globalRecvMsgOpt: MessageReceiveOptType;
-  }
-  export enum BusinessAllowType {
-    Allow = 1,
-    NotAllow = 2,
-  }
-  
+  userID: string;
+  password: string;
+  account: string;
+  phoneNumber: string;
+  areaCode: string;
+  email: string;
+  nickname: string;
+  faceURL: string;
+  gender: number;
+  level: number;
+  birth: number;
+  allowAddFriend: BusinessAllowType;
+  allowBeep: BusinessAllowType;
+  allowVibration: BusinessAllowType;
+  globalRecvMsgOpt: MessageReceiveOptType;
+}
+export enum BusinessAllowType {
+  Allow = 1,
+  NotAllow = 2,
+}
+
 export const useUserStore = create<UserStore>()((set, get) => ({
   selfInfo: {} as BusinessUserInfo,
   appConfig: {} as AppConfig,
@@ -35,14 +35,14 @@ export const useUserStore = create<UserStore>()((set, get) => ({
   },
   getSelfInfoByReq: async () => {
     try {
-      const  rawData  = await OpenIMSDKRN.getSelfUserInfo('29129');
-      const data =JSON.parse(rawData)
+      const rawData = await OpenIMSDKRN.getSelfUserInfo('29129');
+      const data = JSON.parse(rawData)
       // const {
       //   data: { users },
       // } = await getBusinessUserInfo([data.userID], true);
       // const bussinessData = users[0];
       // set(() => ({ selfInfo: bussinessData }));
-      set(()=>({selfInfo:data}))
+      set(() => ({ selfInfo: data }))
     } catch (error) {
       // feedbackToast({ error, msg: t("toast.getSelfInfoFailed") });
     }
