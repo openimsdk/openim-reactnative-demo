@@ -2,8 +2,12 @@ import React from 'react';
 import {View, Text, Image, StyleSheet, Button} from 'react-native';
 import Avatar from '../../../components/avatar';
 import { JoinGroup } from '../../api/openimsdk';
-
-const GroupCard = ({groupID, nickname, faceURL, style}) => {
+interface GroupCardInput{
+  groupID:string, 
+  nickname:string, 
+  faceURL:string,
+}
+const GroupCard = ({groupID, nickname, faceURL}:GroupCardInput) => {
   const handleAddGroup = () => {
     JoinGroup(groupID,3)
   };

@@ -1,6 +1,6 @@
-import {create} from 'zustand';
-import {ContactStore, FriendApplicationItem, FriendUserItem} from './type.d';
-import {GetFriendList} from '../src/screens/api/openimsdk';
+import { create } from 'zustand';
+import { ContactStore, FriendApplicationItem, FriendUserItem } from './type.d';
+import { GetFriendList } from '../src/screens/api/openimsdk';
 import OpenIMSDKRN from 'open-im-sdk-rn';
 
 export const useContactStore = create<ContactStore>()((set, get) => ({
@@ -17,24 +17,24 @@ export const useContactStore = create<ContactStore>()((set, get) => ({
     try {
       const stringData = await OpenIMSDKRN.getFriendList('61387298');
       const data = JSON.parse(stringData);
-      set(() => ({friendList: data.map((item: { friendInfo: any; }) => item.friendInfo!)}));
+      set(() => ({ friendList: data.map((item: { friendInfo: any; }) => item.friendInfo!) }));
     } catch (error) {
       console.error('getFriendListByReq ', error);
     }
   },
   setFriendList: (list: FriendUserItem[]) => {
-    set(() => ({friendList: list}));
+    set(() => ({ friendList: list }));
   },
 
   pushNewFriend: (friend: FriendUserItem) => {
-    set(state => ({friendList: [...state.friendList, friend]}));
+    set(state => ({ friendList: [...state.friendList, friend] }));
   },
   getGroupListByReq: async () => {
     try {
       const stringData = await OpenIMSDKRN.getJoinedGroupList('1231');
       const data = JSON.parse(stringData);
-      
-      set(() => ({groupList: data}));
+
+      set(() => ({ groupList: data }));
     } catch (error) {
       console.error('getFriendListByReq ', error);
     }
@@ -49,14 +49,14 @@ export const useContactStore = create<ContactStore>()((set, get) => ({
     if (remove) {
       tmpList.splice(idx);
     } else {
-      tmpList[idx] = {...friend};
+      tmpList[idx] = { ...friend };
     }
-    set(() => ({friendList: tmpList}));
+    set(() => ({ friendList: tmpList }));
   },
   getRecvFriendApplicationListByReq: async () => {
     try {
       const data = await OpenIMSDKRN.getFriendApplicationListAsRecipient('123');
-      set(() => ({recvFriendApplicationList: JSON.parse(data)}));
+      set(() => ({ recvFriendApplicationList: JSON.parse(data) }));
     } catch (error) {
       console.error('getRecvFriendApplicationListByReq ', error);
     }
@@ -70,7 +70,7 @@ export const useContactStore = create<ContactStore>()((set, get) => ({
     } else {
       isHandleResultUpdate =
         tmpList[idx].handleResult !== application.handleResult;
-      tmpList[idx] = {...application};
+      tmpList[idx] = { ...application };
     }
     if (idx < 0 || isHandleResultUpdate) {
       const unHandleFriendApplicationCount = tmpList.filter(
@@ -83,12 +83,12 @@ export const useContactStore = create<ContactStore>()((set, get) => ({
       }));
       return;
     }
-    set(() => ({recvFriendApplicationList: tmpList}));
+    set(() => ({ recvFriendApplicationList: tmpList }));
   },
   getSendFriendApplicationListByReq: async () => {
     try {
       const data = await OpenIMSDKRN.getFriendApplicationListAsApplicant('192');
-      set(() => ({sendFriendApplicationList: JSON.parse(data)}));
+      set(() => ({ sendFriendApplicationList: JSON.parse(data) }));
     } catch (error) {
       console.error('getSendFriendApplicationListByReq ', error);
     }
@@ -99,15 +99,15 @@ export const useContactStore = create<ContactStore>()((set, get) => ({
     if (idx < 0) {
       tmpList = [...tmpList, application];
     } else {
-      tmpList[idx] = {...application};
+      tmpList[idx] = { ...application };
     }
-    set(() => ({sendFriendApplicationList: tmpList}));
+    set(() => ({ sendFriendApplicationList: tmpList }));
   },
   updateUnHandleFriendApplicationCount: (num: number) => {
-    set(() => ({unHandleFriendApplicationCount: num}));
+    set(() => ({ unHandleFriendApplicationCount: num }));
   },
   updateUnHandleGroupApplicationCount: (num: number) => {
-    set(() => ({unHandleGroupApplicationCount: num}));
+    set(() => ({ unHandleGroupApplicationCount: num }));
   },
   clearContactStore: () => {
     set(() => ({

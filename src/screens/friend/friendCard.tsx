@@ -3,8 +3,12 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, Button } from 'react-native';
 import Avatar from '../../components/avatar';
 import { AddFriend } from '../api/openimsdk';
-
-const FriendCard = ({ nickname, faceURL, userID }) => {
+interface FriendCardInput{
+  nickname:string,
+  faceURL:string,
+  userID:string,
+}
+const FriendCard = ({ nickname, faceURL, userID }:FriendCardInput) => {
   const handleAddFriend = () => {
     AddFriend(userID);
   };

@@ -4,26 +4,32 @@ import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from '@react-navigation/native';
 import { SendVerifyClient, CheckVerifyClient } from "../api/requests";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
-const SetVerificationPage = (props: { route: { params: { email: string }; }; }) => {
+interface SetVerificationPageProps {
+  route: {
+    params: {
+      email: string;
+    };
+  };
+}
+const SetVerificationPage = (props:  SetVerificationPageProps ) => {
   const totalDigits = 6;
   const digitInputs = Array.from({ length: totalDigits }, (_, index) => index);
-  const digitRefs = useRef<TextInput[]>([]);
+  const digitRefs = useRef<(TextInput | null)[]>([]);
   const [digits, setDigits] = useState(Array(totalDigits).fill(''));
-  const [error,setError] = useState("")
+  const [error, setError] = useState("")
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
   const navigateBack = () => {
     navigator.navigate("SignUpPage");
-}
-const navigateToSetPwd = async () => {
-  const result = await CheckVerifyClient({ phoneNumber: props.route.params.email, verifyCode: digits.join("") })
-    if(result.success)
-        navigator.navigate("SetPasswordPage",{email:props.route.params.email,verifyCode:digits.join(""),type:"register"});
-    else{
-      setDigits(['','','','','','',''])
-      setError(result.errorMsg)
-      }
+  }
+  const navigateToSetPwd = async () => {
+    try {
+      await CheckVerifyClient({ phoneNumber: props.route.params.email, verifyCode: digits.join("") })
+      navigator.navigate("SetPasswordPage", { email: props.route.params.email, verifyCode: digits.join(""), type: "register" });
+    } catch (error) {
+      setError(error.errorMsg)
     }
-        
+  }
+
   const handleDigitChange = (index: number, value: string) => {
     const newDigits = [...digits];
     newDigits[index] = value;
@@ -31,17 +37,17 @@ const navigateToSetPwd = async () => {
     if (value === '') {
       // If a digit is deleted, move to the previous input
       if (index > 0) {
-        digitRefs.current[index - 1].focus();
+        digitRefs.current[index - 1]!.focus();
       }
     } else if (index < totalDigits - 1) {
       // If a digit is entered, move to the next input
-      digitRefs.current[index + 1].focus();
+      digitRefs.current[index + 1]!.focus();
     }
 
     setDigits(newDigits);
   };
   const sendVeriCode = () => {
-    SendVerifyClient({usedFor:1,phoneNumber:props.route.params.email});
+    SendVerifyClient({ usedFor: 1, phoneNumber: props.route.params.email });
   }
   return (
     <LinearGradient
@@ -75,12 +81,12 @@ const navigateToSetPwd = async () => {
           </View>
           <View style={styles.didnotReceivedCodeContainer}>
             <Text >Did't received code?</Text>
-            <TouchableOpacity style={styles.didnotReceivedCodeButton} onPress={()=>{sendVeriCode()}}>
-                <Text style={styles.didnotReceivedCodeButtonText}>Resend Code</Text>
+            <TouchableOpacity style={styles.didnotReceivedCodeButton} onPress={() => { sendVeriCode() }}>
+              <Text style={styles.didnotReceivedCodeButtonText}>Resend Code</Text>
             </TouchableOpacity>
           </View>
           <Text style={styles.error}>{error}</Text>
-          <TouchableOpacity style={styles.nextButton} onPress={()=>navigateToSetPwd()}>
+          <TouchableOpacity style={styles.nextButton} onPress={() => navigateToSetPwd()}>
             <Text style={styles.nextButtonText}>Next</Text>
           </TouchableOpacity>
         </View>
@@ -97,7 +103,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingLeft: 20,
-    paddingRight:20,
+    paddingRight: 20,
   },
   backButton: {
     marginTop: 100,
@@ -142,20 +148,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginRight: 10,
   },
-  didnotReceivedCodeContainer:{
-    flexDirection:"row",
-    justifyContent:"center"
+  didnotReceivedCodeContainer: {
+    flexDirection: "row",
+    justifyContent: "center"
   },
-  didnotReceivedCodeButton:{
-    
+  didnotReceivedCodeButton: {
+
   },
-  didnotReceivedCodeButtonText:{
+  didnotReceivedCodeButtonText: {
     color: '#0089FF',
   },
-  error:{
-    fontSize:11,
-    textAlign:"center",
-    color:"red"
+  error: {
+    fontSize: 11,
+    textAlign: "center",
+    color: "red"
   },
   nextButton: {
     backgroundColor: "#0089FF",

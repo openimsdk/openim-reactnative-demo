@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Modal, Platform } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from '@react-navigation/native';
@@ -8,22 +8,19 @@ import OpenIMSDKRN from "open-im-sdk-rn";
 import md5 from 'react-native-md5';
 import { LoginClient, ResetPasswordClient, SignUpClient } from "../api/requests";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
-import { initStore } from "../../../store/useGlobalEvent";
-import { GetLoginStatus } from "../api/openimsdk";
+import { AuthContext } from "../../../AuthContext";
+import { LoginIM } from "../api/openimsdk";
 interface SetPasswordPageProps {
-  // props: {
-    route: {
-      params: {
-        type: string;
-        email: any;
-        verifyCode: any;
-      };
+  route: {
+    params: {
+      type: string;
+      email: any;
+      verifyCode: any;
     };
-  // }
-  onLogin: (loggedIn: boolean) => void;
+  };
 }
 
-const SetPasswordPage: React.FC<SetPasswordPageProps> = ({ route, onLogin }) => {
+const SetPasswordPage: React.FC<SetPasswordPageProps> = ({ route }) => {
   const [name, setName] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
@@ -33,6 +30,7 @@ const SetPasswordPage: React.FC<SetPasswordPageProps> = ({ route, onLogin }) => 
   const navigateBack = () => {
     navigator.navigate("SignUpPage");
   }
+  const { setLoginState } = useContext(AuthContext);
   useEffect(() => {
     if (newPassword === repeatPassword) {
       setNext(true);
@@ -42,45 +40,62 @@ const SetPasswordPage: React.FC<SetPasswordPageProps> = ({ route, onLogin }) => 
   }, [newPassword, repeatPassword]);
 
   const buttonStyle = next ? styles.nextButton : styles.nextButtonDisabled;
+
   const handleSignUp = async () => {
     try {
       if (route.params.type === "register") {
-        const result = await SignUpClient({
-          nickname: name,
-          phoneNumber: route.params.email,
-          password: md5.hex_md5(newPassword),
-          verifyCode: route.params.verifyCode,
-          autoLogin: true
-        });
-        if (!result.success)
-          setError(result.errorMsg)
+        await handleRegister();
+      } else if (route.params.type === "resetPwd") {
+        await handleResetPassword();
       }
-
-      if (route.params.type === "resetPwd") {
-        const result = await ResetPasswordClient({
-          phoneNumber: route.params.email,
-          password: md5.hex_md5(newPassword),
-          verifyCode: route.params.verifyCode,
-        });
-        if (!result.success)
-          setError(result.errorMsg)
-      }
-      const result = await LoginClient({ password: md5.hex_md5(newPassword), phoneNumber: route.params.email, verifyCode: "verify", areaCode: "+86" })
-      if (result.success) {
-        const result = await GetLoginStatus();
-      if (result.status === 3) {
-        onLogin(true);
-      }
-        initStore()
-      } else {
-        setError(result.errorMsg)
-      }
+      await attemptLogin();
     } catch (error) {
-      console.error("Error during sign-up:", error);
+      setError(error.message);
     }
-
-
-  }
+  };
+  
+  const handleRegister = async () => {
+    try {
+      await SignUpClient({
+        nickname: name,
+        phoneNumber: route.params.email,
+        password: md5.hex_md5(newPassword),
+        verifyCode: route.params.verifyCode,
+        autoLogin: true,
+        areaCode: "+86"
+      });
+    } catch (error) {
+      throw new Error("Registration failed: " + error);
+    }
+  };
+  
+  const handleResetPassword = async () => {
+    try {
+      await ResetPasswordClient({
+        phoneNumber: route.params.email,
+        password: md5.hex_md5(newPassword),
+        verifyCode: route.params.verifyCode,
+      });
+    } catch (error) {
+      throw new Error("Password reset failed: " + error);
+    }
+  };
+  
+  const attemptLogin = async () => {
+    try {
+      await LoginClient({
+        password: md5.hex_md5(newPassword),
+        phoneNumber: route.params.email,
+        verifyCode: "verify", // Replace with actual code if necessary
+        areaCode: "+86",
+      });
+      await LoginIM()
+      setLoginState(true); // Uncomment when ready to change login state
+    } catch (error) {
+      throw new Error("Login failed: " + error);
+    }
+  };
+  
   return (
     <LinearGradient
       colors={["#0E6CBE28", "#C6C6C621"]}
