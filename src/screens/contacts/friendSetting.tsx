@@ -17,7 +17,7 @@ const FriendSettingPage = (route:SetVerificationPageProps) => { //TODO seperate 
   const [currentUserInfo,setCurrentUserInfo] = useState({nickname:'',faceURL:'',userID:''})
   getBusinessUserInfo([route.route.params]).then((response) => {
     // Handle the response here  
-    setCurrentUserInfo(response.data.data.users[0])
+    setCurrentUserInfo(response.data.users[0])
   })
   .catch((error) => {
     // Handle errors here

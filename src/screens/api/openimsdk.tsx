@@ -46,12 +46,11 @@ export const LoginIM = async () => {
   }
 };
 export const LogoutIM = async () => {
-  await AsyncStorage.clear()
   
   try {
     const data = await OpenIMSDKRN.logout("12322111137");
     console.log("logout", data);
-
+    await AsyncStorage.clear()
     return data; // Return data directly on successful login
   } catch (error) {
     console.error('Error logout:', error);
@@ -294,6 +293,4 @@ export const CreateMessage = async (inputMessage: string) => {
   } catch (error) {
     console.error('Error CreateTextMsg:', error); // Log the error
   }
-
-
 };

@@ -20,7 +20,8 @@ const SettingPage = () => {
       setLoginState(false); // Update the login state after successful logout
       navigation.navigate('LoginPage'); // Navigate to the login page
     } catch (error) {
-      console.error('Logout failed:', error);
+      const err = error as {message: string};
+      console.error(err)
     }
   };
   return (

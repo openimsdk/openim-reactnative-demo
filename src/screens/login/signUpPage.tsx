@@ -16,7 +16,8 @@ const SignUpPage = () => {
       await SendVerifyClient({ usedFor: 1, phoneNumber: email })
       navigator.navigate("SetVerificationPage", { email });
     } catch (error) {
-      setError(error.errorMsg)
+      const err = error as {message: string};
+      setError(err.message);
     }
 
   }

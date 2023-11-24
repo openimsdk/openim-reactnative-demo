@@ -12,8 +12,8 @@ const ImageCard = memo(({ message }: { message: ExMessageItem }) => {
 
 const SelfImageCard = ({ message }: { message: ExMessageItem }) => (
   <View style={styles.chatContainerSelf}>
-    <View style={styles.messageContainer}>
-      <Text style={styles.messageText} />
+    <View style={styles.selfMessageContainer}>
+      <Text style={styles.selfMessageText}>{message.senderNickname}</Text>
       <Image style={styles.image} source={{ uri: message.pictureElem.snapshotPicture.url }} />
     </View>
     <View style={styles.avatarContainer}>
@@ -27,12 +27,13 @@ const OtherImageCard = ({ message }: { message: ExMessageItem }) => (
     <View style={styles.avatarContainer}>
       <Avatar nickname={message.senderNickname} faceURL={message.senderFaceUrl ?? ''} />
     </View>
-    <View style={styles.messageContainer}>
-      <Text style={styles.messageText}>{message.senderNickname}</Text>
+    <View style={styles.otherMessageContainer}>
+      <Text style={styles.otherMessageText}>{message.senderNickname}</Text>
       <Image style={styles.image} source={{ uri: message.pictureElem.snapshotPicture.url }} />
     </View>
   </View>
 );
+
 
 const styles = StyleSheet.create({
   chatContainerSelf: {
@@ -40,22 +41,33 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     marginVertical: 5,
   },
+  selfMessageContainer: {
+    alignItems: 'flex-end', // Aligns children to the right
+    maxWidth: "80%",
+  },
+  selfMessageText: {
+    fontSize: 16,
+    marginBottom: 4, // Optional: space between name and image
+  },
+  otherMessageContainer: {
+    alignItems: 'flex-start', // Aligns children to the left
+    maxWidth: "80%",
+  },
+  otherMessageText: {
+    fontSize: 16,
+    marginBottom: 4, // Optional: space between name and image
+  },
+  image: {
+    height: 300,
+    width: 200,
+    // Add any additional styling for the image
+  },
   chatContainerOther: {
     flexDirection: "row",
     marginVertical: 5,
   },
   avatarContainer: {
     marginHorizontal: 10,
-  },
-  messageContainer: {
-    maxWidth: "80%",
-  },
-  messageText: {
-    fontSize: 16,
-  },
-  image: {
-    height: 300,
-    width: 200,
   },
 });
 

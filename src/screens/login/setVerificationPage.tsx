@@ -26,7 +26,8 @@ const SetVerificationPage = (props:  SetVerificationPageProps ) => {
       await CheckVerifyClient({ phoneNumber: props.route.params.email, verifyCode: digits.join("") })
       navigator.navigate("SetPasswordPage", { email: props.route.params.email, verifyCode: digits.join(""), type: "register" });
     } catch (error) {
-      setError(error.errorMsg)
+      const err = error as {message: string};
+      setError(err.message);
     }
   }
 

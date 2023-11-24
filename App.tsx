@@ -16,7 +16,12 @@ import OpenIMSDKRN, {OpenIMEmitter} from 'open-im-sdk-rn';
 
 import {useState, useEffect, lazy, Suspense} from 'react';
 import BottomTabBar from './BottomTabBar';
-import {GetLoginStatus, Init, LoginIM, LogoutIM} from './src/screens/api/openimsdk';
+import {
+  GetLoginStatus,
+  Init,
+  LoginIM,
+  LogoutIM,
+} from './src/screens/api/openimsdk';
 import {LoginClient} from './src/screens/api/requests';
 import FriendRequestPage from './src/screens/contacts/friendRequestPage';
 import FriendRequestVerifyPage from './src/screens/contacts/friendRequestVerifyPage';
@@ -37,24 +42,23 @@ import {AuthContext} from './AuthContext';
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  Init()
+  Init();
   useGlobalEvent();
   useEffect(() => {
     const initialize = async () => {
-      
       const storedLoginState = await GetLoginStatus();
-      setIsLoggedIn(storedLoginState === 3);
-      
+      if (storedLoginState === 3) {
+        initStore();
+        setIsLoggedIn(true);
+      }
     };
 
     initialize();
   }, []);
 
-
   return (
     <NavigationContainer>
-      <AuthContext.Provider
-        value={{isLoggedIn, setLoginState: setIsLoggedIn}}>
+      <AuthContext.Provider value={{isLoggedIn, setLoginState: setIsLoggedIn}}>
         <Stack.Navigator screenOptions={{animationEnabled: false}}>
           {!isLoggedIn ? (
             <>

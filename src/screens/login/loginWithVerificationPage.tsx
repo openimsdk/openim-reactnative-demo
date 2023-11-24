@@ -1,23 +1,34 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
-import { CheckVerifyClient, LoginClient, SendVerifyClient } from '../api/requests';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack/lib/typescript/src/types';
-import { AuthContext } from '../../../AuthContext';
-import { LoginIM } from '../api/openimsdk';
+import {useNavigation} from '@react-navigation/native';
+import {
+  CheckVerifyClient,
+  LoginClient,
+  SendVerifyClient,
+} from '../api/requests';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack/lib/typescript/src/types';
+import {AuthContext} from '../../../AuthContext';
+import {LoginIM} from '../api/openimsdk';
 
-const LoginWithVerificationPage = ( ) => {
-  const { setLoginState } = useContext(AuthContext);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const LoginWithVerificationPage = () => {
+  const {setLoginState} = useContext(AuthContext);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [passwordHidden, setPasswordHidden] = useState(true);
-  const [seconds, setSeconds] = useState(0)
-  const [error, setError] = useState("")
+  const [seconds, setSeconds] = useState(0);
+  const [error, setError] = useState('');
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const navigateToLogin = () => {
     navigation.navigate('LoginPage');
-  }
+  };
   const navigateToSignUp = () => {
     navigation.navigate('SignUpPage');
   };
@@ -27,32 +38,38 @@ const LoginWithVerificationPage = ( ) => {
 
   const handleSendVerification = async () => {
     if (seconds == 0) {
-      setSeconds(60)
+      setSeconds(60);
       try {
-        await SendVerifyClient({ usedFor: 3, phoneNumber: email })
-      } catch (error) {
-        setError(error.errorMsg)
-      } 
-    }
-
-  }
-  const handleLogIn = () => {
-    navigateToLogin();
-  }
-  const handleSignIn = async () => {
-    try {
-      await CheckVerifyClient({ phoneNumber: email, verifyCode: password });
-      await LoginClient({ password: "", phoneNumber: email, verifyCode: password, areaCode: "+86" });
-      await LoginIM()
-      setLoginState(true)
-    } catch (error) {
-      setError(error.message);
+        await SendVerifyClient({usedFor: 3, phoneNumber: email});
+      }catch (error) {
+        const err = error as {message: string};
+        setError(err.message);
+      }
     }
   };
-  
+  const handleLogIn = () => {
+    navigateToLogin();
+  };
+  const handleSignIn = async () => {
+    try {
+      await CheckVerifyClient({phoneNumber: email, verifyCode: password});
+      await LoginClient({
+        password: '',
+        phoneNumber: email,
+        verifyCode: password,
+        areaCode: '+86',
+      });
+      await LoginIM();
+      setLoginState(true)
+    } catch (error) {
+      const err = error as {message: string};
+      setError(err.message);
+    }
+  };
+
   const handleSignUpPage = () => {
     navigateToSignUp();
-  }
+  };
   useEffect(() => {
     // Decrease the countdown every second
     const interval = setInterval(() => {
@@ -68,13 +85,15 @@ const LoginWithVerificationPage = ( ) => {
   return (
     <LinearGradient
       colors={['#0E6CBE28', '#C6C6C621']}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={styles.linearGradient}
-    >
+      start={{x: 0, y: 0}}
+      end={{x: 1, y: 1}}
+      style={styles.linearGradient}>
       <View style={styles.container}>
         <View style={styles.logoContainer}>
-          <Image source={require('../../../assets/imgs/loginLogo.png')} style={styles.logo} />
+          <Image
+            source={require('../../../assets/imgs/loginLogo.png')}
+            style={styles.logo}
+          />
         </View>
         <View>
           <Text style={styles.welcomeText}>Welcome to OpenIM</Text>
@@ -87,8 +106,15 @@ const LoginWithVerificationPage = ( ) => {
             <Text style={styles.enterText}>Enter your phone number</Text>
             <View style={styles.emailContainer}>
               <View style={styles.emailInput}>
-                <TextInput style={styles.emailTextInput} placeholder="Phone Number" value={email} onChangeText={setEmail} />
-                <TouchableOpacity style={styles.clearButton} onPress={handleClearEmail}>
+                <TextInput
+                  style={styles.emailTextInput}
+                  placeholder="Phone Number"
+                  value={email}
+                  onChangeText={setEmail}
+                />
+                <TouchableOpacity
+                  style={styles.clearButton}
+                  onPress={handleClearEmail}>
                   <Image
                     source={require('../../../assets/imgs/clear.png')} // Replace with your image file path
                   />
@@ -99,9 +125,21 @@ const LoginWithVerificationPage = ( ) => {
           <View style={styles.inputBox}>
             <Text style={styles.enterText}>Enter your verification code</Text>
             <View style={styles.verificationInput}>
-              <TextInput style={styles.verificationTextInput} placeholder="" secureTextEntry={passwordHidden} value={password} onChangeText={setPassword} />
-              <TouchableOpacity style={styles.sendButtonContainer} onPress={handleSendVerification}>
-                {seconds == 0 ? <Text style={styles.sendButtonText}>Send</Text> : <Text style={styles.sendButtonText}>{seconds}s</Text>}
+              <TextInput
+                style={styles.verificationTextInput}
+                placeholder=""
+                secureTextEntry={passwordHidden}
+                value={password}
+                onChangeText={setPassword}
+              />
+              <TouchableOpacity
+                style={styles.sendButtonContainer}
+                onPress={handleSendVerification}>
+                {seconds == 0 ? (
+                  <Text style={styles.sendButtonText}>Send</Text>
+                ) : (
+                  <Text style={styles.sendButtonText}>{seconds}s</Text>
+                )}
               </TouchableOpacity>
             </View>
             <View style={styles.veriLoginHolder}>
@@ -116,9 +154,11 @@ const LoginWithVerificationPage = ( ) => {
           </TouchableOpacity>
         </View>
         <View style={styles.signUpText}>
-          <Text style={{ fontSize: 11, fontStyle: 'italic', }}>Don't have an account yet?</Text>
+          <Text style={{fontSize: 11, fontStyle: 'italic'}}>
+            Don't have an account yet?
+          </Text>
           <View style={styles.clickToSignUpContainer}>
-            <Text style={{ fontSize: 11, fontStyle: 'italic', }}>Click to  </Text>
+            <Text style={{fontSize: 11, fontStyle: 'italic'}}>Click to </Text>
             <TouchableOpacity onPress={handleSignUpPage}>
               <Text style={styles.signUpButtonText}>Sign Up</Text>
             </TouchableOpacity>
@@ -148,7 +188,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   welcomeText: {
-    color: "#0089FF",
+    color: '#0089FF',
     marginBottom: 20,
   },
   signInText: {
@@ -159,7 +199,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#0089FF'
+    color: '#0089FF',
   },
   inputContainer: {
     width: '100%',
@@ -225,7 +265,7 @@ const styles = StyleSheet.create({
   },
   veriLoginHolder: {
     flexDirection: 'row',
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
   },
   passwordLoginText: {
     color: '#0089FF',
@@ -236,11 +276,10 @@ const styles = StyleSheet.create({
   },
   error: {
     fontSize: 11,
-    textAlign: "center",
-    color: "red"
+    textAlign: 'center',
+    color: 'red',
   },
   signInButton: {
-
     backgroundColor: '#0089FF',
     padding: 15,
     borderRadius: 5,
@@ -267,7 +306,7 @@ const styles = StyleSheet.create({
     color: '#0089FF',
     fontSize: 14,
     fontStyle: 'italic',
-  }
+  },
 });
 
 export default LoginWithVerificationPage;

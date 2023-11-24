@@ -25,7 +25,8 @@ const ForgetPasswordPage = () => {
         await SendVerifyClient({ usedFor: 2, phoneNumber: email });
        
       } catch (error) {
-        setError(error.errorMsg);
+        const err = error as {message: string};
+        setError(err.message);
       }
 
     }
@@ -36,7 +37,8 @@ const ForgetPasswordPage = () => {
       await CheckVerifyClient({ phoneNumber: email, verifyCode: password });
       navigator.navigate('SetPasswordPage', { type: 'resetPwd' })
     } catch (error) {
-      setError(error.errorMsg)
+      const err = error as {message: string};
+      setError(err.message);
     }
   }, [email, password, navigator]);
 
