@@ -18,7 +18,6 @@ export const conversationSort = (conversationList: ConversationItem[]) => {
       return false
     },
   );
-
   filterArr.sort((a, b) => {
     if (a.isPinned === b.isPinned) {
       const aCompare =
@@ -76,10 +75,10 @@ export const useConversationStore = create<ConversationStore>()((set, get) => ({
     return tmpConversationList.length === 20;
   },
   updateConversationList: (
-    list: ConversationItem[],
+    list: any,
     type: ConversationListUpdateType,
   ) => {
-    const parsedArray = list.map((listElem) => (listElem));
+    const parsedArray = list.map((listElem: string) => JSON.parse(listElem));
     const idx = Array.isArray(parsedArray) ? parsedArray.findIndex((c) => c.conversationID === get().currentConversation?.conversationID) : -1;
     if (idx > -1) get().updateCurrentConversation(parsedArray[idx]);
 
