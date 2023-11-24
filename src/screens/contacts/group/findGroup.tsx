@@ -1,74 +1,57 @@
-import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  Platform,
-} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-
-import {FlatList} from 'react-native-gesture-handler';
-import {SearchGroup} from '../../api/openimsdk';
-import FriendCard from '../../friend/friendCard';
+import React, {useState, useEffect, useCallback} from 'react';
+import {View, Text, TextInput, StyleSheet, FlatList, Platform} from 'react-native';
+import debounce from 'lodash.debounce';
 import GroupCard from './findGroupCard';
-import { GroupItem } from '../../../../store/types/entity';
+import {SearchGroup} from '../../api/openimsdk';
+import {GroupItem} from '../../../../store/types/entity';
 
 const FindGroupPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const navigator = useNavigation<NativeStackNavigationProp<any>>();
   const [searchResults, setSearchResults] = useState<GroupItem[]>([]);
 
+  const handleSearch = async (term: string) => {
+    if (!term.trim()) {
+      setSearchResults([]);
+      return;
+    }
+    try {
+      const result = await SearchGroup([term], true, false);
+      setSearchResults(result);
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    }
+  };
+  const debouncedSearch = useCallback(debounce(handleSearch, 300), []);
+  
   useEffect(() => {
-    const fetchData = async () => {
-      try { 
-        const result = await SearchGroup([searchTerm],true,false);
-        setSearchResults(result);
-      } catch (error) {
-        console.error('Error fetching search results:', error);
-      }
-    };
-
-    fetchData();
-  }, [searchTerm]);
+    debouncedSearch(searchTerm);
+  }, [searchTerm, debouncedSearch]);
 
   return (
     <View style={styles.container}>
-
-      {/* Search Bar */}
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
-          placeholder="Search Friends"
+          placeholder="Search Groups"
           value={searchTerm}
-          onChangeText={text => setSearchTerm(text)}
+          onChangeText={setSearchTerm}
         />
       </View>
-
-      {/* Display search results as cards */}
-      {searchResults === null ||
-      searchResults.length === 0 ||
-      searchTerm === '' ? (
-        <Text>No friend matches the search word.</Text>
+      {searchResults.length === 0 ? (
+        <Text>No group matches the search word.</Text>
       ) : (
         <FlatList
           data={searchResults}
-          keyExtractor={group => group.groupID}
-          renderItem={({item: group}) => (
-            // <Text>{JSON.stringify(group)}</Text>
+          keyExtractor={(group) => group.groupID}
+          renderItem={({ item }) => (
             <GroupCard
-              key={group.groupID}
-              nickname={group.groupName}
-              faceURL={group.faceURL}
-              groupID={group.groupID}
-              // style={styles.friendCard} // Add a style prop to your FriendCard component
+              key={item.groupID}
+              nickname={item.groupName}
+              faceURL={item.faceURL}
+              groupID={item.groupID}
             />
           )}
-          contentContainerStyle={styles.flatList} // Style the FlatList items
+          contentContainerStyle={styles.flatList}
         />
       )}
     </View>
@@ -79,7 +62,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    marginTop: Platform.OS === 'ios' ? 50 : 0
+    marginTop: Platform.OS === 'ios' ? 50 : 0,
   },
   searchContainer: {
     marginTop: 20,

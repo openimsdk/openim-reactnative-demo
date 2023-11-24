@@ -8,24 +8,36 @@ const getPlatform = () => {
   return Platform.OS === 'android' ? 2 : 1;
 };
 
-const performRequest = async (url, params, headers = {}) => {
-  const defaultHeaders = {
-    'Content-Type': 'application/json',
-    'operationID': '123',
-  };
+const performRequest = async (url:string, params:any, headers = {}, timeout = 5000) => { // timeout in milliseconds
+  try {
+    const defaultHeaders = {
+      'Content-Type': 'application/json',
+      'operationID': '123',
+    };
 
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: { ...defaultHeaders, ...headers },
-    body: JSON.stringify({ ...params, platform: getPlatform(), areaCode: "+86" }),
-  });
+    const timeoutPromise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        reject(new Error("Request timed out"));
+      }, timeout);
+    });
 
-  if (!response.ok) throw new Error("Request failed");
+    const fetchPromise = fetch(url, {
+      method: 'POST',
+      headers: { ...defaultHeaders, ...headers },
+      body: JSON.stringify({ ...params, platform: getPlatform(), areaCode: "+86" }),
+    });
 
-  const data = await response.json();
-  if (data.errCode !== 0) throw new Error(data.errDlt);
+    const response:any = await Promise.race([fetchPromise, timeoutPromise]);
 
-  return data;
+    if (!response.ok) throw new Error("Request failed");
+
+    const data = await response.json();
+    if (data.errCode !== 0) throw new Error(data.errDlt);
+
+    return data;
+  } catch (error) {
+    throw error
+  }
 };
 
 
@@ -79,25 +91,31 @@ export const ResetPasswordClient = async (params: { phoneNumber: any; password: 
   await performRequest(url, params);
 }
 
-export const getBusinessUserInfo = async (userIDs: string[], isSelfInfo = false) => {
+export const getBusinessUserInfo = async (userIDs: string[], isSelfInfo = false): Promise<{ users: BusinessUserInfo[] } | { error: string }> => {
   try {
     const token = await AsyncStorage.getItem('chatToken');
+    if (!token) throw new Error('Authentication token not found');
 
-    return await axios.post<{ users: BusinessUserInfo[] }>(
+    const response = await axios.post<{ users: BusinessUserInfo[] }>(
       `${USER_URL}/user/find/full`,
       { userIDs },
       { headers: { operationID: '923821', token } }
     );
-  } catch (error) {
+
+    return response.data;
+  } catch (error: any) {
     console.error('Error in getBusinessUserInfo:', error);
+    return { error: error.message || 'Unknown error occurred in getBusinessUserInfo' };
   }
 };
 
-export const searchBusinessUserInfo = async (keyword: string) => {
+export const searchBusinessUserInfo = async (keyword: string): Promise<{ total: number; users: BusinessUserInfo[] } | { error: string }> => {
+  
   try {
     const token = await AsyncStorage.getItem('chatToken');
-
-    return await axios.post<{ total: number; users: BusinessUserInfo[] }>(
+    if (!token) throw new Error('Authentication token not found');
+    
+    const response = await axios.post<{ total: number; users: BusinessUserInfo[] }>(
       `${USER_URL}/user/search/full`,
       {
         keyword,
@@ -105,7 +123,9 @@ export const searchBusinessUserInfo = async (keyword: string) => {
       },
       { headers: { operationID: '9347234', token } }
     );
-  } catch (error) {
+    return response.data;
+  } catch (error: any) {
     console.error('Error in searchBusinessUserInfo:', error);
+    return { error: error.message || 'Unknown error occurred in searchBusinessUserInfo' };
   }
 };

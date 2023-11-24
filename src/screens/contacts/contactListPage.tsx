@@ -76,7 +76,7 @@ const ContactListPage = () => {
     },
     ...sectionsWithOffset]);
   }, [rawData]);
-  
+
   const scrollToSection = (sectionIndex: number) => {
     if (sectionListRef.current) {
       sectionListRef.current.scrollToLocation({
@@ -141,6 +141,7 @@ const ContactListPage = () => {
         }
         bounces={false}
         renderItem={({ item }) => {
+          
           return (<ContactCard nickname={item.nickname} faceURL={item.faceURL} userID={item.userID}></ContactCard>);
         }}
         renderSectionHeader={({ section }) => {

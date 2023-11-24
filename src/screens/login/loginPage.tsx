@@ -1,21 +1,28 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Platform,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import md5 from 'react-native-md5';
-import { LoginClient } from '../api/requests';;
-import { NativeStackNavigationProp } from '@react-navigation/native-stack/lib/typescript/src/types';
-import { AuthContext } from '../../../AuthContext';
-import { LoginIM, LogoutIM } from '../api/openimsdk';
+import {LoginClient} from '../api/requests';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack/lib/typescript/src/types';
+import {AuthContext} from '../../../AuthContext';
+import {LoginIM, LogoutIM} from '../api/openimsdk';
 
 const LoginPage = () => {
-  const { setLoginState } = useContext(AuthContext);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const {setLoginState} = useContext(AuthContext);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [passwordHidden, setPasswordHidden] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-
 
   const navigateToForgetPwd = () => {
     navigation.navigate('ForgetPasswordPage');
@@ -42,33 +49,38 @@ const LoginPage = () => {
   };
   const handleVerificationLogin = () => {
     navigateToVeri();
-  }
+  };
   const handleSignUp = () => {
     navigateToSignUp();
-  }
+  };
   const handleSignIn = async () => {
-    try{
-      await LoginClient({ password: md5.hex_md5(password), phoneNumber: email, verifyCode: "verify", areaCode: "+86" });
-      await LoginIM()
+    try {
+      await LoginClient({
+        password: md5.hex_md5(password),
+        phoneNumber: email,
+        verifyCode: 'verify',
+        areaCode: '+86',
+      });
+      await LoginIM();
       setLoginState(true)
+    } catch (error) {
+      const err = error as {message: string};
+      setError(err.message);
     }
-    catch{
-      console.error("login error")
-    }
-    
-    
   };
 
   return (
     <LinearGradient
       colors={['#0E6CBE28', '#C6C6C621']}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={styles.linearGradient}
-    >
+      start={{x: 0, y: 0}}
+      end={{x: 1, y: 1}}
+      style={styles.linearGradient}>
       <View style={styles.container}>
         <View style={styles.logoContainer}>
-          <Image source={require('../../../assets/imgs/loginLogo.png')} style={styles.logo} />
+          <Image
+            source={require('../../../assets/imgs/loginLogo.png')}
+            style={styles.logo}
+          />
         </View>
         <View>
           <Text style={styles.welcomeText}>Welcome to OpenIM</Text>
@@ -81,8 +93,15 @@ const LoginPage = () => {
             <Text style={styles.enterText}>Enter your phone number</Text>
             <View style={styles.emailContainer}>
               <View style={styles.emailInput}>
-                <TextInput style={styles.emailTextInput} placeholder="Phone Number" value={email} onChangeText={setEmail} />
-                <TouchableOpacity style={styles.clearButton} onPress={handleClearEmail}>
+                <TextInput
+                  style={styles.emailTextInput}
+                  placeholder="Phone Number"
+                  value={email}
+                  onChangeText={setEmail}
+                />
+                <TouchableOpacity
+                  style={styles.clearButton}
+                  onPress={handleClearEmail}>
                   <Image
                     source={require('../../../assets/imgs/clear.png')} // Replace with your image file path
                   />
@@ -93,8 +112,16 @@ const LoginPage = () => {
           <View style={styles.inputBox}>
             <Text style={styles.enterText}>Enter your password</Text>
             <View style={styles.passwordInput}>
-              <TextInput style={styles.passwordTextInput} placeholder="Password" secureTextEntry={passwordHidden} value={password} onChangeText={setPassword} />
-              <TouchableOpacity style={styles.clearButton} onPress={handleClearPassword}>
+              <TextInput
+                style={styles.passwordTextInput}
+                placeholder="Password"
+                secureTextEntry={passwordHidden}
+                value={password}
+                onChangeText={setPassword}
+              />
+              <TouchableOpacity
+                style={styles.clearButton}
+                onPress={handleClearPassword}>
                 <Image
                   source={require('../../../assets/imgs/clear.png')} // Replace with your image file path
                 />
@@ -110,7 +137,9 @@ const LoginPage = () => {
                 <Text style={styles.forgetPasswordText}>Forgot Password</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={handleVerificationLogin}>
-                <Text style={styles.verificationLoginText}>Verification Login</Text>
+                <Text style={styles.verificationLoginText}>
+                  Verification Login
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -118,14 +147,17 @@ const LoginPage = () => {
           <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
             <Text style={styles.signInButtonText}>Sign In</Text>
           </TouchableOpacity>
-
         </View>
         <View style={styles.signUpText}>
-          <Text style={{ fontSize: 11, fontStyle: 'italic', }}>Don't have an account yet?</Text>
+          <Text style={{fontSize: 11, fontStyle: 'italic'}}>
+            Don't have an account yet?
+          </Text>
           <View style={styles.clickToSignUpContainer}>
-            <Text style={{ fontSize: 11, fontStyle: 'italic', }}>Click to  </Text>
+            <Text style={{fontSize: 11, fontStyle: 'italic'}}>Click to </Text>
             <TouchableOpacity>
-              <Text style={styles.signUpButtonText} onPress={handleSignUp}>Sign Up</Text>
+              <Text style={styles.signUpButtonText} onPress={handleSignUp}>
+                Sign Up
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -153,7 +185,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   welcomeText: {
-    color: "#0089FF",
+    color: '#0089FF',
     marginBottom: 20,
   },
   signInText: {
@@ -164,7 +196,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#0089FF'
+    color: '#0089FF',
   },
   inputContainer: {
     width: '100%',
@@ -234,11 +266,10 @@ const styles = StyleSheet.create({
   },
   error: {
     fontSize: 11,
-    textAlign: "center",
-    color: "red"
+    textAlign: 'center',
+    color: 'red',
   },
   signInButton: {
-
     backgroundColor: '#0089FF',
     padding: 15,
     borderRadius: 5,
@@ -265,7 +296,7 @@ const styles = StyleSheet.create({
     color: '#0089FF',
     fontSize: 14,
     fontStyle: 'italic',
-  }
+  },
 });
 
 export default LoginPage;

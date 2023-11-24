@@ -69,7 +69,6 @@ const AlphabetHintList: React.FC<AlphabetHintListProps> = ({ hints, onPressItem 
   </ScrollView>
 );
 
-// Include appropriate styles for SearchBar in your styles object.
 interface SectionWithOffset {
   title: string;
   data: FriendUserItem[];

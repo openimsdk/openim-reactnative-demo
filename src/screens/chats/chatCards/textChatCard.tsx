@@ -13,7 +13,8 @@ const TextChatCard = memo(({ message }: { message: ExMessageItem }) => {
 
 const SelfTextMessage = ({ message }: { message: ExMessageItem }) => (
   <View style={styles.chatContainerSelf}>
-    <View style={styles.messageContainer}>
+    <View style={styles.selfMessageContainer}>
+      <Text style={styles.messageText}>{message.senderNickname}</Text>
       <Text style={styles.messageText}>{message.textElem.content}</Text>
     </View>
     <View style={styles.avatarContainer}>
@@ -27,7 +28,7 @@ const OtherTextMessage = ({ message }: { message: ExMessageItem }) => (
     <View style={styles.avatarContainer}>
       <Avatar nickname={message.senderNickname} faceURL={message.senderFaceUrl ?? ''} />
     </View>
-    <View style={styles.messageContainer}>
+    <View style={styles.otherMessageContainer}>
       <Text style={styles.messageText}>{message.senderNickname}</Text>
       <Text style={styles.messageText}>{message.textElem.content}</Text>
     </View>
@@ -47,7 +48,12 @@ const styles = StyleSheet.create({
   avatarContainer: {
     marginHorizontal: 10,
   },
-  messageContainer: {
+  selfMessageContainer: {
+    alignItems: 'flex-end',
+    maxWidth: "80%",
+  },
+  otherMessageContainer: {
+    
     maxWidth: "80%",
   },
   messageText: {

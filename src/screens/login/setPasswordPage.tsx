@@ -50,7 +50,8 @@ const SetPasswordPage: React.FC<SetPasswordPageProps> = ({ route }) => {
       }
       await attemptLogin();
     } catch (error) {
-      setError(error.message);
+      const err = error as {message: string};
+      setError(err.message);
     }
   };
   
