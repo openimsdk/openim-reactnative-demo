@@ -1,26 +1,37 @@
-import React from "react";
-import { FlatList, ListRenderItem, Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import ConversationCard from "./conversationCard";
-import { useConversationStore } from "../../../store/conversation";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { ConversationItem } from "../../../store/types/entity";
+import React, { useEffect } from 'react';
+import {
+  FlatList,
+  ListRenderItem,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import ConversationCard from './conversationCard';
+import {useConversationStore} from '../../../store/conversation';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {ConversationItem} from '../../../store/types/entity';
 
 const ChatPage = () => {
-  const conversationList = useConversationStore(state => state.conversationList);
+  const conversationList:ConversationItem[] = useConversationStore(
+    state => state.conversationList,
+  );
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
-
-  
-  const renderConversationItem: ListRenderItem<ConversationItem> = ({ item, index }) => {
+  const renderConversationItem: ListRenderItem<ConversationItem> = ({
+    item
+  }) => {
     if (!item.conversationID) {
       return null; // or some placeholder component
     }
+
     return <ConversationCard item={item} />;
   };
 
   const handleAddFriend = () => {
-    navigator.navigate("AddFriend");
-  }
+    navigator.navigate('AddFriend');
+  };
 
   return (
     <View style={styles.container}>
@@ -35,18 +46,18 @@ const ChatPage = () => {
       </View>
       <FlatList
         data={conversationList}
-        keyExtractor={(item) => item.conversationID.toString()}
+        keyExtractor={item => item.conversationID || `item-${Math.random()}`}
         renderItem={renderConversationItem}
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    marginTop: Platform.OS === 'ios' ? 50 : 0
+    marginTop: Platform.OS === 'ios' ? 50 : 0,
   },
   header: {
     backgroundColor: '#F6F6F6FF',
@@ -73,7 +84,7 @@ const styles = StyleSheet.create({
     // marginBottom: 16,
     paddingLeft: 8,
     backgroundColor: '#E5E5E5FF',
-    textAlign: "center"
+    textAlign: 'center',
   },
 });
 export default ChatPage;
