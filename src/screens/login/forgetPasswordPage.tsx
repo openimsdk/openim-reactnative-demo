@@ -35,7 +35,7 @@ const ForgetPasswordPage = () => {
   const handleSavePwd = useCallback(async () => {
     try {
       await CheckVerifyClient({ phoneNumber: email, verifyCode: password });
-      navigator.navigate('SetPasswordPage', { type: 'resetPwd' })
+      navigator.navigate('SetPasswordPage', { type: 'resetPwd', email: email,verifyCode: password })
     } catch (error) {
       const err = error as {message: string};
       setError(err.message);
