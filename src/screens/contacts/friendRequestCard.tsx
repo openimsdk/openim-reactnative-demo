@@ -3,15 +3,21 @@ import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import Avatar from '../../components/avatar';
+import { useUserStore } from '../../../store/user';
 
 export const FriendRequestCard = ({ nickname, faceURL, handleResult, reqMsg, fromUserID }: { nickname: string, faceURL: string, handleResult: number, reqMsg: string, fromUserID: string }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-
+  
   const handleViewPress = () => {
     navigation.navigate('FriendRequests', { nickname, faceURL, fromUserID, reqMsg });
   }
 
   const renderActionButton = () => {
+    if(useUserStore(state=>state.selfInfo.userID === fromUserID)){
+      return (
+        <Text>Sent</Text>
+      )
+    }
     if (handleResult === 0) {
       return (
         <TouchableOpacity

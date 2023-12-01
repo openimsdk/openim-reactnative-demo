@@ -35,7 +35,7 @@ const ChatPage = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View style={styles.topBar}>
         <TouchableOpacity style={styles.button}>
           <Text>Edit</Text>
         </TouchableOpacity>
@@ -67,7 +67,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // marginBottom: 16,
+    marginBottom: 8,
+    marginTop: 8,
   },
   button: {
     padding: 8,

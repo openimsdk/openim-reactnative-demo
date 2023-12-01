@@ -148,6 +148,8 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 20,
     paddingRight: 20,
+    paddingBottom:100,
+    justifyContent:"center",
   },
   backButton: {
     marginTop: 100,

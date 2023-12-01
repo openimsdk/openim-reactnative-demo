@@ -7,6 +7,8 @@ import { SendMsgParams } from "../../../store/types/params";
 import { useContext } from "react";
 import { AuthContext } from "../../../AuthContext";
 import { initStore } from "../../../store/useGlobalEvent";
+import { useContactStore } from "../../../store/contact";
+import { useConversationStore } from "../../../store/conversation";
 export const Init = async () => {
   let platform = Platform.OS === 'android' ? 2 : 1; // Simplified platform determination
   await RNFS.mkdir(RNFS.DocumentDirectoryPath + '/tmp');
@@ -51,6 +53,8 @@ export const LogoutIM = async () => {
     const data = await OpenIMSDKRN.logout("12322111137");
     console.log("logout", data);
     await AsyncStorage.clear()
+    useContactStore.getState().clearContactStore();
+    useConversationStore.getState().clearConversationStore();
     return data; // Return data directly on successful login
   } catch (error) {
     console.error('Error logout:', error);

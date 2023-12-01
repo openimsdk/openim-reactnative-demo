@@ -53,7 +53,8 @@ const ChatRoom = (conversation: {
           const data = await GetUsersInfo([
             conversation.route.params.item!.userID,
           ]);
-          setUser(JSON.parse(data)[0].friendInfo);
+  
+          setUser(JSON.parse(data)[0].publicInfo);
         } catch (error) {
           // Handle errors here
           console.error(error);

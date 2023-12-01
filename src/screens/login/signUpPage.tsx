@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Platform } from "react-native";
+import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, Platform, KeyboardAvoidingView } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from '@react-navigation/native';
 import { SendVerifyClient } from "../api/requests";
@@ -57,6 +57,8 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 20,
     paddingRight: 20,
+    paddingBottom:100,
+    justifyContent:"center",
   },
   backButton: {
     marginTop: 100,

@@ -19,7 +19,6 @@ const FriendRequestPage = () => {
 
   const applicationList: FriendApplicationItem[] = [...recvFriendApplicationList, ...sendFriendApplicationList]
   applicationList.sort((a, b) => b.createTime - a.createTime);
-
   const renderFriendRequest = ({ item }: { item: FriendApplicationItem }) => (
     <FriendRequestCard
       nickname={item.fromNickname}

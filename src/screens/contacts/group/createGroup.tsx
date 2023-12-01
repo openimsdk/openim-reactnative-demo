@@ -269,6 +269,7 @@ const styles = StyleSheet.create({
   },
   hintItem: {
     padding: 4,
+    fontSize: 8,
   },
   friendSelect: {
     padding: 16,
