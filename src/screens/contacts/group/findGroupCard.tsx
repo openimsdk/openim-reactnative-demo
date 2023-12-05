@@ -15,7 +15,7 @@ const GroupCard = ({groupID, nickname, faceURL}:GroupCardInput) => {
     <View style={styles.contactItem}>
       <Avatar nickname={nickname} faceURL={faceURL} />
       <View style={{flex: 1}}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View style={styles.textContainer}>
           <Text>{nickname}</Text>
         </View>
         <View
@@ -44,6 +44,10 @@ const styles = StyleSheet.create({
     width: 50,
     borderRadius: 25,
     marginRight: 10,
+  },
+  textContainer: {
+    flexDirection: 'row', 
+    justifyContent: 'space-between',
   },
 });
 export default GroupCard;
