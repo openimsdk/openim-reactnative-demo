@@ -55,6 +55,7 @@ export const LogoutIM = async () => {
     await AsyncStorage.clear()
     useContactStore.getState().clearContactStore();
     useConversationStore.getState().clearConversationStore();
+    
     return data; // Return data directly on successful login
   } catch (error) {
     console.error('Error logout:', error);

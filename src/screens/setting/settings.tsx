@@ -10,8 +10,8 @@ import { LogoutIM } from '../api/openimsdk';
 
 
 const SettingPage = () => {
-  const { setLoginState } = useAuth();;
-  let curretnUserInfo = useUserStore((state) => state.selfInfo)
+  const { setLoginState } = useAuth()
+  let currentUserInfo = useUserStore((state) => state.selfInfo)
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   
   const handleLogout = async () => {
@@ -38,9 +38,9 @@ const SettingPage = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.content}>
-        <Avatar nickname={curretnUserInfo.nickname} faceURL={curretnUserInfo.faceURL} />
-        <Text style={styles.name}>{curretnUserInfo.nickname}</Text>
-        <Text style={styles.email}>{curretnUserInfo.userID}</Text>
+        <Avatar nickname={currentUserInfo.nickname} faceURL={currentUserInfo.faceURL} />
+        <Text style={styles.name}>{currentUserInfo.nickname}</Text>
+        <Text style={styles.email}>{currentUserInfo.userID}</Text>
 
         <TouchableOpacity style={styles.button} onPress={handleLogout}>
           {/* Search button with icon */}
