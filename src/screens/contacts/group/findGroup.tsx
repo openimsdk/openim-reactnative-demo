@@ -8,8 +8,8 @@ import {GroupItem} from '../../../../store/types/entity';
 const FindGroupPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState<GroupItem[]>([]);
-
-  const handleSearch = async (term: string) => {
+  const [error, setError] = useState<string | null>(null);
+  const handleSearch = useCallback(async (term: string) => {
     if (!term.trim()) {
       setSearchResults([]);
       return;
@@ -19,13 +19,23 @@ const FindGroupPage = () => {
       setSearchResults(result);
     } catch (error) {
       console.error('Error fetching search results:', error);
+      setError('Error fetching search results');
     }
-  };
-  const debouncedSearch = useCallback(debounce(handleSearch, 300), []);
+  },[]);
+  const debouncedSearch = useCallback(debounce(handleSearch, 300), [handleSearch]);
   
   useEffect(() => {
     debouncedSearch(searchTerm);
-  }, [searchTerm, debouncedSearch]);
+  }, [searchTerm]);
+
+  const renderItem = ({ item }: { item: GroupItem }) => (
+    <GroupCard
+      key={item.groupID}
+      nickname={item.groupName}
+      faceURL={item.faceURL}
+      groupID={item.groupID}
+    />
+  );
 
   return (
     <View style={styles.container}>
@@ -37,20 +47,14 @@ const FindGroupPage = () => {
           onChangeText={setSearchTerm}
         />
       </View>
+      {error && <Text style={styles.errorText}>{error}</Text>}
       {searchResults.length === 0 ? (
         <Text>No group matches the search word.</Text>
       ) : (
         <FlatList
           data={searchResults}
           keyExtractor={(group) => group.groupID}
-          renderItem={({ item }) => (
-            <GroupCard
-              key={item.groupID}
-              nickname={item.groupName}
-              faceURL={item.faceURL}
-              groupID={item.groupID}
-            />
-          )}
+          renderItem={renderItem}
           contentContainerStyle={styles.flatList}
         />
       )}
@@ -63,6 +67,9 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     marginTop: Platform.OS === 'ios' ? 50 : 0,
+  },
+  errorText: {
+    color: 'red',
   },
   searchContainer: {
     marginTop: 20,

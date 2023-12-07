@@ -1,11 +1,13 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
   Image,
+  RefreshControl,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
+  FlatList,
 } from 'react-native';
 import Avatar from '../../components/avatar';
 import TextChatCard from './chatCards/textChatCard';
@@ -20,7 +22,6 @@ import {API} from '../api/typings';
 import {useMessageStore} from '../../../store/message';
 import {useConversationStore} from '../../../store/conversation';
 import {ConversationItem} from '../../../store/types/entity';
-import {FlatList} from 'react-native-gesture-handler';
 import OpenIMSDKRN from 'open-im-sdk-rn';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
@@ -43,6 +44,7 @@ const ChatRoom = (conversation: {
     faceURL: '',
     nickname: '',
   });
+  const [isRefreshing, setIsRefreshing] = useState(false);
   
   useEffect(() => {
     updateCurrentConversation(conversation.route.params.item);
@@ -63,7 +65,22 @@ const ChatRoom = (conversation: {
       getUser();
     }
   }, []);
-
+  const onRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      const previousLength = messages.length;
+      await getHistoryMessageListByReq(true); // Load more messages
+      const newLength = useMessageStore.getState().historyMessageList.length;
+      const newMessagesCount = newLength - previousLength;
+      if (newMessagesCount > 0) {
+        // Adjust scroll position based on number of new messages
+        flatListRef.current?.scrollToIndex({ index: newMessagesCount, animated: false });
+      }
+    } catch (error) {
+      console.error('Error refreshing messages:', error);
+    }
+    setIsRefreshing(false);
+  };
   const messages = useMessageStore(state => state.historyMessageList);
   useEffect(() => {
     MarkConversationMessageAsRead(conversation.route.params.item.conversationID)
@@ -138,6 +155,16 @@ const ChatRoom = (conversation: {
             return <View />;
           }
         }}
+        refreshControl={
+          <RefreshControl
+              title={"Loading"} //android中设置无效
+              colors={["red"]} //android
+              tintColor={"red"} //ios
+              titleColor={"red"}
+              refreshing={isRefreshing}
+              onRefresh={onRefresh}
+          />
+      }
         onContentSizeChange={() => {
           // Scroll to the bottom when content size changes
           flatListRef.current?.scrollToEnd();
