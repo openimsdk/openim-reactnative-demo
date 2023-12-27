@@ -168,7 +168,7 @@ const ChatRoom = (conversation: {
       onContentSizeChange={() => {
         // // Scroll to the bottom when content size changes
         // if(!initialLoadDone)
-          flatListRef.current?.scrollToEnd({animated:false});
+          // flatListRef.current?.scrollToEnd({animated:false});
         //   // setInitialLoadDone(true)
       }}
       

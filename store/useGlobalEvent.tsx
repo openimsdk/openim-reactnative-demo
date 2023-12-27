@@ -133,8 +133,8 @@ export function useGlobalEvent() {
     }
   };
 
-  const conversationChangeHandler = ( data:string) => {
-    updateConversationList(JSON.parse(data), "filter");
+  const conversationChangeHandler = ( { data }: WSEvent<ConversationItem[]>) => {
+    updateConversationList(data, "filter");
   };
   const newConversationHandler = ({ data }: WSEvent<ConversationItem[]>) => updateConversationList(data, "push");
   const totalUnreadChangeHandler = ({ data }: WSEvent<number>) => updateUnReadCount(data);
@@ -192,8 +192,8 @@ export function useGlobalEvent() {
     OpenIMEmitter.addListener('onConnecting', connectingHandler);
     OpenIMEmitter.addListener('onConnectFailed', connectFailedHandler);
     OpenIMEmitter.addListener('onConnectSuccess', connectSuccessHandler);
-    OpenIMEmitter.addListener('onKickedOffline', (v) => { kickHandler});
-    OpenIMEmitter.addListener('onUserTokenExpired', (v) => { expiredHandler});
+    OpenIMEmitter.addListener('onKickedOffline',  kickHandler);
+    OpenIMEmitter.addListener('onUserTokenExpired', expiredHandler);
     // sync
     OpenIMEmitter.addListener('onSyncServerStart', syncStartHandler);
     OpenIMEmitter.addListener('onSyncServerFinish', syncFinishHandler);
@@ -203,13 +203,13 @@ export function useGlobalEvent() {
     OpenIMEmitter.addListener('onRecvNewMessages', newMessageHandler );
     OpenIMEmitter.addListener('onNewRecvMessageRevoked',revokedMessageHandler );
     // // conversation
-    OpenIMEmitter.addListener('onConversationChanged',  (v) => {conversationChangeHandler});
-    OpenIMEmitter.addListener('onNewConversation',  (v) => {newConversationHandler} );
-    OpenIMEmitter.addListener('onTotalUnreadMessageCountChanged', (v) => {totalUnreadChangeHandler});
+    OpenIMEmitter.addListener('onConversationChanged',  conversationChangeHandler);
+    OpenIMEmitter.addListener('onNewConversation',  newConversationHandler );
+    OpenIMEmitter.addListener('onTotalUnreadMessageCountChanged', totalUnreadChangeHandler);
     // // friend
     OpenIMEmitter.addListener('onFriendInfoChanged', friendInfoChangeHandler);
     OpenIMEmitter.addListener('onFriendAdded', friendAddedHandler);
-    OpenIMEmitter.addListener('onFriendDeleted', (v) => { friendDeletedHandler });
+    OpenIMEmitter.addListener('onFriendDeleted', friendDeletedHandler );
     // // blacklist
     // OpenIMEmitter.addListener('onBlackAdded', (v) => { blackAddedHandler });
     // OpenIMEmitter.addListener('onBlackDeleted', (v) => { blackDeletedHandler });
