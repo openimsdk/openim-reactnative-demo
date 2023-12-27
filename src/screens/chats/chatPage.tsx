@@ -47,6 +47,7 @@ const ChatPage = () => {
       <FlatList
         data={conversationList}
         keyExtractor={item => item.conversationID || `item-${Math.random()}`}
+        extraData={conversationList}
         renderItem={renderConversationItem}
       />
     </View>

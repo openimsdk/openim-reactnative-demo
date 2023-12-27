@@ -64,10 +64,12 @@ export const useMessageStore = create<MessageStore>()((set, get) => ({
     }
   },
   pushNewMessage: (message: ExMessageItem) => {
+    
     get().tryUpdatePreviewImg([message]);
     set((state) => ({
       historyMessageList: [...state.historyMessageList, message],
     }));
+    
   },
   updateOneMessage: (message: ExMessageItem, fromSuccessCallBack = false) => {
 

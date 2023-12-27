@@ -124,14 +124,16 @@ export function useGlobalEvent() {
 
   const notPushType = [MessageType.TypingMessage, MessageType.RevokeMessage];
 
-  const handleNewMessage = (newServerMsg: ExMessageItem) => {
-    if (!notPushType.includes(newServerMsg.contentType)) {
-      pushNewMessage(newServerMsg);
+  const handleNewMessage = (newServerMsg:string) => {
+    var parsedMsg: ExMessageItem = JSON.parse(newServerMsg)
+    if (!notPushType.includes(parsedMsg.contentType)) {
+      
+      pushNewMessage(parsedMsg);
       // emitter.emit("CHAT_LIST_SCROLL_TO_BOTTOM", true);
     }
   };
 
-  const conversationChangeHandler = ({ data }: WSEvent<ConversationItem[]>) => {
+  const conversationChangeHandler = ( { data }: WSEvent<ConversationItem[]>) => {
     updateConversationList(data, "filter");
   };
   const newConversationHandler = ({ data }: WSEvent<ConversationItem[]>) => updateConversationList(data, "push");
@@ -190,26 +192,24 @@ export function useGlobalEvent() {
     OpenIMEmitter.addListener('onConnecting', connectingHandler);
     OpenIMEmitter.addListener('onConnectFailed', connectFailedHandler);
     OpenIMEmitter.addListener('onConnectSuccess', connectSuccessHandler);
-    OpenIMEmitter.addListener('onKickedOffline', (v) => { kickHandler(v) });
-    OpenIMEmitter.addListener('onUserTokenExpired', (v) => { expiredHandler(v) });
+    OpenIMEmitter.addListener('onKickedOffline',  kickHandler);
+    OpenIMEmitter.addListener('onUserTokenExpired', expiredHandler);
     // sync
     OpenIMEmitter.addListener('onSyncServerStart', syncStartHandler);
     OpenIMEmitter.addListener('onSyncServerFinish', syncFinishHandler);
     OpenIMEmitter.addListener('onSyncServerFailed', syncFailedHandler);
     // message
-    // OpenIMEmitter.addListener('onRecvNewMessage',  newMessageHandler );
-    // OpenIMEmitter.addListener('onRecvNewMessages',  newMessageHandler );
-    // OpenIMEmitter.addListener('onNewRecvMessageRevoked',revokedMessageHandler );bug!
+    OpenIMEmitter.addListener('onRecvNewMessage',  newMessageHandler );
+    OpenIMEmitter.addListener('onRecvNewMessages', newMessageHandler );
+    OpenIMEmitter.addListener('onNewRecvMessageRevoked',revokedMessageHandler );
     // // conversation
-    OpenIMEmitter.addListener('onConversationChanged', (v) => {
-      conversationChangeHandler(v);
-    });
-    OpenIMEmitter.addListener('onNewConversation', (v) => { newConversationHandler });
-    OpenIMEmitter.addListener('onTotalUnreadMessageCountChanged', (v) => { totalUnreadChangeHandler });
+    OpenIMEmitter.addListener('onConversationChanged',  conversationChangeHandler);
+    OpenIMEmitter.addListener('onNewConversation',  newConversationHandler );
+    OpenIMEmitter.addListener('onTotalUnreadMessageCountChanged', totalUnreadChangeHandler);
     // // friend
     OpenIMEmitter.addListener('onFriendInfoChanged', friendInfoChangeHandler);
     OpenIMEmitter.addListener('onFriendAdded', friendAddedHandler);
-    // OpenIMEmitter.addListener('onFriendDeleted', (v) => { friendDeletedHandler });
+    OpenIMEmitter.addListener('onFriendDeleted', friendDeletedHandler );
     // // blacklist
     // OpenIMEmitter.addListener('onBlackAdded', (v) => { blackAddedHandler });
     // OpenIMEmitter.addListener('onBlackDeleted', (v) => { blackDeletedHandler });
