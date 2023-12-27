@@ -1,6 +1,6 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Avatar from '../../components/avatar';
-import {useState, useEffect, useMemo} from 'react';
+import {useState, useEffect} from 'react';
 import {API} from '../api/typings';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
@@ -78,12 +78,6 @@ const ConversationCard = ({item}: {item: ConversationItem}) => {
     }
     return '';
   };
-  const showMsgTime = useMemo(
-    () => formatDate(item.latestMsgSendTime),
-    [item.latestMsgSendTime],
-  );
-  const latestMessageContent = useMemo(() => getLatestMessageContent(), [item]);
-
   if (!item) {
     return null;
   }
@@ -94,10 +88,10 @@ const ConversationCard = ({item}: {item: ConversationItem}) => {
       <View style={styles.messageContainer}>
         <View style={styles.row}>
           <Text>{item.showName}</Text>
-          <Text>{showMsgTime}</Text>
+          <Text>{formatDate(item.latestMsgSendTime)}</Text>
         </View>
         <View style={styles.messageRow}>
-          <Text>{latestMessageContent}</Text>
+          <Text>{getLatestMessageContent()}</Text>
           {item.unreadCount > 0 && (
             <View style={styles.unreadBadge}>
               <Text style={styles.unreadText}>{item.unreadCount}</Text>

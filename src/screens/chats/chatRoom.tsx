@@ -45,7 +45,6 @@ const ChatRoom = (conversation: {
     nickname: '',
   });
   const [isRefreshing, setIsRefreshing] = useState(false);
-  
   useEffect(() => {
     updateCurrentConversation(conversation.route.params.item);
     getHistoryMessageListByReq();
@@ -89,7 +88,6 @@ const ChatRoom = (conversation: {
   const toggleModal = () => {
     setShowModal(!showModal);
   };
-
   const pushNewMessage = useMessageStore(state => state.pushNewMessage);
   const updateOneMessage = useMessageStore(state => state.updateOneMessage);
   const [inputMessage, setInputMessage] = useState(''); // State to hold the input message
@@ -144,7 +142,9 @@ const ChatRoom = (conversation: {
       <FlatList
         style={styles.messageList}
         data={messages}
+        keyExtractor={(item, index) => index.toString()}
         ref={flatListRef}
+        extraData={messages}
         renderItem={({item: message}) => {
           if (message.contentType === 101) {
             return <TextChatCard message={message} />;
@@ -165,10 +165,13 @@ const ChatRoom = (conversation: {
               onRefresh={onRefresh}
           />
       }
-        onContentSizeChange={() => {
-          // Scroll to the bottom when content size changes
-          flatListRef.current?.scrollToEnd();
-        }}
+      onContentSizeChange={() => {
+        // // Scroll to the bottom when content size changes
+        // if(!initialLoadDone)
+          flatListRef.current?.scrollToEnd({animated:false});
+        //   // setInitialLoadDone(true)
+      }}
+      
       />
       <View style={styles.inputContainer}>
         <TouchableOpacity

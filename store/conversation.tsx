@@ -79,6 +79,7 @@ export const useConversationStore = create<ConversationStore>()((set, get) => ({
     type: ConversationListUpdateType,
   ) => {
     const parsedArray = list.map((listElem: string) => JSON.parse(listElem));
+    console.log("pppppp",parsedArray)
     const idx = Array.isArray(parsedArray) ? parsedArray.findIndex((c) => c.conversationID === get().currentConversation?.conversationID) : -1;
     if (idx > -1) get().updateCurrentConversation(parsedArray[idx]);
 
