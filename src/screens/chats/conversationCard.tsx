@@ -1,59 +1,66 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  InteractionManager,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Avatar from '../../components/avatar';
 import {useState, useEffect} from 'react';
-import {API} from '../api/typings';
+import {API} from '../../api/typings';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import ChatRoom from './chatRoom';
 import {
   GetAdvancedHistoryMessageListReverse,
   MarkConversationMessageAsRead,
-} from '../api/openimsdk';
-import {ConversationItem, MessageItem} from '../../../store/types/entity';
-import {useConversationStore} from '../../../store/conversation';
-import {formatMessageByType} from '../../components/formatMsg';
+} from '../../api/openimsdk';
+import {ConversationItem, MessageItem} from '../../store/types/entity';
+import {useConversationStore} from '../../store/conversation';
+import {formatMessageByType} from '../../utils/formatMsg';
 import dayjs from 'dayjs';
-import calendar from "dayjs/plugin/calendar";
-import relativeTime from "dayjs/plugin/relativeTime";
-import updateLocale from "dayjs/plugin/updateLocale";
+import calendar from 'dayjs/plugin/calendar';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import updateLocale from 'dayjs/plugin/updateLocale';
 
 dayjs.extend(calendar);
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
 
-dayjs.updateLocale("en", {
+dayjs.updateLocale('en', {
   calendar: {
-    sameDay: "HH:mm",
-    nextDay: "[tomorrow]",
-    nextWeek: "dddd",
-    lastDay: "[yesterday] HH:mm",
-    lastWeek: "dddd HH:mm",
-    sameElse: "YYYY/M/D HH:mm",
+    sameDay: 'HH:mm',
+    nextDay: '[tomorrow]',
+    nextWeek: 'dddd',
+    lastDay: '[yesterday] HH:mm',
+    lastWeek: 'dddd HH:mm',
+    sameElse: 'YYYY/M/D HH:mm',
   },
 });
-dayjs.updateLocale("zh-cn", {
+dayjs.updateLocale('zh-cn', {
   calendar: {
-    sameDay: "HH:mm",
-    nextDay: "[明天]",
-    nextWeek: "dddd",
-    lastDay: "[昨天] HH:mm",
-    lastWeek: "dddd HH:mm",
-    sameElse: "YYYY年M月D日 HH:mm",
+    sameDay: 'HH:mm',
+    nextDay: '[明天]',
+    nextWeek: 'dddd',
+    lastDay: '[昨天] HH:mm',
+    lastWeek: 'dddd HH:mm',
+    sameElse: 'YYYY年M月D日 HH:mm',
   },
 });
 
 const formatDate = (timestamp: number) => {
-  if (!timestamp) return "";
+  if (!timestamp) return '';
 
   const fromNowStr = dayjs(timestamp).fromNow();
 
-  if (fromNowStr.includes("date.second")) {
-    return "date.justNow";
+  if (fromNowStr.includes('date.second')) {
+    return 'date.justNow';
   }
 
   if (
-    !fromNowStr.includes("date.second") &&
-    !fromNowStr.includes("date.minute")
+    !fromNowStr.includes('date.second') &&
+    !fromNowStr.includes('date.minute')
   ) {
     return dayjs(timestamp).calendar();
   }
@@ -64,13 +71,16 @@ const formatDate = (timestamp: number) => {
 const ConversationCard = ({item}: {item: ConversationItem}) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const updateCurrentConversation = useConversationStore(
-    (state) => state.updateCurrentConversation,
+    state => state.updateCurrentConversation,
   );
-  
+
   const handleConversation = async () => {
     updateCurrentConversation(item);
     MarkConversationMessageAsRead(item.conversationID);
-    navigation.navigate('ChatRoom', {item});
+    InteractionManager.runAfterInteractions(() => {
+      // navigate after animations are complete
+      navigation.navigate('ChatRoom', {item});
+    });
   };
   const getLatestMessageContent = () => {
     if (item.latestMsg) {

@@ -1,5 +1,4 @@
-import { createContext, useContext } from "react";
-
+import {createContext, useContext} from 'react';
 
 interface AuthContextType {
   isLoggedIn: boolean;
@@ -11,4 +10,4 @@ export const AuthContext = createContext<AuthContextType>({
   setLoginState: () => {},
 });
 
-export const useAuth = () => useContext(AuthContext)
+export const useAuth = () => useContext(AuthContext);

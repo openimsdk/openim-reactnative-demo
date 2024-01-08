@@ -1,6 +1,6 @@
 import React from 'react';
-import { Image, StyleSheet, Text, View } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
+import {Image, StyleSheet, Text, View} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 const images = {
   ic_avatar_01: require('../../assets/avatar/ic_avatar_01.png'),
@@ -15,18 +15,24 @@ const images = {
 };
 
 const avatarImages: Record<string, any> = {
-  'ic_avatar_01': images.ic_avatar_01,
-  'ic_avatar_02': images.ic_avatar_02,
-  'ic_avatar_03': images.ic_avatar_03,
-  'ic_avatar_04': images.ic_avatar_04,
-  'ic_avatar_05': images.ic_avatar_05,
-  'ic_avatar_06': images.ic_avatar_06,
+  ic_avatar_01: images.ic_avatar_01,
+  ic_avatar_02: images.ic_avatar_02,
+  ic_avatar_03: images.ic_avatar_03,
+  ic_avatar_04: images.ic_avatar_04,
+  ic_avatar_05: images.ic_avatar_05,
+  ic_avatar_06: images.ic_avatar_06,
   'New Friend': images.newFriend,
   'New Group': images.newGroup,
   'My Groups': images.myGroups,
 };
 
-const getAvatarImage = ({ nickname, faceURL }: { nickname: string, faceURL: string | null | undefined }) => {
+const getAvatarImage = ({
+  nickname,
+  faceURL,
+}: {
+  nickname: string;
+  faceURL: string | null | undefined;
+}) => {
   if (faceURL === null || faceURL == undefined) {
     return null; // Return null or a placeholder component if data is undefined
   }
@@ -35,11 +41,12 @@ const getAvatarImage = ({ nickname, faceURL }: { nickname: string, faceURL: stri
     return (
       <LinearGradient
         colors={['#EAF27E', '#00D292']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.textImage}
-      >
-        <Text style={styles.textImageText}>{nickname.charAt(0).toUpperCase()}</Text>
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 1}}
+        style={styles.textImage}>
+        <Text style={styles.textImageText}>
+          {nickname.charAt(0).toUpperCase()}
+        </Text>
       </LinearGradient>
     );
   }
@@ -50,20 +57,26 @@ const getAvatarImage = ({ nickname, faceURL }: { nickname: string, faceURL: stri
     return <Image style={styles.avatar} source={avatarSource} />;
   }
 
-  return <Image style={styles.avatar} source={{ uri: faceURL }} />;
+  return <Image style={styles.avatar} source={{uri: faceURL}} />;
 };
 
-const Avatar = ({ nickname, faceURL }: { nickname: string; faceURL: string | null | undefined }) => {
-  return getAvatarImage({ nickname, faceURL });
+const Avatar = ({
+  nickname,
+  faceURL,
+}: {
+  nickname: string;
+  faceURL: string | null | undefined;
+}) => {
+  return getAvatarImage({nickname, faceURL});
 };
 
 const styles = StyleSheet.create({
   contactItem: {
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-    flexDirection: "row",
-    backgroundColor: "white",
+    borderBottomColor: '#ccc',
+    flexDirection: 'row',
+    backgroundColor: 'white',
   },
   avatar: {
     height: 50,
@@ -78,13 +91,13 @@ const styles = StyleSheet.create({
     marginRight: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: "blue"
+    backgroundColor: 'blue',
   },
   textImageText: {
-    color: "white",
+    color: 'white',
     textAlign: 'center',
     fontSize: 18,
-  }
+  },
 });
 
 export default Avatar;

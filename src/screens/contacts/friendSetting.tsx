@@ -1,34 +1,52 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Avatar from '../../components/avatar';
-import { useUserStore } from '../../../store/user';
-import { getBusinessUserInfo } from '../api/requests';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { GetOneConversation } from '../api/openimsdk';
-import { ConversationItem } from '../../../store/types/entity';
+import {useUserStore} from '../../store/user';
+import {getBusinessUserInfo} from '../../api/requests';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {GetOneConversation} from '../../api/openimsdk';
+import {ConversationItem} from '../../store/types/entity';
 
-interface SetVerificationPageProps {
+interface FriendSettingPageProps {
   route: {
-      params: string;
+    params: string;
   };
 }
-const FriendSettingPage = (route:SetVerificationPageProps) => { //TODO seperate views
-  const [currentUserInfo,setCurrentUserInfo] = useState({nickname:'',faceURL:'',userID:''})
-  getBusinessUserInfo([route.route.params]).then((response) => {
-    // Handle the response here  
-    setCurrentUserInfo(response.data.users[0])
-  })
-  .catch((error) => {
-    // Handle errors here
-    console.error('Error:', error);
+const FriendSettingPage = (route: FriendSettingPageProps) => {
+  //TODO seperate views
+  const [currentUserInfo, setCurrentUserInfo] = useState({
+    nickname: '',
+    faceURL: '',
+    userID: '',
   });
-  
+  getBusinessUserInfo([route.route.params])
+    .then(response => {
+      // Check if the response contains an error
+      if ('error' in response) {
+        console.error('Error fetching business user info:', response.error);
+        // Handle the error case, like setting state or displaying a message
+      } else if (response.users && response.users.length > 0) {
+        // Ensure that users array is present and not empty
+        setCurrentUserInfo(response.users[0]);
+      } else {
+        // Handle the case where users array is empty or not present
+        console.error('No user data received');
+        // Optionally, handle this case in your UI
+      }
+    })
+    .catch(error => {
+      console.error('Error in getBusinessUserInfo call:', error);
+      // Handle errors that might have occurred during the request
+    });
+
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  const handleConversation = async () =>  {
-    const item:ConversationItem = JSON.parse(await GetOneConversation(currentUserInfo.userID,1))
-      navigation.navigate('ChatRoom',{item})
-  }
+  const handleConversation = async () => {
+    const item: ConversationItem = JSON.parse(
+      await GetOneConversation(currentUserInfo.userID, 1),
+    );
+    navigation.navigate('ChatRoom', {item});
+  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -43,7 +61,10 @@ const FriendSettingPage = (route:SetVerificationPageProps) => { //TODO seperate 
         </TouchableOpacity>
       </View>
       <View style={styles.content}>
-        <Avatar nickname={currentUserInfo.nickname} faceURL={currentUserInfo.faceURL} />
+        <Avatar
+          nickname={currentUserInfo.nickname}
+          faceURL={currentUserInfo.faceURL}
+        />
         <Text style={styles.name}>{currentUserInfo.nickname}</Text>
         <Text style={styles.email}>{currentUserInfo.userID}</Text>
         <View style={styles.buttonRow}>

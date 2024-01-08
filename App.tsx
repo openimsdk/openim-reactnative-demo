@@ -15,29 +15,24 @@ import SignUpPage from './src/screens/login/signUpPage';
 import OpenIMSDKRN, {OpenIMEmitter} from 'open-im-sdk-rn';
 
 import {useState, useEffect, lazy, Suspense} from 'react';
-import BottomTabBar from './BottomTabBar';
-import {
-  GetLoginStatus,
-  Init,
-  LoginIM,
-  LogoutIM,
-} from './src/screens/api/openimsdk';
-import {LoginClient} from './src/screens/api/requests';
+import BottomTabBar from './src/navigation/BottomTabBar';
+import {GetLoginStatus, Init, LoginIM, LogoutIM} from './src/api/openimsdk';
+import {LoginClient} from './src/api/requests';
 import FriendRequestPage from './src/screens/contacts/friendRequestPage';
 import FriendRequestVerifyPage from './src/screens/contacts/friendRequestVerifyPage';
 import ChatRoom from './src/screens/chats/chatRoom';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {initStore, useGlobalEvent} from './store/useGlobalEvent';
+import {initStore, useGlobalEvent} from './src/store/useGlobalEvent';
 
 import AddFriendScreen from './src/screens/friend/addFriend';
-import NewGroup from './src/screens/contacts/group/newGroup';
-import FindGroupPage from './src/screens/contacts/group/findGroup';
-import CreateGroupPage from './src/screens/contacts/group/createGroup';
+import NewGroup from './src/screens/group/newGroup';
+import FindGroupPage from './src/screens/group/findGroup';
+import CreateGroupPage from './src/screens/group/createGroup';
 import FriendSettingPage from './src/screens/contacts/friendSetting';
-import MyGroupPage from './src/screens/contacts/group/myGroup';
+import MyGroupPage from './src/screens/group/myGroup';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {adaptViewConfig} from 'react-native-reanimated/lib/typescript/ConfigHelper';
-import {AuthContext} from './AuthContext';
+import {AuthContext} from './src/components/AuthContext';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

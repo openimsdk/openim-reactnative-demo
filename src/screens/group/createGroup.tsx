@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, RefObject } from 'react';
+import React, {useState, useEffect, useRef, RefObject} from 'react';
 import {
   View,
   Text,
@@ -12,12 +12,12 @@ import {
   SectionListData,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import { useContactStore } from '../../../../store/contact';
-import { FriendUserItem } from '../../../../store/type.d';
-import SearchDrawer from '../../../components/searchDrawer';
-import Avatar from '../../../components/avatar';
-import { CreateGroup } from '../../api/openimsdk';
-import { groupContactsByFirstCharacter } from '../../../components/contactUtils';
+import {useContactStore} from '../../store/contact';
+import {FriendUserItem} from '../../store/type.d';
+// import SearchDrawer from '../../components/searchDrawer';
+import Avatar from '../../components/avatar';
+import {CreateGroup} from '../../api/openimsdk';
+import {groupContactsByFirstCharacter} from '../../utils/contactUtils';
 
 interface SearchBarProps {
   search: string;
@@ -25,13 +25,9 @@ interface SearchBarProps {
   onPress: () => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ search, setSearch, onPress }) => (
+const SearchBar: React.FC<SearchBarProps> = ({search, setSearch, onPress}) => (
   <TouchableOpacity style={styles.searchBar} onPress={onPress}>
-    <TextInput
-      placeholder="Search"
-      value={search}
-      onChangeText={setSearch}
-    />
+    <TextInput placeholder="Search" value={search} onChangeText={setSearch} />
   </TouchableOpacity>
 );
 interface FriendItemProps {
@@ -40,10 +36,8 @@ interface FriendItemProps {
   onPress: () => void;
 }
 
-const FriendItem: React.FC<FriendItemProps> = ({ item, isSelected, onPress }) => (
-  <TouchableOpacity
-    style={styles.friendSelect}
-    onPress={onPress}>
+const FriendItem: React.FC<FriendItemProps> = ({item, isSelected, onPress}) => (
+  <TouchableOpacity style={styles.friendSelect} onPress={onPress}>
     <Avatar nickname={item.nickname} faceURL={item.faceURL} />
     <Text>{item.nickname}</Text>
     {isSelected && <Text> Selected</Text>}
@@ -54,7 +48,10 @@ interface AlphabetHintListProps {
   onPressItem: (index: number) => void;
 }
 
-const AlphabetHintList: React.FC<AlphabetHintListProps> = ({ hints, onPressItem }) => (
+const AlphabetHintList: React.FC<AlphabetHintListProps> = ({
+  hints,
+  onPressItem,
+}) => (
   <ScrollView
     style={styles.hintContainer}
     contentContainerStyle={styles.hintContentContainer}>
@@ -77,11 +74,12 @@ interface SectionWithOffset {
 const CreateGroupPage = () => {
   const [search, setSearch] = useState('');
   const [alphabetHints, setAlphabetHints] = useState<string[]>([]);
-  const [contactSections, setContactSections] = useState<
-    SectionWithOffset[]
-  >([]);
+  const [contactSections, setContactSections] = useState<SectionWithOffset[]>(
+    [],
+  );
   const [scrollEnabled, setScrollEnabled] = useState(true);
-  const sectionListRef = useRef<SectionList<FriendUserItem, SectionWithOffset>>(null);
+  const sectionListRef =
+    useRef<SectionList<FriendUserItem, SectionWithOffset>>(null);
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const popupSearchInputRef = useRef<TextInput | null>(null);
   const rawData = useContactStore(state => state.friendList);
@@ -104,14 +102,16 @@ const CreateGroupPage = () => {
     hints.push(modifiedHints[0]);
     setAlphabetHints(hints);
 
-    const groupedContacts = groupContactsByFirstCharacter(data, "nickname");
+    const groupedContacts = groupContactsByFirstCharacter(data, 'nickname');
 
     let totalOffset = 0;
     const sectionsWithOffset = groupedContacts.map(section => {
       const sectionWithOffset = {
         ...section,
         offset: totalOffset,
-      }; const headerHeight = 16; const itemHeight = 32;
+      };
+      const headerHeight = 16;
+      const itemHeight = 32;
       totalOffset += section.data.length * itemHeight + headerHeight;
       return sectionWithOffset;
     });
@@ -155,7 +155,11 @@ const CreateGroupPage = () => {
       setSelectedFriend([...selectedFriend, userID]);
     }
   };
-  const renderSectionHeader = ({ section }: { section: SectionListData<FriendUserItem, SectionWithOffset> }) => {
+  const renderSectionHeader = ({
+    section,
+  }: {
+    section: SectionListData<FriendUserItem, SectionWithOffset>;
+  }) => {
     return section.title !== '' ? (
       <Text style={styles.sectionHeader}>{section.title}</Text>
     ) : null;
@@ -166,7 +170,6 @@ const CreateGroupPage = () => {
       style={styles.container}
       behavior="height"
       keyboardVerticalOffset={Platform.OS === 'android' ? -60 : -70}>
-
       <View style={styles.header}>
         <SearchBar search={search} setSearch={setSearch} onPress={openDrawer} />
       </View>
@@ -179,13 +182,14 @@ const CreateGroupPage = () => {
             : index.toString()
         }
         bounces={false}
-        renderItem={({ item }) => {
+        renderItem={({item}) => {
           const isSelected = selectedFriend.includes(item.userID);
           return (
             <FriendItem
               item={item}
               isSelected={isSelected}
-              onPress={() => toggleSelectFriend(item.userID)} />
+              onPress={() => toggleSelectFriend(item.userID)}
+            />
           );
         }}
         renderSectionHeader={renderSectionHeader}
@@ -200,7 +204,10 @@ const CreateGroupPage = () => {
         }}
         scrollEnabled={scrollEnabled}
       />
-      <AlphabetHintList hints={alphabetHints} onPressItem={handleHintItemPress} />
+      <AlphabetHintList
+        hints={alphabetHints}
+        onPressItem={handleHintItemPress}
+      />
 
       <TouchableOpacity
         onPress={() => {
@@ -209,13 +216,13 @@ const CreateGroupPage = () => {
         }}>
         <Text>Accept</Text>
       </TouchableOpacity>
-      <Modal
+      {/* <Modal
         isVisible={isDrawerVisible}
         onBackdropPress={closeDrawer}
         backdropOpacity={0.5}
         backdropColor="black">
         <SearchDrawer ref={popupSearchInputRef} />
-      </Modal>
+      </Modal> */}
     </KeyboardAvoidingView>
   );
 };

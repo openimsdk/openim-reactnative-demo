@@ -1,9 +1,16 @@
-import React, { useRef, useState } from "react";
-import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
-import { useNavigation } from '@react-navigation/native';
-import { SendVerifyClient, CheckVerifyClient } from "../api/requests";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack/lib/typescript/src/types";
+import React, {useRef, useState} from 'react';
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import {useNavigation} from '@react-navigation/native';
+import {SendVerifyClient, CheckVerifyClient} from '../../api/requests';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack/lib/typescript/src/types';
 interface SetVerificationPageProps {
   route: {
     params: {
@@ -11,25 +18,32 @@ interface SetVerificationPageProps {
     };
   };
 }
-const SetVerificationPage = (props:  SetVerificationPageProps ) => {
+const SetVerificationPage = (props: SetVerificationPageProps) => {
   const totalDigits = 6;
-  const digitInputs = Array.from({ length: totalDigits }, (_, index) => index);
+  const digitInputs = Array.from({length: totalDigits}, (_, index) => index);
   const digitRefs = useRef<(TextInput | null)[]>([]);
   const [digits, setDigits] = useState(Array(totalDigits).fill(''));
-  const [error, setError] = useState("")
+  const [error, setError] = useState('');
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
   const navigateBack = () => {
-    navigator.navigate("SignUpPage");
-  }
+    navigator.navigate('SignUpPage');
+  };
   const navigateToSetPwd = async () => {
     try {
-      await CheckVerifyClient({ phoneNumber: props.route.params.email, verifyCode: digits.join("") })
-      navigator.navigate("SetPasswordPage", { email: props.route.params.email, verifyCode: digits.join(""), type: "register" });
+      await CheckVerifyClient({
+        phoneNumber: props.route.params.email,
+        verifyCode: digits.join(''),
+      });
+      navigator.navigate('SetPasswordPage', {
+        email: props.route.params.email,
+        verifyCode: digits.join(''),
+        type: 'register',
+      });
     } catch (error) {
       const err = error as {message: string};
       setError(err.message);
     }
-  }
+  };
 
   const handleDigitChange = (index: number, value: string) => {
     const newDigits = [...digits];
@@ -48,15 +62,14 @@ const SetVerificationPage = (props:  SetVerificationPageProps ) => {
     setDigits(newDigits);
   };
   const sendVeriCode = () => {
-    SendVerifyClient({ usedFor: 1, phoneNumber: props.route.params.email });
-  }
+    SendVerifyClient({usedFor: 1, phoneNumber: props.route.params.email});
+  };
   return (
     <LinearGradient
-      colors={["#0E6CBE28", "#C6C6C621"]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={styles.linearGradient}
-    >
+      colors={['#0E6CBE28', '#C6C6C621']}
+      start={{x: 0, y: 0}}
+      end={{x: 1, y: 1}}
+      style={styles.linearGradient}>
       <View style={styles.container}>
         <TouchableOpacity style={styles.backButton} onPress={navigateBack}>
           <Image
@@ -68,26 +81,34 @@ const SetVerificationPage = (props:  SetVerificationPageProps ) => {
           <Text style={styles.enterText}>Enter the code that was sent to</Text>
           <Text style={styles.userEmail}>{props.route.params.email}</Text>
           <View style={styles.digitInputContainer}>
-            {digitInputs.map((index) => (
+            {digitInputs.map(index => (
               <TextInput
                 key={index}
-                ref={(input) => (digitRefs.current[index] = input)}
+                ref={input => (digitRefs.current[index] = input)}
                 style={styles.digitInput}
                 value={digits[index]}
-                onChangeText={(value) => handleDigitChange(index, value)}
+                onChangeText={value => handleDigitChange(index, value)}
                 keyboardType="numeric"
                 maxLength={1}
               />
             ))}
           </View>
           <View style={styles.didnotReceivedCodeContainer}>
-            <Text >Did't received code?</Text>
-            <TouchableOpacity style={styles.didnotReceivedCodeButton} onPress={() => { sendVeriCode() }}>
-              <Text style={styles.didnotReceivedCodeButtonText}>Resend Code</Text>
+            <Text>Did't received code?</Text>
+            <TouchableOpacity
+              style={styles.didnotReceivedCodeButton}
+              onPress={() => {
+                sendVeriCode();
+              }}>
+              <Text style={styles.didnotReceivedCodeButtonText}>
+                Resend Code
+              </Text>
             </TouchableOpacity>
           </View>
           <Text style={styles.error}>{error}</Text>
-          <TouchableOpacity style={styles.nextButton} onPress={() => navigateToSetPwd()}>
+          <TouchableOpacity
+            style={styles.nextButton}
+            onPress={() => navigateToSetPwd()}>
             <Text style={styles.nextButtonText}>Next</Text>
           </TouchableOpacity>
         </View>
@@ -95,7 +116,6 @@ const SetVerificationPage = (props:  SetVerificationPageProps ) => {
     </LinearGradient>
   );
 };
-
 
 const styles = StyleSheet.create({
   linearGradient: {
@@ -105,22 +125,22 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 20,
     paddingRight: 20,
-    paddingBottom:100,
-    justifyContent:"center",
+    paddingBottom: 100,
+    justifyContent: 'center',
   },
   backButton: {
     marginTop: 100,
   },
   signUpTitle: {
     fontSize: 24,
-    fontWeight: "bold",
-    color: "#0089FF",
+    fontWeight: 'bold',
+    color: '#0089FF',
     marginBottom: 20,
     marginTop: 40,
   },
   inputContainer: {
-    width: "100%",
-    backgroundColor: "white",
+    width: '100%',
+    backgroundColor: 'white',
     borderRadius: 11,
     padding: 20,
     marginTop: 20,
@@ -132,51 +152,49 @@ const styles = StyleSheet.create({
   userEmail: {
     marginTop: 10,
     fontSize: 16,
-    fontWeight: "bold",
-    color: "#1E1E1E",
+    fontWeight: 'bold',
+    color: '#1E1E1E',
   },
   digitInputContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 20,
   },
   digitInput: {
     width: 40,
     height: 40,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: '#ccc',
     borderRadius: 5,
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 18,
     marginRight: 10,
   },
   didnotReceivedCodeContainer: {
-    flexDirection: "row",
-    justifyContent: "center"
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
-  didnotReceivedCodeButton: {
-
-  },
+  didnotReceivedCodeButton: {},
   didnotReceivedCodeButtonText: {
     color: '#0089FF',
   },
   error: {
     fontSize: 11,
-    textAlign: "center",
-    color: "red"
+    textAlign: 'center',
+    color: 'red',
   },
   nextButton: {
-    backgroundColor: "#0089FF",
+    backgroundColor: '#0089FF',
     padding: 15,
     borderRadius: 5,
-    alignItems: "center",
+    alignItems: 'center',
     marginTop: 60,
   },
   nextButtonText: {
-    color: "white",
+    color: 'white',
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });
 

@@ -1,8 +1,13 @@
-import React from "react";
-import { View, Text, Modal, StyleSheet, TouchableOpacity } from "react-native";
+import React from 'react';
+import {View, Text, Modal, StyleSheet, TouchableOpacity} from 'react-native';
 
-
-const OptionModalView = ({ isVisible, onClose }: { isVisible: boolean, onClose: () => void }) => {
+const OptionModalView = ({
+  isVisible,
+  onClose,
+}: {
+  isVisible: boolean;
+  onClose: () => void;
+}) => {
   return (
     <Modal visible={isVisible} transparent={true} animationType="slide">
       <View style={styles.modalContainer}>
@@ -26,7 +31,6 @@ const OptionModalView = ({ isVisible, onClose }: { isVisible: boolean, onClose: 
         <TouchableOpacity style={styles.closeButton} onPress={onClose}>
           <Text>Close</Text>
         </TouchableOpacity>
-
       </View>
     </Modal>
   );
@@ -34,9 +38,9 @@ const OptionModalView = ({ isVisible, onClose }: { isVisible: boolean, onClose: 
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   whiteBackground: {
     backgroundColor: 'white',
@@ -44,15 +48,14 @@ const styles = StyleSheet.create({
   optionItem: {
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-    width: "100%",
+    borderBottomColor: '#ccc',
+    width: '100%',
   },
   closeButton: {
     marginTop: 10,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     padding: 10,
     borderRadius: 5,
-
   },
 });
 export default OptionModalView;
