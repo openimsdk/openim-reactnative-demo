@@ -1,25 +1,25 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Platform} from 'react-native';
-import Avatar from '../../../components/avatar';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import Avatar from '../../components/avatar';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 const NewGroup = () => {
-    const navigator = useNavigation<NativeStackNavigationProp<any>>();
-    const handleFindGroup = () => {
-        navigator.navigate("FindGroup")
-    }
-    const handleCreateGroup = () => {
-        navigator.navigate("CreateGroup")
-    }
+  const navigator = useNavigation<NativeStackNavigationProp<any>>();
+  const handleFindGroup = () => {
+    navigator.navigate('FindGroup');
+  };
+  const handleCreateGroup = () => {
+    navigator.navigate('CreateGroup');
+  };
   return (
     <View>
       <TouchableOpacity style={styles.contactItem} onPress={handleFindGroup}>
         <Avatar nickname={'Find Group'} faceURL={''} />
         <Text>{'Find Group'}</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.contactItem}  onPress={handleCreateGroup}>
-        <Avatar nickname={'Create Group'} faceURL={''}/>
+      <TouchableOpacity style={styles.contactItem} onPress={handleCreateGroup}>
+        <Avatar nickname={'Create Group'} faceURL={''} />
         <Text>{'Create Group'}</Text>
       </TouchableOpacity>
     </View>
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: Platform.OS === 'ios' ? 50 : 0
+    marginTop: Platform.OS === 'ios' ? 50 : 0,
   },
   contactItem: {
     padding: 16,

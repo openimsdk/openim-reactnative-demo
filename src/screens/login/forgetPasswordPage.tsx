@@ -1,19 +1,26 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
-import { CheckVerifyClient, SendVerifyClient } from '../api/requests';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import {useNavigation} from '@react-navigation/native';
+import {CheckVerifyClient, SendVerifyClient} from '../../api/requests';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 const ForgetPasswordPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [countdownSeconds, setCountdownSeconds] = useState(0);
-  const [error, setError] = useState("")
+  const [error, setError] = useState('');
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
   const navigateToLogin = () => {
-    navigator.navigate("LoginPage")
-  }
+    navigator.navigate('LoginPage');
+  };
   const handleClearEmail = () => {
     setEmail('');
   };
@@ -21,21 +28,23 @@ const ForgetPasswordPage = () => {
   const handleSendVerification = useCallback(async () => {
     if (countdownSeconds === 0 && email) {
       try {
-        setCountdownSeconds(60) 
-        await SendVerifyClient({ usedFor: 2, phoneNumber: email });
-       
+        setCountdownSeconds(60);
+        await SendVerifyClient({usedFor: 2, phoneNumber: email});
       } catch (error) {
         const err = error as {message: string};
         setError(err.message);
       }
-
     }
   }, [email, countdownSeconds]);
 
   const handleSavePwd = useCallback(async () => {
     try {
-      await CheckVerifyClient({ phoneNumber: email, verifyCode: password });
-      navigator.navigate('SetPasswordPage', { type: 'resetPwd', email: email,verifyCode: password })
+      await CheckVerifyClient({phoneNumber: email, verifyCode: password});
+      navigator.navigate('SetPasswordPage', {
+        type: 'resetPwd',
+        email: email,
+        verifyCode: password,
+      });
     } catch (error) {
       const err = error as {message: string};
       setError(err.message);
@@ -57,15 +66,12 @@ const ForgetPasswordPage = () => {
   return (
     <LinearGradient
       colors={['#0E6CBE28', '#C6C6C621']}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={styles.linearGradient}
-    >
+      start={{x: 0, y: 0}}
+      end={{x: 1, y: 1}}
+      style={styles.linearGradient}>
       <View style={styles.container}>
         <TouchableOpacity style={styles.backButton} onPress={navigateToLogin}>
-          <Image
-            source={require('../../../assets/imgs/back.png')}
-          />
+          <Image source={require('../../../assets/imgs/back.png')} />
         </TouchableOpacity>
         <View style={styles.signInText}>
           <Text style={styles.signInTitle}>Forgot Password</Text>
@@ -75,11 +81,16 @@ const ForgetPasswordPage = () => {
             <Text style={styles.enterText}>Enter your phone number</Text>
             <View style={styles.emailContainer}>
               <View style={styles.emailInput}>
-                <TextInput style={styles.emailTextInput} placeholder="Phone Number" value={email} onChangeText={setEmail} />
-                <TouchableOpacity style={styles.clearButton} onPress={handleClearEmail}>
-                  <Image
-                    source={require('../../../assets/imgs/clear.png')}
-                  />
+                <TextInput
+                  style={styles.emailTextInput}
+                  placeholder="Phone Number"
+                  value={email}
+                  onChangeText={setEmail}
+                />
+                <TouchableOpacity
+                  style={styles.clearButton}
+                  onPress={handleClearEmail}>
+                  <Image source={require('../../../assets/imgs/clear.png')} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -87,9 +98,21 @@ const ForgetPasswordPage = () => {
           <View style={styles.inputBox}>
             <Text style={styles.enterText}>Enter verification code</Text>
             <View style={styles.verificationInput}>
-              <TextInput style={styles.verificationTextInput} placeholder="" onChangeText={setPassword} />
-              <TouchableOpacity style={styles.sendButtonContainer} onPress={() => { handleSendVerification() }} >
-                {countdownSeconds === 0 ? <Text style={styles.sendButtonText}>Send</Text> : <Text style={styles.sendButtonText}>{countdownSeconds}s</Text>}
+              <TextInput
+                style={styles.verificationTextInput}
+                placeholder=""
+                onChangeText={setPassword}
+              />
+              <TouchableOpacity
+                style={styles.sendButtonContainer}
+                onPress={() => {
+                  handleSendVerification();
+                }}>
+                {countdownSeconds === 0 ? (
+                  <Text style={styles.sendButtonText}>Send</Text>
+                ) : (
+                  <Text style={styles.sendButtonText}>{countdownSeconds}s</Text>
+                )}
               </TouchableOpacity>
             </View>
           </View>
@@ -174,8 +197,8 @@ const styles = StyleSheet.create({
   },
   error: {
     fontSize: 11,
-    textAlign: "center",
-    color: "red"
+    textAlign: 'center',
+    color: 'red',
   },
   sendButtonContainer: {
     backgroundColor: '#0089FF',

@@ -1,4 +1,4 @@
-import { ExMessageItem } from './message';
+import {ExMessageItem} from './message';
 import {
   ConversationItem,
   GroupApplicationItem,
@@ -102,7 +102,7 @@ export interface UserStore {
   getSelfInfoByReq: () => Promise<void>;
   // getAppConfigByReq: () => Promise<void>;
   // updateAppSettings: (settings: Partial<AppSettings>) => void;
-  userLogout: () => Promise<void>;
+  // userLogout: () => Promise<void>;
 }
 export interface AppSettings {
   locale: LocaleString;
@@ -125,7 +125,7 @@ export interface ConversationStore {
   quoteMessage?: MessageItem;
   getConversationListByReq: (isOffset?: boolean) => Promise<boolean>;
   updateConversationList: (
-    list: ConversationItem[],
+    list: string[],
     type: ConversationListUpdateType,
   ) => void;
   delConversationByCID: (conversationID: string) => void;

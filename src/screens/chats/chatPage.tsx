@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
   FlatList,
   ListRenderItem,
@@ -9,19 +9,17 @@ import {
   View,
 } from 'react-native';
 import ConversationCard from './conversationCard';
-import {useConversationStore} from '../../../store/conversation';
+import {useConversationStore} from '../../store/conversation';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {ConversationItem} from '../../../store/types/entity';
+import {ConversationItem} from '../../store/types/entity';
 
 const ChatPage = () => {
-  const conversationList:ConversationItem[] = useConversationStore(
+  const conversationList: ConversationItem[] = useConversationStore(
     state => state.conversationList,
   );
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
-  const renderConversationItem: ListRenderItem<ConversationItem> = ({
-    item
-  }) => {
+  const renderConversationItem: ListRenderItem<ConversationItem> = ({item}) => {
     if (!item.conversationID) {
       return null; // or some placeholder component
     }

@@ -1,19 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Platform} from 'react-native';
 import Avatar from '../../components/avatar';
-import { useUserStore } from '../../../store/user';
-import { getBusinessUserInfo } from '../api/requests';
-import { useAuth } from '../../../AuthContext';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { LogoutIM } from '../api/openimsdk';
-
+import {useUserStore} from '../../store/user';
+import {getBusinessUserInfo} from '../../api/requests';
+import {useAuth} from '../../components/AuthContext';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {GetUsersInfo, LogoutIM} from '../../api/openimsdk';
 
 const SettingPage = () => {
-  const { setLoginState } = useAuth()
-  let currentUserInfo = useUserStore((state) => state.selfInfo)
+  const {setLoginState} = useAuth();
+  let currentUserInfo = useUserStore(state => state.selfInfo);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  
   const handleLogout = async () => {
     try {
       await LogoutIM();
@@ -21,7 +19,7 @@ const SettingPage = () => {
       navigation.navigate('LoginPage'); // Navigate to the login page
     } catch (error) {
       const err = error as {message: string};
-      console.error(err)
+      console.error(err);
     }
   };
   return (
@@ -38,7 +36,10 @@ const SettingPage = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.content}>
-        <Avatar nickname={currentUserInfo.nickname} faceURL={currentUserInfo.faceURL} />
+        <Avatar
+          nickname={currentUserInfo.nickname}
+          faceURL={currentUserInfo.faceURL}
+        />
         <Text style={styles.name}>{currentUserInfo.nickname}</Text>
         <Text style={styles.email}>{currentUserInfo.userID}</Text>
 
@@ -54,7 +55,7 @@ const SettingPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: Platform.OS === 'ios' ? 50 : 0
+    marginTop: Platform.OS === 'ios' ? 50 : 0,
   },
   header: {
     flexDirection: 'row',

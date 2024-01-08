@@ -1,15 +1,15 @@
 import React from 'react';
 import {View, Text, Image, StyleSheet, Button} from 'react-native';
-import Avatar from '../../../components/avatar';
-import { JoinGroup } from '../../api/openimsdk';
-interface GroupCardInput{
-  groupID:string, 
-  nickname:string, 
-  faceURL:string,
+import Avatar from '../../components/avatar';
+import {JoinGroup} from '../../api/openimsdk';
+interface GroupCardInput {
+  groupID: string;
+  nickname: string;
+  faceURL: string;
 }
-const GroupCard = ({groupID, nickname, faceURL}:GroupCardInput) => {
+const GroupCard = ({groupID, nickname, faceURL}: GroupCardInput) => {
   const handleAddGroup = () => {
-    JoinGroup(groupID,3)
+    JoinGroup(groupID, 3);
   };
   return (
     <View style={styles.contactItem}>
@@ -32,7 +32,7 @@ const GroupCard = ({groupID, nickname, faceURL}:GroupCardInput) => {
 };
 
 const styles = StyleSheet.create({
-  contactItem: {  
+  contactItem: {
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   textContainer: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     justifyContent: 'space-between',
   },
 });

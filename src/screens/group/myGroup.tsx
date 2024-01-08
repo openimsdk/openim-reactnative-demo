@@ -12,11 +12,11 @@ import {
   Platform,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import {useContactStore} from '../../../../store/contact';
-import SearchDrawer from '../../../components/searchDrawer';
+import {useContactStore} from '../../store/contact';
+// import SearchDrawer from '../../components/searchDrawer';
 import MyGroupCard from './myGroupCard';
-import { groupContactsByFirstCharacter } from '../../../components/contactUtils';
-import { GroupItem } from '../../../../store/types/entity';
+import {groupContactsByFirstCharacter} from '../../utils/contactUtils';
+import {GroupItem} from '../../store/types/entity';
 
 interface SectionWithOffset {
   title: string;
@@ -27,9 +27,9 @@ interface SectionWithOffset {
 const MyGroupPage = () => {
   const [search, setSearch] = useState('');
   const [alphabetHints, setAlphabetHints] = useState<string[]>([]);
-  const [contactSections, setContactSections] = useState<
-  SectionWithOffset[]
-  >([]);
+  const [contactSections, setContactSections] = useState<SectionWithOffset[]>(
+    [],
+  );
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const sectionListRef: RefObject<SectionList> = useRef(null);
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
@@ -38,7 +38,7 @@ const MyGroupPage = () => {
   const data: GroupItem[] = rawData.sort((a: GroupItem, b: GroupItem) =>
     a.groupName.localeCompare(b.groupName),
   );
-  
+
   useEffect(() => {
     const hints: string[] = Array.from(
       new Set(
@@ -52,7 +52,7 @@ const MyGroupPage = () => {
     hints.push(modifiedHints[0]);
     setAlphabetHints(hints);
 
-    const groupedContacts = groupContactsByFirstCharacter(data,'groupName');
+    const groupedContacts = groupContactsByFirstCharacter(data, 'groupName');
 
     let totalOffset = 0;
     const sectionsWithOffset = groupedContacts.map(section => {
@@ -156,13 +156,13 @@ const MyGroupPage = () => {
           </TouchableOpacity>
         ))}
       </ScrollView>
-      <Modal
+      {/* <Modal
         isVisible={isDrawerVisible}
         onBackdropPress={closeDrawer}
         backdropOpacity={0.5}
         backdropColor="black">
         <SearchDrawer ref={popupSearchInputRef} />
-      </Modal>
+      </Modal> */}
     </KeyboardAvoidingView>
   );
 };
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    marginTop: Platform.OS === 'ios' ? 50 : 0
+    marginTop: Platform.OS === 'ios' ? 50 : 0,
   },
   header: {
     backgroundColor: '#F6F6F6FF',
