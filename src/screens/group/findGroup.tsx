@@ -1,9 +1,16 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {View, Text, TextInput, StyleSheet, FlatList, Platform} from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  FlatList,
+  Platform,
+} from 'react-native';
 import debounce from 'lodash.debounce';
 import GroupCard from './findGroupCard';
 import {SearchGroup} from '../../api/openimsdk';
-import {GroupItem} from '../../../../store/types/entity';
+import {GroupItem} from '../../store/types/entity';
 
 const FindGroupPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -21,14 +28,16 @@ const FindGroupPage = () => {
       console.error('Error fetching search results:', error);
       setError('Error fetching search results');
     }
-  },[]);
-  const debouncedSearch = useCallback(debounce(handleSearch, 300), [handleSearch]);
-  
+  }, []);
+  const debouncedSearch = useCallback(debounce(handleSearch, 300), [
+    handleSearch,
+  ]);
+
   useEffect(() => {
     debouncedSearch(searchTerm);
   }, [searchTerm]);
 
-  const renderItem = ({ item }: { item: GroupItem }) => (
+  const renderItem = ({item}: {item: GroupItem}) => (
     <GroupCard
       key={item.groupID}
       nickname={item.groupName}
@@ -53,7 +62,7 @@ const FindGroupPage = () => {
       ) : (
         <FlatList
           data={searchResults}
-          keyExtractor={(group) => group.groupID}
+          keyExtractor={group => group.groupID}
           renderItem={renderItem}
           contentContainerStyle={styles.flatList}
         />

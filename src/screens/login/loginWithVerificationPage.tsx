@@ -13,10 +13,10 @@ import {
   CheckVerifyClient,
   LoginClient,
   SendVerifyClient,
-} from '../api/requests';
+} from '../../api/requests';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack/lib/typescript/src/types';
-import {AuthContext} from '../../../AuthContext';
-import {LoginIM} from '../api/openimsdk';
+import {AuthContext} from '../../components/AuthContext';
+import {LoginIM} from '../../api/openimsdk';
 
 const LoginWithVerificationPage = () => {
   const {setLoginState} = useContext(AuthContext);
@@ -41,7 +41,7 @@ const LoginWithVerificationPage = () => {
       setSeconds(60);
       try {
         await SendVerifyClient({usedFor: 3, phoneNumber: email});
-      }catch (error) {
+      } catch (error) {
         const err = error as {message: string};
         setError(err.message);
       }
@@ -60,7 +60,7 @@ const LoginWithVerificationPage = () => {
         areaCode: '+86',
       });
       await LoginIM();
-      setLoginState(true)
+      setLoginState(true);
     } catch (error) {
       const err = error as {message: string};
       setError(err.message);

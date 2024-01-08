@@ -1,10 +1,9 @@
-import { create } from "zustand";
-import { MessageItem } from "./types/entity";
-import { MessageStore } from "./type.d";
-import OpenIMSDKRN from "open-im-sdk-rn";
-import { useConversationStore } from "./conversation";
-import { MessageType } from "./types/enum";
-
+import {create} from 'zustand';
+import {MessageItem} from './types/entity';
+import {MessageStore} from './type.d';
+import OpenIMSDKRN from 'open-im-sdk-rn';
+import {useConversationStore} from './conversation';
+import {MessageType} from './types/enum';
 
 const GET_HISTORY_MESSAGE_COUNT = 20;
 
@@ -33,28 +32,34 @@ export const useMessageStore = create<MessageStore>()((set, get) => ({
     if (!conversationID) return;
     try {
       const prevList = [...get().historyMessageList];
-      const rawData =
-        await OpenIMSDKRN.getAdvancedHistoryMessageList({
-          userID: "",
-          groupID: "",
+      const rawData = await OpenIMSDKRN.getAdvancedHistoryMessageList(
+        {
+          userID: '',
+          groupID: '',
           count: GET_HISTORY_MESSAGE_COUNT,
           lastMinSeq: loadMore ? get().lastMinSeq : 0,
-          startClientMsgID: loadMore ? prevList[0]?.clientMsgID : "",
+          startClientMsgID: loadMore ? prevList[0]?.clientMsgID : '',
           conversationID,
-        }, "09820");
-      const data = JSON.parse(rawData)
+        },
+        '09820',
+      );
+      const data = JSON.parse(rawData);
       const nextList = [...data.messageList, ...(loadMore ? prevList : [])];
 
       const imageUrls = filterPreviewImage(data.messageList);
       if (imageUrls.length > 0 || !loadMore) {
-        set((state) => ({
-          previewImgList: [...imageUrls, ...(loadMore ? state.previewImgList : [])],
+        set(state => ({
+          previewImgList: [
+            ...imageUrls,
+            ...(loadMore ? state.previewImgList : []),
+          ],
         }));
       }
 
       set(() => ({
         lastMinSeq: data.lastMinSeq,
-        hasMore: !data.isEnd && data.messageList.length === GET_HISTORY_MESSAGE_COUNT,
+        hasMore:
+          !data.isEnd && data.messageList.length === GET_HISTORY_MESSAGE_COUNT,
         historyMessageList: nextList,
       }));
       return data.messageList.length;
@@ -64,40 +69,37 @@ export const useMessageStore = create<MessageStore>()((set, get) => ({
     }
   },
   pushNewMessage: (message: ExMessageItem) => {
-    
     get().tryUpdatePreviewImg([message]);
-    set((state) => ({
+    set(state => ({
       historyMessageList: [...state.historyMessageList, message],
     }));
-    
   },
   updateOneMessage: (message: ExMessageItem, fromSuccessCallBack = false) => {
-
     const tmpList = [...get().historyMessageList];
-    const idx = tmpList.findIndex((msg) => msg.clientMsgID === message.clientMsgID);
+    const idx = tmpList.findIndex(
+      msg => msg.clientMsgID === message.clientMsgID,
+    );
     if (idx < 0) {
       return;
     }
     if (fromSuccessCallBack) {
       get().tryUpdatePreviewImg([message]);
     }
-    tmpList[idx] = { ...tmpList[idx], ...message };
-    set(() => ({ historyMessageList: tmpList }));
+    tmpList[idx] = {...tmpList[idx], ...message};
+    set(() => ({historyMessageList: tmpList}));
   },
   tryUpdatePreviewImg: (mesageList: ExMessageItem[]) => {
     const imageUrls = filterPreviewImage(mesageList);
     if (imageUrls.length === 0) return;
-    set((state) => ({
+    set(state => ({
       previewImgList: [...state.previewImgList, ...imageUrls],
     }));
   },
 }));
 
-
-
 function filterPreviewImage(messages: MessageItem[]) {
   return messages
-    .filter((message) => {
+    .filter(message => {
       if (message.contentType === MessageType.PictureMessage) {
         return true;
       }
@@ -117,7 +119,7 @@ function filterPreviewImage(messages: MessageItem[]) {
       }
       return false;
     })
-    .map((item) => ({
+    .map(item => ({
       url: item.pictureElem.sourcePicture.url,
       clientMsgID: item.clientMsgID,
     }));

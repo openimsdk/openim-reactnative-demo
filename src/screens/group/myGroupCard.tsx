@@ -4,41 +4,27 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Avatar from '../../components/avatar';
-const ContactCard = ({
+import {ConversationItem} from '../../store/types/entity';
+import {GetOneConversation} from '../../api/openimsdk';
+
+const MyGroupCard = ({
   nickname,
   faceURL,
-  userID,
+  groupID,
 }: {
   nickname: string;
   faceURL: string;
-  userID: string;
+  groupID: string;
 }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-
-  // Single function to handle various navigation paths
-  const handlePress = () => {
-    switch (userID) {
-      case 'newFriend':
-        navigation.navigate('Friends');
-        break;
-      case 'newGroup':
-        navigation.navigate('NewGroup');
-        break;
-      case 'myGroup':
-        navigation.navigate('MyGroup');
-        break;
-      default:
-        navigation.navigate('FriendSettingPage', userID);
-        break;
-    }
+  const handleConversation = async () => {
+    const item: ConversationItem = JSON.parse(
+      await GetOneConversation(groupID, 3),
+    );
+    navigation.navigate('ChatRoom', {item});
   };
-
-  // If no nickname is provided, return null
-  if (!nickname) return null;
-
-  // Repeated JSX structure
   return (
-    <TouchableOpacity style={styles.contactItem} onPress={handlePress}>
+    <TouchableOpacity style={styles.contactItem} onPress={handleConversation}>
       <Avatar nickname={nickname} faceURL={faceURL} />
       <Text>{nickname}</Text>
     </TouchableOpacity>
@@ -61,4 +47,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ContactCard;
+export default MyGroupCard;

@@ -17,16 +17,17 @@ import {
   GetUsersInfo,
   MarkConversationMessageAsRead,
   SendMessage,
-} from '../api/openimsdk';
-import {API} from '../api/typings';
-import {useMessageStore} from '../../../store/message';
-import {useConversationStore} from '../../../store/conversation';
-import {ConversationItem} from '../../../store/types/entity';
+} from '../../api/openimsdk';
+import {API} from '../../api/typings';
+import {useMessageStore} from '../../store/message';
+import {useConversationStore} from '../../store/conversation';
+import {ConversationItem} from '../../store/types/entity';
 import OpenIMSDKRN from 'open-im-sdk-rn';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import ImageCard from './chatCards/imageCard';
 import OptionModalView from './optionsModalView';
+import {SendMsgParams} from '../../store/types/params';
 
 const ChatRoom = (conversation: {
   route: {params: {item: ConversationItem}};
@@ -54,7 +55,7 @@ const ChatRoom = (conversation: {
           const data = await GetUsersInfo([
             conversation.route.params.item!.userID,
           ]);
-  
+
           setUser(JSON.parse(data)[0].publicInfo);
         } catch (error) {
           // Handle errors here
@@ -73,7 +74,10 @@ const ChatRoom = (conversation: {
       const newMessagesCount = newLength - previousLength;
       if (newMessagesCount > 0) {
         // Adjust scroll position based on number of new messages
-        flatListRef.current?.scrollToIndex({ index: newMessagesCount, animated: false });
+        flatListRef.current?.scrollToIndex({
+          index: newMessagesCount,
+          animated: false,
+        });
       }
     } catch (error) {
       console.error('Error refreshing messages:', error);
@@ -82,7 +86,9 @@ const ChatRoom = (conversation: {
   };
   const messages = useMessageStore(state => state.historyMessageList);
   useEffect(() => {
-    MarkConversationMessageAsRead(conversation.route.params.item.conversationID)
+    MarkConversationMessageAsRead(
+      conversation.route.params.item.conversationID,
+    );
   }, [messages]);
   const [showModal, setShowModal] = useState(false);
   const toggleModal = () => {
@@ -110,14 +116,17 @@ const ChatRoom = (conversation: {
       iOSPushSound: '+1',
       iOSBadgeCount: true,
     };
-    const options = {
-      message: text,
-      recvID: currentConversation?.userID,
-      groupID: currentConversation?.groupID,
-      offlinePushInfo,
-    };
-    const msg = await SendMessage(options);
-    pushNewMessage(msg);
+    if (currentConversation) {
+      const options: SendMsgParams = {
+        message: text,
+        recvID: currentConversation.userID,
+        groupID: currentConversation.groupID,
+        offlinePushInfo,
+      };
+      const msg = await SendMessage(options);
+      pushNewMessage(msg);
+    }
+
     setInputMessage(''); // Clear the input field after sending
   };
 
@@ -157,21 +166,20 @@ const ChatRoom = (conversation: {
         }}
         refreshControl={
           <RefreshControl
-              title={"Loading"} //android中设置无效
-              colors={["red"]} //android
-              tintColor={"red"} //ios
-              titleColor={"red"}
-              refreshing={isRefreshing}
-              onRefresh={onRefresh}
+            title={'Loading'} //android中设置无效
+            colors={['red']} //android
+            tintColor={'red'} //ios
+            titleColor={'red'}
+            refreshing={isRefreshing}
+            onRefresh={onRefresh}
           />
-      }
-      onContentSizeChange={() => {
-        // // Scroll to the bottom when content size changes
-        // if(!initialLoadDone)
+        }
+        onContentSizeChange={() => {
+          // // Scroll to the bottom when content size changes
+          // if(!initialLoadDone)
           // flatListRef.current?.scrollToEnd({animated:false});
-        //   // setInitialLoadDone(true)
-      }}
-      
+          //   // setInitialLoadDone(true)
+        }}
       />
       <View style={styles.inputContainer}>
         <TouchableOpacity
@@ -234,6 +242,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     backgroundColor: '#ffffff', // Set your desired background color
   },
+  moreOptionsButton: {},
+  moreOptionsButtonImage: {},
   input: {
     flex: 1, // Allow the input field to grow
     borderWidth: 1,

@@ -1,8 +1,7 @@
-
-import { create } from "zustand";
-import { MessageReceiveOptType } from "./types/enum";
-import { AppConfig, UserStore } from "./type.d";
-import OpenIMSDKRN from "open-im-sdk-rn";
+import {create} from 'zustand';
+import {MessageReceiveOptType} from './types/enum';
+import {AppConfig, UserStore} from './type.d';
+import OpenIMSDKRN from 'open-im-sdk-rn';
 
 export interface BusinessUserInfo {
   userID: string;
@@ -30,25 +29,28 @@ export const useUserStore = create<UserStore>()((set, get) => ({
   selfInfo: {} as BusinessUserInfo,
   appConfig: {} as AppConfig,
   appSettings: {
-    locale: "zh-CN", //need update
-    closeAction: "miniSize",
+    locale: 'zh-CN', //need update
+    closeAction: 'miniSize',
   },
   getSelfInfoByReq: async () => {
     try {
       const rawData = await OpenIMSDKRN.getSelfUserInfo('29129');
-      const data = JSON.parse(rawData)
+      console.log(rawData);
+      const data = JSON.parse(rawData);
       // const {
       //   data: { users },
       // } = await getBusinessUserInfo([data.userID], true);
       // const bussinessData = users[0];
       // set(() => ({ selfInfo: bussinessData }));
-      set(() => ({ selfInfo: data }))
+
+      set(() => ({selfInfo: data}));
     } catch (error) {
+      console.log(error);
       // feedbackToast({ error, msg: t("toast.getSelfInfoFailed") });
     }
   },
   updateSelfInfo: (info: Partial<BusinessUserInfo>) => {
-    set((state) => ({ selfInfo: { ...state.selfInfo, ...info } }));
+    set(state => ({selfInfo: {...state.selfInfo, ...info}}));
   },
   // getAppConfigByReq: async () => {
   //   let config = {} as AppConfig;
@@ -66,15 +68,15 @@ export const useUserStore = create<UserStore>()((set, get) => ({
   //   }
   //   set((state) => ({ appSettings: { ...state.appSettings, ...settings } }));
   // },
-  userLogout: async () => {
-    console.log("call userLogout:::");
+  // userLogout: async () => {
+  //   console.log("call userLogout:::");
 
-    await IMSDK.logout();
-    const userID = get().selfInfo.userID;
-    clearIMProfile(userID);
-    set({ selfInfo: {} as BusinessUserInfo });
-    useContactStore.getState().clearContactStore();
-    useConversationStore.getState().clearConversationStore();
-    router.navigate("/login");
-  },
+  //   await IMSDK.logout();
+  //   const userID = get().selfInfo.userID;
+  //   clearIMProfile(userID);
+  //   set({ selfInfo: {} as BusinessUserInfo });
+  //   useContactStore.getState().clearContactStore();
+  //   useConversationStore.getState().clearConversationStore();
+  //   router.navigate("/login");
+  // },
 }));

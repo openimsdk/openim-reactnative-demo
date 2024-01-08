@@ -11,10 +11,10 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
 import md5 from 'react-native-md5';
-import {LoginClient} from '../api/requests';
+import {LoginClient} from '../../api/requests';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack/lib/typescript/src/types';
-import {AuthContext} from '../../../AuthContext';
-import {LoginIM, LogoutIM} from '../api/openimsdk';
+import {AuthContext} from '../../components/AuthContext';
+import {LoginIM, LogoutIM} from '../../api/openimsdk';
 
 const LoginPage = () => {
   const {setLoginState} = useContext(AuthContext);
@@ -62,7 +62,7 @@ const LoginPage = () => {
         areaCode: '+86',
       });
       await LoginIM();
-      setLoginState(true)
+      setLoginState(true);
     } catch (error) {
       const err = error as {message: string};
       setError(err.message);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -8,28 +8,34 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import FriendCard from './friendCard';
-import { searchBusinessUserInfo } from '../api/requests';
-import { FlatList } from 'react-native-gesture-handler';
-import { BusinessUserInfo } from '../../../store/user';
+import {searchBusinessUserInfo} from '../../api/requests';
+import {FlatList} from 'react-native-gesture-handler';
+import {BusinessUserInfo} from '../../store/user';
 
 const AddFriendScreen = () => {
-
   const [searchTerm, setSearchTerm] = useState('');
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
   const [searchResults, setSearchResults] = useState<BusinessUserInfo[]>([]);
 
   useEffect(() => {
     searchBusinessUserInfo(searchTerm)
-      .then((response) => {
-        // Handle the response here
-        setSearchResults(response.data.users);
+      .then(response => {
+        // Check if the response contains an error
+        if ('error' in response) {
+          // Handle the error case
+          console.error('Error fetching business user info:', response.error);
+          // Optionally, set some state or display a message to the user
+        } else {
+          // Handle the success case
+          setSearchResults(response.users);
+        }
       })
-      .catch((error) => {
-        // Handle errors here
+      .catch(error => {
+        // Handle any errors that might have occurred while making the request
         console.error('Error:', error);
       });
   }, [searchTerm]);
@@ -37,7 +43,9 @@ const AddFriendScreen = () => {
   return (
     <View style={styles.container}>
       {/* Back Button */}
-      <TouchableOpacity style={styles.backButton} onPress={() => navigator.goBack()}>
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigator.goBack()}>
         <Image source={require('../../../assets/imgs/back.png')} />
       </TouchableOpacity>
 
@@ -47,24 +55,27 @@ const AddFriendScreen = () => {
           style={styles.searchInput}
           placeholder="Search Friends"
           value={searchTerm}
-          onChangeText={(text) => setSearchTerm(text)}
+          onChangeText={text => setSearchTerm(text)}
         />
       </View>
 
       {/* Display search results as cards */}
-      {searchResults === undefined || searchResults === null || searchResults.length === 0 || searchTerm === '' ? (
+      {searchResults === undefined ||
+      searchResults === null ||
+      searchResults.length === 0 ||
+      searchTerm === '' ? (
         <Text>No friend matches the search word.</Text>
       ) : (
         <FlatList
           data={searchResults || []}
-          keyExtractor={(friend) => friend.userID.toString()}
-          renderItem={({ item: friend }) => (
+          keyExtractor={friend => friend.userID.toString()}
+          renderItem={({item: friend}) => (
             <FriendCard
               key={friend.userID}
               nickname={friend.nickname}
               faceURL={friend.faceURL}
               userID={friend.userID}
-            //style={styles.friendCard} // Add a style prop to your FriendCard component
+              //style={styles.friendCard} // Add a style prop to your FriendCard component
             />
           )}
           contentContainerStyle={styles.flatList} // Style the FlatList items
