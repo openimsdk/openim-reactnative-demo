@@ -66,6 +66,7 @@ const ChatRoom = (conversation: {
       getUser();
     }
   }, []);
+
   const onRefresh = async () => {
     setIsRefreshing(true);
     try {
@@ -90,6 +91,10 @@ const ChatRoom = (conversation: {
     MarkConversationMessageAsRead(
       conversation.route.params.item.conversationID,
     );
+    if (initialLoadDone && messages.length > 0) {
+      // If the initial messages are loaded and there are messages, scroll to the bottom
+      flatListRef.current?.scrollToEnd({animated: true});
+    }
   }, [messages]);
   const [showModal, setShowModal] = useState(false);
   const toggleModal = () => {
