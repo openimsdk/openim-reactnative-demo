@@ -1,6 +1,6 @@
 import { MessageEntity, OfflinePush, PicBaseInfo, AtUsersInfoItem, GroupInitInfo, MessageItem, SelfUserInfo } from './entity';
 import { AllowType, GroupJoinSource, GroupVerificationType, MessageType, MessageReceiveOptType, GroupMemberRole, GroupMemberFilter, LogLevel } from './enum';
-export declare type InitAndLoginConfig = {
+export type InitAndLoginConfig = {
   userID: string;
   token: string;
   platformID: number;
@@ -11,11 +11,11 @@ export declare type InitAndLoginConfig = {
   isExternalExtensions?: boolean;
   tryParse?: boolean;
 };
-export declare type GetOneConversationParams = {
+export type GetOneConversationParams = {
   sourceID: string;
   sessionType: number;
 };
-export declare type GetAdvancedHistoryMsgParams = {
+export type GetAdvancedHistoryMsgParams = {
   userID?: string;
   groupID?: string;
   lastMinSeq: number;
@@ -23,24 +23,24 @@ export declare type GetAdvancedHistoryMsgParams = {
   startClientMsgID: string;
   conversationID: string;
 };
-export declare type GetHistoryMsgParams = {
+export type GetHistoryMsgParams = {
   userID: string;
   groupID: string;
   count: number;
   startClientMsgID: string;
   conversationID?: string;
 };
-export declare type MarkNotiParams = {
+export type MarkNotiParams = {
   conversationID: string;
   clientMsgIDList: string[];
 };
-export declare type GetGroupMemberParams = {
+export type GetGroupMemberParams = {
   groupID: string;
   filter: GroupMemberFilter;
   offset: number;
   count: number;
 };
-export declare type SendMsgParams = {
+export type SendMsgParams = {
   recvID: string;
   groupID: string;
   offlinePushInfo?: OfflinePush;
@@ -48,17 +48,17 @@ export declare type SendMsgParams = {
   fileArrayBuffer?: ArrayBuffer;
   snpFileArrayBuffer?: ArrayBuffer;
 };
-export declare type SetMessageLocalExParams = {
+export type SetMessageLocalExParams = {
   conversationID: string;
   clientMsgID: string;
   localEx: string;
 };
-export declare type ImageMsgParams = {
+export type ImageMsgParams = {
   sourcePicture: PicBaseInfo;
   bigPicture: PicBaseInfo;
   snapshotPicture: PicBaseInfo;
 };
-export declare type VideoMsgParams = {
+export type VideoMsgParams = {
   videoPath: string;
   duration: number;
   videoType: string;
@@ -73,110 +73,110 @@ export declare type VideoMsgParams = {
   snapshotHeight: number;
   snapShotType?: string;
 };
-export declare type VideoMsgFullParams = {
+export type VideoMsgFullParams = {
   videoFullPath: string;
   videoType: string;
   duration: number;
   snapshotFullPath: string;
 };
-export declare type CustomMsgParams = {
+export type CustomMsgParams = {
   data: string;
   extension: string;
   description: string;
 };
-export declare type QuoteMsgParams = {
+export type QuoteMsgParams = {
   text: string;
   message: string;
 };
-export declare type AdvancedQuoteMsgParams = {
+export type AdvancedQuoteMsgParams = {
   text: string;
   message: MessageItem;
   messageEntityList?: MessageEntity[];
 };
-export declare type AdvancedMsgParams = {
+export type AdvancedMsgParams = {
   text: string;
   messageEntityList?: MessageEntity[];
 };
-export declare type SetPrvParams = {
+export type SetPrvParams = {
   conversationID: string;
   isPrivate: boolean;
 };
-export declare type SplitConversationParams = {
+export type SplitConversationParams = {
   offset: number;
   count: number;
 };
-export declare type SetDraftParams = {
+export type SetDraftParams = {
   conversationID: string;
   draftText: string;
 };
-export declare type PinCveParams = {
+export type PinCveParams = {
   conversationID: string;
   isPinned: boolean;
 };
-export declare type IsRecvParams = {
+export type IsRecvParams = {
   conversationIDList: string[];
   opt: MessageReceiveOptType;
 };
-export declare type UpdateMemberNameParams = {
+export type UpdateMemberNameParams = {
   groupID: string;
   userID: string;
   GroupMemberNickname: string;
 };
-export declare type GroupBaseInfo = Partial<Omit<GroupInitInfo, 'groupType'>> & {
+export type GroupBaseInfo = Partial<Omit<GroupInitInfo, 'groupType'>> & {
   groupID: string;
 };
-export declare type JoinGroupParams = {
+export type JoinGroupParams = {
   groupID: string;
   reqMsg: string;
   joinSource: GroupJoinSource;
 };
-export declare type SearchGroupParams = {
+export type SearchGroupParams = {
   keywordList: string[];
   isSearchGroupID: boolean;
   isSearchGroupName: boolean;
 };
-export declare type ChangeGroupMuteParams = {
+export type ChangeGroupMuteParams = {
   groupID: string;
   isMute: boolean;
 };
-export declare type ChangeGroupMemberMuteParams = {
+export type ChangeGroupMemberMuteParams = {
   groupID: string;
   userID: string;
   mutedSeconds: number;
 };
-export declare type TransferGroupParams = {
+export type TransferGroupParams = {
   groupID: string;
   newOwnerUserID: string;
 };
-export declare type AccessGroupParams = {
+export type AccessGroupParams = {
   groupID: string;
   fromUserID: string;
   handleMsg: string;
 };
-export declare type SetGroupRoleParams = {
+export type SetGroupRoleParams = {
   groupID: string;
   userID: string;
   roleLevel: GroupMemberRole;
 };
-export declare type SetGroupVerificationParams = {
+export type SetGroupVerificationParams = {
   verification: GroupVerificationType;
   groupID: string;
 };
-export declare type setPrvParams = {
+export type setPrvParams = {
   conversationID: string;
   isPrivate: boolean;
 };
-export declare type setBurnDurationParams = {
+export type setBurnDurationParams = {
   conversationID: string;
   burnDuration: number;
 };
-export declare type AtMsgParams = {
+export type AtMsgParams = {
   text: string;
   atUserIDList: string[];
   atUsersInfo?: AtUsersInfoItem[];
   message?: MessageItem;
 };
-export declare type SoundMsgParams = {
+export type SoundMsgParams = {
   uuid: string;
   soundPath: string;
   sourceUrl: string;
@@ -184,7 +184,7 @@ export declare type SoundMsgParams = {
   duration: number;
   soundType?: string;
 };
-export declare type FileMsgParams = {
+export type FileMsgParams = {
   filePath: string;
   fileName: string;
   uuid: string;
@@ -192,63 +192,63 @@ export declare type FileMsgParams = {
   fileSize: number;
   fileType?: string;
 };
-export declare type FileMsgFullParams = {
+export type FileMsgFullParams = {
   fileFullPath: string;
   fileName: string;
 };
-export declare type SouondMsgFullParams = {
+export type SouondMsgFullParams = {
   soundPath: string;
   duration: number;
 };
-export declare type MergerMsgParams = {
+export type MergerMsgParams = {
   messageList: MessageItem[];
   title: string;
   summaryList: string[];
 };
-export declare type FaceMessageParams = {
+export type FaceMessageParams = {
   index: number;
   data: string;
 };
-export declare type LocationMsgParams = {
+export type LocationMsgParams = {
   description: string;
   longitude: number;
   latitude: number;
 };
-export declare type GroupMsgReadParams = {
+export type GroupMsgReadParams = {
   groupID: string;
   msgIDList: string[];
 };
-export declare type InsertSingleMsgParams = {
+export type InsertSingleMsgParams = {
   message: MessageItem;
   recvID: string;
   sendID: string;
 };
-export declare type InsertGroupMsgParams = {
+export type InsertGroupMsgParams = {
   message: MessageItem;
   groupID: string;
   sendID: string;
 };
-export declare type AccessMessageParams = {
+export type AccessMessageParams = {
   conversationID: string;
   clientMsgID: string;
 };
-export declare type TypingUpdateParams = {
+export type TypingUpdateParams = {
   recvID: string;
   msgTip: string;
 };
-export declare type SplitParams = {
+export type SplitParams = {
   offset: number;
   count: number;
 };
-export declare type GetOneCveParams = {
+export type GetOneCveParams = {
   sourceID: string;
   sessionType: number;
 };
-export declare type isRecvParams = {
+export type isRecvParams = {
   conversationID: string;
   opt: MessageReceiveOptType;
 };
-export declare type SearchLocalParams = {
+export type SearchLocalParams = {
   conversationID: string;
   keywordList: string[];
   keywordListMatchType?: number;
@@ -259,30 +259,30 @@ export declare type SearchLocalParams = {
   pageIndex?: number;
   count?: number;
 };
-export declare type AddFriendParams = {
+export type AddFriendParams = {
   toUserID: string;
   reqMsg: string;
 };
-export declare type SearchFriendParams = {
+export type SearchFriendParams = {
   keywordList: string[];
   isSearchUserID: boolean;
   isSearchNickname: boolean;
   isSearchRemark: boolean;
 };
-export declare type RemarkFriendParams = {
+export type RemarkFriendParams = {
   toUserID: string;
   remark: string;
 };
-export declare type AccessFriendParams = {
+export type AccessFriendParams = {
   toUserID: string;
   handleMsg: string;
 };
-export declare type InviteGroupParams = {
+export type InviteGroupParams = {
   groupID: string;
   reason: string;
   userIDList: string[];
 };
-export declare type GetGroupMemberByTimeParams = {
+export type GetGroupMemberByTimeParams = {
   groupID: string;
   filterUserIDList: string[];
   offset: number;
@@ -290,7 +290,7 @@ export declare type GetGroupMemberByTimeParams = {
   joinTimeBegin: number;
   joinTimeEnd: number;
 };
-export declare type SearchGroupMemberParams = {
+export type SearchGroupMemberParams = {
   groupID: string;
   keywordList: string[];
   isSearchUserID: boolean;
@@ -298,40 +298,40 @@ export declare type SearchGroupMemberParams = {
   offset: number;
   count: number;
 };
-export declare type SetMemberAuthParams = {
+export type SetMemberAuthParams = {
   rule: AllowType;
   groupID: string;
 };
-export declare type CreateGroupParams = {
+export type CreateGroupParams = {
   memberUserIDs: string[];
   groupInfo: GroupInitInfo;
   adminUserIDs?: string[];
   ownerUserID?: string;
 };
-export declare type GroupInfoParams = Partial<GroupInitInfo> & {
+export type GroupInfoParams = Partial<GroupInitInfo> & {
   groupID: string;
   needVerification: GroupVerificationType;
   lookMemberInfo: AllowType;
   applyMemberFriend: AllowType;
 };
-export declare type MemberNameParams = {
+export type MemberNameParams = {
   groupID: string;
   userID: string;
   groupMemberNickname: string;
 };
-export declare type MemberExParams = {
+export type MemberExParams = {
   groupID: string;
   userID: string;
   ex: string;
 };
-export declare type FindMessageParams = {
+export type FindMessageParams = {
   conversationID: string;
   clientMsgIDList: string[];
 };
-export declare type UploadFileParams = {
+export type UploadFileParams = {
   name: string;
   contentType: string;
   uuid: string;
   file: File;
 };
-export declare type PartialUserItem = Partial<SelfUserInfo>;
+export type PartialUserItem = Partial<SelfUserInfo>;

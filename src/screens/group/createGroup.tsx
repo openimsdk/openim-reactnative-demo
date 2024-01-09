@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {useContactStore} from '../../store/contact';
-import {FriendUserItem} from '../../store/type.d';
+import {FriendUserItem} from '../../store/type';
 // import SearchDrawer from '../../components/searchDrawer';
 import Avatar from '../../components/avatar';
 import {CreateGroup} from '../../api/openimsdk';

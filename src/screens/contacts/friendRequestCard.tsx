@@ -5,6 +5,10 @@ import {useNavigation} from '@react-navigation/native';
 import Avatar from '../../components/avatar';
 import {useUserStore} from '../../store/user';
 
+type FriendRequestCardProps = {
+  
+}
+
 export const FriendRequestCard = ({
   nickname,
   faceURL,

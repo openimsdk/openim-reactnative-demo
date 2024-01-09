@@ -1,15 +1,15 @@
 import {useContext, useEffect, useState} from 'react';
 import {OpenIMEmitter} from 'open-im-sdk-rn';
 import {useContactStore} from './contact';
-import {FriendUserItem, WSEvent} from './type.d';
+import {FriendUserItem, WSEvent} from './type';
 import {useConversationStore} from './conversation';
 import {ExMessageItem, useMessageStore} from './message';
-import {MessageType} from './types/enum';
+import {MessageType} from '../types/enum';
 import {
   ConversationItem,
   FriendApplicationItem,
   RevokedInfo,
-} from './types/entity';
+} from '../types/entity';
 import {useUserStore} from './user';
 import {Init, LoginIM, LogoutIM} from '../api/openimsdk';
 import {AuthContext} from '../components/AuthContext';

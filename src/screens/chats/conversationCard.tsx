@@ -16,7 +16,7 @@ import {
   GetAdvancedHistoryMessageListReverse,
   MarkConversationMessageAsRead,
 } from '../../api/openimsdk';
-import {ConversationItem, MessageItem} from '../../store/types/entity';
+import {ConversationItem, MessageItem} from '../../types/entity';
 import {useConversationStore} from '../../store/conversation';
 import {formatMessageByType} from '../../utils/formatMsg';
 import dayjs from 'dayjs';

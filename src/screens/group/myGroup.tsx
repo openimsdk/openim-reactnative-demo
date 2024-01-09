@@ -16,7 +16,7 @@ import {useContactStore} from '../../store/contact';
 // import SearchDrawer from '../../components/searchDrawer';
 import MyGroupCard from './myGroupCard';
 import {groupContactsByFirstCharacter} from '../../utils/contactUtils';
-import {GroupItem} from '../../store/types/entity';
+import {GroupItem} from '../../types/entity';
 
 interface SectionWithOffset {
   title: string;

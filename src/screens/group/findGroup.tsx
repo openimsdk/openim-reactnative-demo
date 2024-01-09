@@ -10,7 +10,7 @@ import {
 import debounce from 'lodash.debounce';
 import GroupCard from './findGroupCard';
 import {SearchGroup} from '../../api/openimsdk';
-import {GroupItem} from '../../store/types/entity';
+import {GroupItem} from '../../types/entity';
 
 const FindGroupPage = () => {
   const [searchTerm, setSearchTerm] = useState('');

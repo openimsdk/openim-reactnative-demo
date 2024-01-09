@@ -1,6 +1,6 @@
 import {create} from 'zustand';
-import {MessageReceiveOptType} from './types/enum';
-import {AppConfig, UserStore} from './type.d';
+import {MessageReceiveOptType} from '../types/enum';
+import {AppConfig, UserStore} from './type';
 import OpenIMSDKRN from 'open-im-sdk-rn';
 
 export interface BusinessUserInfo {

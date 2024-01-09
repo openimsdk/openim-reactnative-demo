@@ -21,13 +21,13 @@ import {
 import {API} from '../../api/typings';
 import {useMessageStore} from '../../store/message';
 import {useConversationStore} from '../../store/conversation';
-import {ConversationItem} from '../../store/types/entity';
+import {ConversationItem} from '../../types/entity';
 import OpenIMSDKRN from 'open-im-sdk-rn';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import ImageCard from './chatCards/imageCard';
 import OptionModalView from './optionsModalView';
-import {SendMsgParams} from '../../store/types/params';
+import {SendMsgParams} from '../../types/params';
 
 const ChatRoom = (conversation: {
   route: {params: {item: ConversationItem}};
