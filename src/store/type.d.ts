@@ -5,7 +5,7 @@ import {
   GroupItem,
   GroupMemberItem,
   MessageItem,
-} from './types/entity';
+} from '../types/entity';
 
 export declare type WSEvent<T = unknown> = {
   event: string;

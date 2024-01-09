@@ -12,7 +12,7 @@ import ConversationCard from './conversationCard';
 import {useConversationStore} from '../../store/conversation';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {ConversationItem} from '../../store/types/entity';
+import {ConversationItem} from '../../types/entity';
 
 const ChatPage = () => {
   const conversationList: ConversationItem[] = useConversationStore(

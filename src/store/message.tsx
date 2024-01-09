@@ -1,9 +1,9 @@
 import {create} from 'zustand';
-import {MessageItem} from './types/entity';
-import {MessageStore} from './type.d';
+import {MessageItem} from '../types/entity';
+import {MessageStore} from './type';
 import OpenIMSDKRN from 'open-im-sdk-rn';
 import {useConversationStore} from './conversation';
-import {MessageType} from './types/enum';
+import {MessageType} from '../types/enum';
 
 const GET_HISTORY_MESSAGE_COUNT = 20;
 

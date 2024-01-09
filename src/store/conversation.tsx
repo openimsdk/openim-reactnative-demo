@@ -4,11 +4,11 @@ import {
   GroupItem,
   GroupMemberItem,
   MessageItem,
-} from './types/entity';
-import {ConversationListUpdateType, ConversationStore} from './type.d';
+} from '../types/entity';
+import {ConversationListUpdateType, ConversationStore} from './type';
 import OpenIMSDKRN from 'open-im-sdk-rn';
 import {useUserStore} from './user';
-import {SessionType} from './types/enum';
+import {SessionType} from '../types/enum';
 export const conversationSort = (conversationList: ConversationItem[]) => {
   const arr: string[] = [];
   const filterArr = conversationList.filter(c => {

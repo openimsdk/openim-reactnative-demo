@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, Switch} from 'react-native';
 import Avatar from '../../components/avatar';
 import {useUserStore} from '../../store/user';
 import {getBusinessUserInfo} from '../../api/requests';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {GetOneConversation} from '../../api/openimsdk';
-import {ConversationItem} from '../../store/types/entity';
+import {ConversationItem} from '../../types/entity';
 
 interface FriendSettingPageProps {
   route: {
@@ -20,6 +20,9 @@ const FriendSettingPage = (route: FriendSettingPageProps) => {
     faceURL: '',
     userID: '',
   });
+  const [pinContact, setPinContact] = useState(false);
+  const [muteContact, setMuteContact] = useState(false);
+
   getBusinessUserInfo([route.route.params])
     .then(response => {
       // Check if the response contains an error
@@ -50,14 +53,14 @@ const FriendSettingPage = (route: FriendSettingPageProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton}>
+        <TouchableOpacity>
           {/* Add your back button component here */}
-          <Text>Back</Text>
+          <Text style={styles.backButton}>Back</Text>
         </TouchableOpacity>
         <Text style={styles.title}>Contact Info</Text>
-        <TouchableOpacity style={styles.editButton}>
+        <TouchableOpacity>
           {/* Add your edit button component here */}
-          <Text>Edit</Text>
+          <Text style={styles.editButton}>Edit</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.content}>
@@ -83,91 +86,198 @@ const FriendSettingPage = (route: FriendSettingPageProps) => {
         </View>
         <View style={styles.settings}>
           <View style={styles.settingItem}>
-            <Text>Pin this contact</Text>
-            {/* On/Off switch for pinning */}
+            <Text style={styles.settingText}>Pin this contact</Text>
+            <Switch
+              trackColor={{false: '#767577', true: '#81b0ff'}}
+              thumbColor={pinContact ? '#f5dd4b' : '#f4f3f4'}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={newValue => setPinContact(newValue)}
+              value={pinContact}
+            />
           </View>
+
           <View style={styles.settingItem}>
-            <Text>Mute</Text>
-            {/* On/Off switch for muting */}
+            <Text style={styles.settingText}>Mute</Text>
+            <Switch
+              trackColor={{false: '#767577', true: '#81b0ff'}}
+              thumbColor={muteContact ? '#f5dd4b' : '#f4f3f4'}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={newValue => setMuteContact(newValue)}
+              value={muteContact}
+            />
           </View>
-          <View style={styles.settingItem}>
-            <Text>Destroy after reading</Text>
-            {/* On/Off switch for destroying after reading */}
-          </View>
-          <View style={styles.settingItem}>
-            <Text>Clear history regularly</Text>
-            {/* On/Off switch for clearing history regularly */}
-          </View>
-          <View style={styles.settingItem}>
-            <Text>Wallpaper</Text>
+          <TouchableOpacity
+            style={styles.settingItem}
+            // onPress={() => navigateToSetting('destroyAfterReading')}
+          >
+            <Text style={styles.settingText}>Destroy after reading</Text>
+            <Text>Off</Text>
+            {/* Replace this Text with an icon if needed */}
+            <Text>&gt;</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.settingItem}
+            // onPress={() => navigateToSetting('clearHistoryRegularly')}
+          >
+            <Text style={styles.settingText}>Clear history regularly</Text>
+            <Text>On</Text>
+            {/* Replace this Text with an icon if needed */}
+            <Text>&gt;</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.settingItem}>
+            <Text style={styles.settingText}>Wallpaper</Text>
             {/* On/Off switch for changing wallpaper */}
-          </View>
-          <View style={styles.settingItem}>
-            <Text>Friend settings</Text>
+            <Text style={styles.settingArrow}>&gt;</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.settingItem}>
+            <Text style={styles.settingText}>Friend settings</Text>
             {/* On/Off switch for friend settings */}
-          </View>
+            <Text style={styles.settingArrow}>&gt;</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 10,
+    paddingTop: 12,
+    paddingBottom: 16,
+    paddingHorizontal: 16,
     backgroundColor: '#3498db',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ffffff50',
   },
   backButton: {
-    padding: 10,
+    fontSize: 16,
+    color: 'white',
+    fontWeight: '600',
   },
   title: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     color: 'white',
   },
   editButton: {
-    padding: 10,
+    fontSize: 16,
+    color: 'white',
+    fontWeight: '600',
   },
   content: {
     flex: 1,
-    padding: 16,
     alignItems: 'center',
+    backgroundColor: 'white',
+    paddingTop: 32,
   },
   name: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold',
+    marginTop: 8,
+    marginBottom: 4,
   },
   email: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#888',
+    marginBottom: 24,
   },
   buttonRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
+    justifyContent: 'space-around',
+    width: '80%',
+    marginBottom: 24,
   },
   button: {
-    backgroundColor: '#3498db',
-    padding: 10,
-    borderRadius: 5,
+    // Style for buttons such as Message, Audio & Video, Search
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 90,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    backgroundColor: '#e1e1e1', // A light grey background
+    marginHorizontal: 5,
   },
   buttonText: {
-    color: 'white',
+    color: '#3498db',
+    fontWeight: '600',
   },
   settings: {
+    width: '70%',
     marginTop: 20,
   },
   settingItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  settingText: {
+    fontSize: 18,
+    fontWeight: '400',
+  },
+  settingStatus: {
+    fontSize: 16,
+    fontWeight: '400',
+    color: '#ccc', // Assuming grey text color for the status
+  },
+  settingArrow: {
+    fontSize: 18,
+    fontWeight: '400',
+    color: '#ccc', // Assuming grey color for the arrow
+  },
+  clearChatButton: {
+    // Style for the 'Clear chat' button
+    marginTop: 24,
+    backgroundColor: '#ff3b30',
+    borderRadius: 4,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    width: '90%',
+    alignSelf: 'center', // Center the button horizontally
+  },
+  clearChatButtonText: {
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  // Style for switches
+  switch: {
+    transform: [{scaleX: 0.8}, {scaleY: 0.8}], // Slightly smaller switches
+  },
+  // Style for setting options that navigate to another screen (indicated by an arrow or similar)
+  settingOption: {
+    fontSize: 16,
+    color: 'black',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    backgroundColor: 'white',
+    borderBottomWidth: 1,
+    borderBottomColor: '#cccccc',
+  },
+  settingOptionText: {
+    // Text style for options
+    flex: 1,
+    fontSize: 18,
+    color: '#333',
+  },
+  settingOptionIcon: {
+    // Placeholder for the navigation icon in each setting option
+    color: '#333',
+    paddingRight: 10,
   },
 });
 
