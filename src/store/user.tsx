@@ -40,8 +40,7 @@ export const useUserStore = create<UserStore>()((set, get) => ({
       //   data: { users },
       // } = await getBusinessUserInfo([data.userID], true);
       // const bussinessData = users[0];
-      // set(() => ({ selfInfo: bussinessData }));
-
+      // set(() => ({ selfInfo: bussinessData }));s
       set(() => ({selfInfo: data}));
     } catch (error) {
       console.log(error);

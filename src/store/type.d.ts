@@ -94,8 +94,7 @@ export interface ContactStore {
   clearContactStore: () => void;
 }
 export interface UserStore {
-  selfInfo: any;
-  // selfInfo: BusinessUserInfo;
+  selfInfo: BusinessUserInfo;
   appConfig: AppConfig;
   appSettings: AppSettings;
   // updateSelfInfo: (info: Partial<BusinessUserInfo>) => void;
