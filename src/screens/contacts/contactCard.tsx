@@ -4,6 +4,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Avatar from '../../components/avatar';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 const ContactCard = ({
   nickname,
   faceURL,
@@ -36,28 +37,45 @@ const ContactCard = ({
   // If no nickname is provided, return null
   if (!nickname) return null;
 
-  // Repeated JSX structure
   return (
     <TouchableOpacity style={styles.contactItem} onPress={handlePress}>
       <Avatar nickname={nickname} faceURL={faceURL} />
-      <Text>{nickname}</Text>
+      <View style={styles.textContainer}>
+        <Text style={styles.nickname}>{nickname}</Text>
+      </View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   contactItem: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
     flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#ccc',
     backgroundColor: 'white',
   },
   avatar: {
-    height: 50,
-    width: 50,
-    borderRadius: 25,
-    marginRight: 10,
+    height: 40,
+    width: 40,
+    borderRadius: 20,
+    marginRight: 12,
+  },
+  textContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  nickname: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  status: {
+    fontSize: 12,
+    color: '#999999',
+    marginTop: 4,
   },
 });
 

@@ -19,6 +19,7 @@ import ContactCard from './contactCard';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {groupContactsByFirstCharacter} from '../../utils/contactUtils';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 interface SectionWithOffset {
   title: string;
   data: FriendUserItem[];
@@ -152,25 +153,27 @@ const ContactListPage = () => {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior="height"
-      keyboardVerticalOffset={Platform.OS === 'android' ? -60 : -70}>
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
       <View style={styles.header}>
         <View style={styles.topBar}>
           <TouchableOpacity style={styles.button}>
-            <Text></Text>
+            {/* Add icons or text here as needed */}
           </TouchableOpacity>
           <Text style={styles.title}>Contacts</Text>
           <TouchableOpacity style={styles.button} onPress={handleAddFriend}>
-            <Text>Add Friend</Text>
+            {/* Add icons or text here as needed */}
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.searchBar} onPress={openDrawer}>
+        <View style={styles.searchContainer}>
+          <Ionicons name="search" size={20} color="#000" />
           <TextInput
+            style={styles.searchInput}
             placeholder="Search"
             value={search}
-            onChangeText={setSearch} // Update the 'search' state
+            onChangeText={setSearch}
           />
-        </TouchableOpacity>
+        </View>
       </View>
       <SectionList
         ref={sectionListRef}
@@ -250,14 +253,20 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-  searchBar: {
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     height: 40,
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 8,
-    paddingLeft: 8,
+    borderRadius: 20,
+    paddingLeft: 10,
+    paddingRight: 10,
     backgroundColor: '#E5E5E5FF',
-    textAlign: 'center',
+  },
+  searchInput: {
+    flex: 1,
+    marginLeft: 10,
   },
   sectionHeader: {
     fontSize: 18,
