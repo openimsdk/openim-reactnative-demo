@@ -18,23 +18,43 @@ const ImageCard = memo(({message}: {message: ExMessageItem}) => {
 
 const SelfImageCard = ({message}: {message: ExMessageItem}) => {
   const [isLoading, setLoading] = useState(true);
+  const {width, height} = message.pictureElem.snapshotPicture;
+  const ratio = width / height;
+  var renderWidth;
+  var renderHeight;
+
+  if (width > height) {
+    renderWidth = 200;
+    renderHeight = 200 / ratio;
+  } else {
+    renderWidth = 200 * ratio;
+
+    renderHeight = 200;
+  }
   return (
     <View style={styles.chatContainerSelf}>
       <View style={styles.selfMessageContainer}>
         <Text style={styles.selfMessageText}>{message.senderNickname}</Text>
-        <Image
-          style={styles.image}
-          source={{uri: message.pictureElem.snapshotPicture.url}}
-          onLoadStart={() => setLoading(true)}
-          onLoad={() => setLoading(false)}
-          onError={() => setLoading(false)}
-        />
-        {isLoading && (
-          <ActivityIndicator
-            style={StyleSheet.absoluteFillObject} // Position over the image
-            size="large"
+        <View
+          style={{
+            width: renderWidth,
+            height: renderHeight,
+            position: 'relative',
+          }}>
+          <Image
+            style={{width: renderWidth, height: renderHeight}}
+            source={{uri: message.pictureElem.snapshotPicture.url}}
+            onLoadStart={() => setLoading(true)}
+            onLoad={() => setLoading(false)}
+            onError={() => setLoading(false)}
           />
-        )}
+          {isLoading && (
+            <ActivityIndicator
+              style={StyleSheet.absoluteFillObject} // Position over the image
+              size="large"
+            />
+          )}
+        </View>
       </View>
       <View style={styles.avatarContainer}>
         <Avatar
@@ -48,6 +68,17 @@ const SelfImageCard = ({message}: {message: ExMessageItem}) => {
 
 const OtherImageCard = ({message}: {message: ExMessageItem}) => {
   const [isLoading, setLoading] = useState(true);
+  const {width, height} = message.pictureElem.snapshotPicture;
+  const ratio = width / height;
+  var renderWidth;
+  var renderHeight;
+  if (width > height) {
+    renderWidth = 200;
+    renderHeight = 200 / ratio;
+  } else {
+    renderWidth = 200 * ratio;
+    renderHeight = 200;
+  }
   return (
     <View style={styles.chatContainerOther}>
       <View style={styles.avatarContainer}>
@@ -58,19 +89,26 @@ const OtherImageCard = ({message}: {message: ExMessageItem}) => {
       </View>
       <View style={styles.otherMessageContainer}>
         <Text style={styles.otherMessageText}>{message.senderNickname}</Text>
-        <Image
-          style={styles.image}
-          source={{uri: message.pictureElem.snapshotPicture.url}}
-          onLoadStart={() => setLoading(true)}
-          onLoad={() => setLoading(false)}
-          onError={() => setLoading(false)}
-        />
-        {isLoading && (
-          <ActivityIndicator
-            style={StyleSheet.absoluteFillObject} // Position over the image
-            size="large"
+        <View
+          style={{
+            width: renderWidth,
+            height: renderHeight,
+            position: 'relative',
+          }}>
+          <Image
+            style={{width: renderWidth, height: renderHeight}}
+            source={{uri: message.pictureElem.snapshotPicture.url}}
+            onLoadStart={() => setLoading(true)}
+            onLoad={() => setLoading(false)}
+            onError={() => setLoading(false)}
           />
-        )}
+          {isLoading && (
+            <ActivityIndicator
+              style={StyleSheet.absoluteFillObject} // Position over the image
+              size="large"
+            />
+          )}
+        </View>
       </View>
     </View>
   );
