@@ -45,6 +45,7 @@ const ChatRoom = (conversation: {
     faceURL: '',
     nickname: '',
   });
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   useEffect(() => {
     updateCurrentConversation(conversation.route.params.item);
@@ -176,9 +177,10 @@ const ChatRoom = (conversation: {
         }
         onContentSizeChange={() => {
           // // Scroll to the bottom when content size changes
-          // if(!initialLoadDone)
-          // flatListRef.current?.scrollToEnd({animated:false});
-          //   // setInitialLoadDone(true)
+          if (!initialLoadDone) {
+            flatListRef.current?.scrollToEnd({animated: false});
+            setInitialLoadDone(true);
+          }
         }}
       />
       <View style={styles.inputContainer}>

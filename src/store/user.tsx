@@ -35,7 +35,6 @@ export const useUserStore = create<UserStore>()((set, get) => ({
   getSelfInfoByReq: async () => {
     try {
       const rawData = await OpenIMSDKRN.getSelfUserInfo('29129');
-      console.log(rawData);
       const data = JSON.parse(rawData);
       // const {
       //   data: { users },

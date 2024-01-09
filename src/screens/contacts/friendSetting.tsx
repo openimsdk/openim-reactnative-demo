@@ -111,9 +111,9 @@ const FriendSettingPage = (route: FriendSettingPageProps) => {
             // onPress={() => navigateToSetting('destroyAfterReading')}
           >
             <Text style={styles.settingText}>Destroy after reading</Text>
-            <Text style={styles.settingStatus}>Off</Text>
+            <Text>Off</Text>
             {/* Replace this Text with an icon if needed */}
-            <Text style={styles.settingArrow}>&gt;</Text>
+            <Text>&gt;</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -121,19 +121,21 @@ const FriendSettingPage = (route: FriendSettingPageProps) => {
             // onPress={() => navigateToSetting('clearHistoryRegularly')}
           >
             <Text style={styles.settingText}>Clear history regularly</Text>
-            <Text style={styles.settingStatus}>On</Text>
+            <Text>On</Text>
             {/* Replace this Text with an icon if needed */}
-            <Text style={styles.settingArrow}>&gt;</Text>
+            <Text>&gt;</Text>
           </TouchableOpacity>
 
-          <View style={styles.settingItem}>
-            <Text>Wallpaper</Text>
+          <TouchableOpacity style={styles.settingItem}>
+            <Text style={styles.settingText}>Wallpaper</Text>
             {/* On/Off switch for changing wallpaper */}
-          </View>
-          <View style={styles.settingItem}>
-            <Text>Friend settings</Text>
+            <Text style={styles.settingArrow}>&gt;</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.settingItem}>
+            <Text style={styles.settingText}>Friend settings</Text>
             {/* On/Off switch for friend settings */}
-          </View>
+            <Text style={styles.settingArrow}>&gt;</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -156,7 +158,6 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ffffff50',
   },
   backButton: {
-    // Style for a text-based back button
     fontSize: 16,
     color: 'white',
     fontWeight: '600',
@@ -167,7 +168,6 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   editButton: {
-    // Style for a text-based edit button
     fontSize: 16,
     color: 'white',
     fontWeight: '600',
@@ -218,14 +218,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 16,
     paddingHorizontal: 16,
+    backgroundColor: 'white',
     borderBottomWidth: 1,
-    borderBottomColor: '#cccccc',
+    borderBottomColor: '#ccc',
   },
   settingText: {
     fontSize: 18,
     fontWeight: '400',
+  },
+  settingStatus: {
+    fontSize: 16,
+    fontWeight: '400',
+    color: '#ccc', // Assuming grey text color for the status
+  },
+  settingArrow: {
+    fontSize: 18,
+    fontWeight: '400',
+    color: '#ccc', // Assuming grey color for the arrow
   },
   clearChatButton: {
     // Style for the 'Clear chat' button

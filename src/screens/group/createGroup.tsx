@@ -211,7 +211,7 @@ const CreateGroupPage = () => {
 
       <TouchableOpacity
         onPress={() => {
-          console.log(selectedFriend);
+          console.log('selectedFriends:', selectedFriend);
           CreateGroup('defaultgroup', 2, selectedFriend);
         }}>
         <Text>Accept</Text>
