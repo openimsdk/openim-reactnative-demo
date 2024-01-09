@@ -28,7 +28,7 @@ import {useNavigation} from '@react-navigation/native';
 import ImageCard from './chatCards/imageCard';
 import OptionModalView from './optionsModalView';
 import {SendMsgParams} from '../../types/params';
-
+// const ITEM_HEIGHT = 150;
 const ChatRoom = (conversation: {
   route: {params: {item: ConversationItem}};
 }) => {
@@ -65,6 +65,7 @@ const ChatRoom = (conversation: {
       };
       getUser();
     }
+    setInitialLoadDone(true);
   }, []);
 
   const onRefresh = async () => {
@@ -78,7 +79,7 @@ const ChatRoom = (conversation: {
         // Adjust scroll position based on number of new messages
         flatListRef.current?.scrollToIndex({
           index: newMessagesCount,
-          animated: false,
+          animated: true,
         });
       }
     } catch (error) {
@@ -91,10 +92,6 @@ const ChatRoom = (conversation: {
     MarkConversationMessageAsRead(
       conversation.route.params.item.conversationID,
     );
-    if (initialLoadDone && messages.length > 0) {
-      // If the initial messages are loaded and there are messages, scroll to the bottom
-      flatListRef.current?.scrollToEnd({animated: true});
-    }
   }, [messages]);
   const [showModal, setShowModal] = useState(false);
   const toggleModal = () => {
@@ -159,7 +156,6 @@ const ChatRoom = (conversation: {
         data={messages}
         keyExtractor={(item, index) => index.toString()}
         ref={flatListRef}
-        extraData={messages}
         renderItem={({item: message}) => {
           if (message.contentType === 101) {
             return <TextChatCard message={message} />;
@@ -180,12 +176,16 @@ const ChatRoom = (conversation: {
             onRefresh={onRefresh}
           />
         }
+        onScrollToIndexFailed={info => {
+          console.log('Scroll to index failed:', info);
+          // You can add additional logic here if needed
+        }}
         onContentSizeChange={() => {
-          // // Scroll to the bottom when content size changes
-          if (!initialLoadDone) {
-            flatListRef.current?.scrollToEnd({animated: false});
-            setInitialLoadDone(true);
-          }
+          // if (!initialLoadDone)
+          //   setTimeout(
+          //     () => flatListRef.current?.scrollToEnd({animated: false}),
+          //     100,
+          //   );
         }}
       />
       <View style={styles.inputContainer}>
