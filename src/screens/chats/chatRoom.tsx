@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import Avatar from '../../components/avatar';
 import TextChatCard from './chatCards/textChatCard';
@@ -38,33 +39,25 @@ const ChatRoom = (conversation: {
   const currentConversation = useConversationStore(
     state => state.currentConversation,
   );
+  const messages = useMessageStore(state => state.historyMessageList);
   const flatListRef = useRef<FlatList>(null);
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
   const {getHistoryMessageListByReq} = useMessageStore.getState();
-  const [user, setUser] = useState({
-    faceURL: '',
-    nickname: '',
-  });
   const [initialLoadDone, setInitialLoadDone] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  useEffect(() => {
-    updateCurrentConversation(conversation.route.params.item);
-    getHistoryMessageListByReq();
-    if (currentConversation?.conversationType === 1) {
-      const getUser = async () => {
-        try {
-          const data = await GetUsersInfo([
-            conversation.route.params.item!.userID,
-          ]);
+  const [loading, setLoading] = useState(false);
 
-          setUser(JSON.parse(data)[0].publicInfo);
-        } catch (error) {
-          // Handle errors here
-          console.error(error);
-        }
-      };
-      getUser();
-    }
+  const [showModal, setShowModal] = useState(false);
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
+  const pushNewMessage = useMessageStore(state => state.pushNewMessage);
+  const [inputMessage, setInputMessage] = useState(''); // State to hold the input message
+
+  useEffect(() => {
+    setLoading(true);
+    updateCurrentConversation(conversation.route.params.item);
+    getHistoryMessageListByReq().then(() => setLoading(false));
   }, []);
 
   const onRefresh = async () => {
@@ -86,23 +79,7 @@ const ChatRoom = (conversation: {
     }
     setIsRefreshing(false);
   };
-  const messages = useMessageStore(state => state.historyMessageList);
-  useEffect(() => {
-    MarkConversationMessageAsRead(
-      conversation.route.params.item.conversationID,
-    );
-    if (initialLoadDone && messages.length > 0) {
-      // If the initial messages are loaded and there are messages, scroll to the bottom
-      flatListRef.current?.scrollToEnd({animated: true});
-    }
-  }, [messages]);
-  const [showModal, setShowModal] = useState(false);
-  const toggleModal = () => {
-    setShowModal(!showModal);
-  };
-  const pushNewMessage = useMessageStore(state => state.pushNewMessage);
-  const updateOneMessage = useMessageStore(state => state.updateOneMessage);
-  const [inputMessage, setInputMessage] = useState(''); // State to hold the input message
+
   // Function to handle sending a message
   const sendMessage = async () => {
     // Add your logic to send the message here
@@ -146,48 +123,68 @@ const ChatRoom = (conversation: {
         </TouchableOpacity>
         {currentConversation?.conversationType === 1 ? (
           <View style={styles.userInfo}>
-            <Avatar faceURL={user.faceURL} nickname={user.nickname} />
+            <Avatar
+              faceURL={conversation.route.params.item!.faceURL}
+              nickname={conversation.route.params.item!.showName}
+            />
             <View style={styles.userDetails}>
-              <Text style={styles.userName}>{user.nickname}</Text>
+              <Text style={styles.userName}>
+                {conversation.route.params.item!.showName}
+              </Text>
               {/* <Text style={styles.onlineStatus}>{user.onlineStatus}</Text> */}
             </View>
           </View>
         ) : null}
       </View>
-      <FlatList
-        style={styles.messageList}
-        data={messages}
-        keyExtractor={(item, index) => index.toString()}
-        ref={flatListRef}
-        extraData={messages}
-        renderItem={({item: message}) => {
-          if (message.contentType === 101) {
-            return <TextChatCard message={message} />;
-          } else if (message.contentType === 102) {
-            return <ImageCard message={message} />;
-          } else {
-            // Return a placeholder component or an empty View for other cases
-            return <View />;
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      ) : (
+        <FlatList
+          style={styles.messageList}
+          data={messages}
+          keyExtractor={(item, index) => index.toString()}
+          ref={flatListRef}
+          renderItem={({item: message}) => {
+            if (message.contentType === 101) {
+              return <TextChatCard message={message} />;
+            } else if (message.contentType === 102) {
+              return <ImageCard message={message} />;
+            } else {
+              // Return a placeholder component or an empty View for other cases
+              return <View />;
+            }
+          }}
+          refreshControl={
+            <RefreshControl
+              title={'Loading'} //android中设置无效
+              colors={['red']} //android
+              tintColor={'red'} //ios
+              titleColor={'red'}
+              refreshing={isRefreshing}
+              onRefresh={onRefresh}
+            />
           }
-        }}
-        refreshControl={
-          <RefreshControl
-            title={'Loading'} //android中设置无效
-            colors={['red']} //android
-            tintColor={'red'} //ios
-            titleColor={'red'}
-            refreshing={isRefreshing}
-            onRefresh={onRefresh}
-          />
-        }
-        onContentSizeChange={() => {
-          // // Scroll to the bottom when content size changes
-          if (!initialLoadDone) {
-            flatListRef.current?.scrollToEnd({animated: false});
-            setInitialLoadDone(true);
-          }
-        }}
-      />
+          onScrollToIndexFailed={info => {
+            const wait = new Promise(resolve => setTimeout(resolve, 200));
+            wait.then(() => {
+              flatListRef.current?.scrollToIndex({
+                index: info.index,
+                animated: false,
+              });
+            });
+          }}
+          onContentSizeChange={() => {
+            if (!initialLoadDone) {
+              setTimeout(() => {
+                flatListRef.current?.scrollToEnd({animated: false});
+                setInitialLoadDone(true);
+              }, 100);
+            }
+          }}
+        />
+      )}
       <View style={styles.inputContainer}>
         <TouchableOpacity
           style={styles.moreOptionsButton}
@@ -241,6 +238,11 @@ const styles = StyleSheet.create({
   },
   messageList: {
     flex: 1, // Allow the message list to take up the remaining space
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   inputContainer: {
     flexDirection: 'row',

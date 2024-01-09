@@ -135,8 +135,8 @@ export const useConversationStore = create<ConversationStore>()((set, get) => ({
     }
     const prevConversation = get().currentConversation;
 
-    console.log('prevConversation:::');
-    console.log(prevConversation);
+    // console.log('prevConversation:::');
+    // console.log(prevConversation);
 
     const toggleNewConversation =
       conversation.conversationID !== prevConversation?.conversationID;

@@ -1,5 +1,12 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  ImageStyle,
+  StyleProp,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 const images = {
@@ -29,9 +36,11 @@ const avatarImages: Record<string, any> = {
 const getAvatarImage = ({
   nickname,
   faceURL,
+  style,
 }: {
   nickname: string;
   faceURL: string | null | undefined;
+  style?: StyleProp<ImageStyle>;
 }) => {
   if (faceURL === null || faceURL == undefined) {
     return null; // Return null or a placeholder component if data is undefined
@@ -54,22 +63,23 @@ const getAvatarImage = ({
   const avatarSource = avatarImages[faceURL as keyof typeof avatarImages]; // Type assertion
 
   if (avatarSource) {
-    return <Image style={styles.avatar} source={avatarSource} />;
+    return <Image style={[styles.avatar, style]} source={avatarSource} />;
   }
 
-  return <Image style={styles.avatar} source={{uri: faceURL}} />;
+  return <Image style={[styles.avatar, style]} source={{uri: faceURL}} />;
 };
 
 const Avatar = ({
   nickname,
   faceURL,
+  style,
 }: {
   nickname: string;
   faceURL: string | null | undefined;
+  style?: StyleProp<ImageStyle>;
 }) => {
-  return getAvatarImage({nickname, faceURL});
+  return getAvatarImage({nickname, faceURL, style});
 };
-
 const styles = StyleSheet.create({
   contactItem: {
     padding: 16,
@@ -96,7 +106,8 @@ const styles = StyleSheet.create({
   textImageText: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: 25,
+    fontWeight: 'bold',
   },
 });
 
