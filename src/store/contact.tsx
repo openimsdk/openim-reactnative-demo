@@ -1,5 +1,5 @@
 import {create} from 'zustand';
-import {ContactStore, FriendApplicationItem, FriendUserItem} from './type.d';
+import {ContactStore, FriendApplicationItem, FriendUserItem} from './type';
 import {GetFriendList} from '../api/openimsdk';
 import OpenIMSDKRN from 'open-im-sdk-rn';
 

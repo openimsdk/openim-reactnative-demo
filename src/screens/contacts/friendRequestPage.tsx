@@ -7,7 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import API from '../../api/typings';
 import {useContactStore} from '../../store/contact';
 import {FriendRequestCard} from './friendRequestCard';
-import {FriendApplicationItem} from '../../store/type.d';
+import {FriendApplicationItem} from '../../store/type';
 const FriendRequestPage = () => {
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
   const recvFriendApplicationList: FriendApplicationItem[] = useContactStore(

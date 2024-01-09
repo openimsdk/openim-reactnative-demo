@@ -1,15 +1,15 @@
 import {useContext, useEffect, useState} from 'react';
 import {OpenIMEmitter} from 'open-im-sdk-rn';
 import {useContactStore} from './contact';
-import {FriendUserItem, WSEvent} from './type.d';
+import {FriendUserItem, WSEvent} from './type';
 import {useConversationStore} from './conversation';
 import {ExMessageItem, useMessageStore} from './message';
-import {MessageType} from './types/enum';
+import {GroupType, MessageType, SessionType} from '../types/enum';
 import {
   ConversationItem,
   FriendApplicationItem,
   RevokedInfo,
-} from './types/entity';
+} from '../types/entity';
 import {useUserStore} from './user';
 import {Init, LoginIM, LogoutIM} from '../api/openimsdk';
 import {AuthContext} from '../components/AuthContext';
@@ -170,13 +170,45 @@ export function useGlobalEvent() {
 
   const notPushType = [MessageType.TypingMessage, MessageType.RevokeMessage];
 
+  const currentConversation = useConversationStore(
+    state => state.currentConversation,
+  );
+  const currentUser = useUserStore(state => state.selfInfo);
+
   const handleNewMessage = (newServerMsg: string) => {
-    var parsedMsg: ExMessageItem = JSON.parse(newServerMsg);
-    if (!notPushType.includes(parsedMsg.contentType)) {
+    const parsedMsg: ExMessageItem = JSON.parse(newServerMsg);
+
+    // Determine if the message is for the current group conversation
+    const isForCurrentGroup =
+      (parsedMsg.sessionType === SessionType.Group &&
+        currentConversation?.conversationType === SessionType.Group) ||
+      (parsedMsg.sessionType === SessionType.WorkingGroup &&
+        currentConversation?.conversationType === SessionType.WorkingGroup &&
+        parsedMsg.groupID === currentConversation?.groupID);
+
+    // Determine if the message is for the current single conversation
+    console.log('parsedMsg', parsedMsg);
+    const isForCurrentSingle =
+      parsedMsg.sessionType === SessionType.Single &&
+      ((parsedMsg.sendID === currentUser.userID &&
+        parsedMsg.recvID === currentConversation?.userID) ||
+        (parsedMsg.sendID === currentConversation?.userID &&
+          parsedMsg.recvID === currentUser.userID)) &&
+      currentConversation?.conversationType === SessionType.Single;
+    console.log('parsedMsg.sendID', parsedMsg.sendID);
+    console.log('parsedMsg.recvID', parsedMsg.recvID);
+    console.log('currentUser.userID', currentUser.userID);
+    console.log('currentConversation', currentConversation);
+    console.log('currentConversation?.userID', currentConversation?.userID);
+    // If the message is for the current conversation and is not a push type to be ignored
+    if (
+      (isForCurrentGroup || isForCurrentSingle) &&
+      !notPushType.includes(parsedMsg.contentType)
+    ) {
       pushNewMessage(parsedMsg);
-      // emitter.emit("CHAT_LIST_SCROLL_TO_BOTTOM", true);
     }
   };
+
   interface ConversationDataObject {
     data: string[];
   }

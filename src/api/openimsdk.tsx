@@ -3,7 +3,7 @@ import OpenIMSDKRN from 'open-im-sdk-rn';
 import RNFS from 'react-native-fs';
 import {API_URL, WS_URL} from '../config/config';
 import {Platform} from 'react-native';
-import {SendMsgParams} from '../store/types/params';
+import {SendMsgParams} from '../types/params';
 import {useContext} from 'react';
 import {AuthContext} from '../components/AuthContext';
 import {initStore} from '../store/useGlobalEvent';

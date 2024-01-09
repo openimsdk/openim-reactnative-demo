@@ -14,15 +14,21 @@ import {
 } from '../../api/openimsdk';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
+
 interface FriendRequestItem {
   faceURL: string;
   fromUserID: string;
   nickname: string;
   reqMsg: string;
 }
-const FriendRequestVerifyPage = (props: {
-  route: {params: FriendRequestItem};
-}) => {
+
+interface FriendRequestItemProps {
+  route:{
+    params: FriendRequestItem
+  }
+}
+
+const FriendRequestVerifyPage = (props:FriendRequestItemProps) => {
   //TODO props, seperate views
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
   const friendRequestInfo = props.route.params;

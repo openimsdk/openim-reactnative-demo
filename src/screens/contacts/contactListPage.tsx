@@ -14,7 +14,7 @@ import {
 import Modal from 'react-native-modal';
 // import SearchDrawer from '../../components/searchDrawer';
 import {useContactStore} from '../../store/contact';
-import {FriendUserItem} from '../../store/type.d';
+import {FriendUserItem} from '../../store/type';
 import ContactCard from './contactCard';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';

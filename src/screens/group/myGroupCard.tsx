@@ -4,7 +4,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Avatar from '../../components/avatar';
-import {ConversationItem} from '../../store/types/entity';
+import {ConversationItem} from '../../types/entity';
 import {GetOneConversation} from '../../api/openimsdk';
 
 const MyGroupCard = ({

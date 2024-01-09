@@ -1,5 +1,5 @@
-import React, {memo} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import React, {memo, useState} from 'react';
+import {ActivityIndicator, Image, StyleSheet, Text, View} from 'react-native';
 import Avatar from '../../../components/avatar';
 import {useUserStore} from '../../../store/user';
 import {ExMessageItem} from '../../../store/message';
@@ -16,41 +16,65 @@ const ImageCard = memo(({message}: {message: ExMessageItem}) => {
   );
 });
 
-const SelfImageCard = ({message}: {message: ExMessageItem}) => (
-  <View style={styles.chatContainerSelf}>
-    <View style={styles.selfMessageContainer}>
-      <Text style={styles.selfMessageText}>{message.senderNickname}</Text>
-      <Image
-        style={styles.image}
-        source={{uri: message.pictureElem.snapshotPicture.url}}
-      />
+const SelfImageCard = ({message}: {message: ExMessageItem}) => {
+  const [isLoading, setLoading] = useState(true);
+  return (
+    <View style={styles.chatContainerSelf}>
+      <View style={styles.selfMessageContainer}>
+        <Text style={styles.selfMessageText}>{message.senderNickname}</Text>
+        <Image
+          style={styles.image}
+          source={{uri: message.pictureElem.snapshotPicture.url}}
+          onLoadStart={() => setLoading(true)}
+          onLoad={() => setLoading(false)}
+          onError={() => setLoading(false)}
+        />
+        {isLoading && (
+          <ActivityIndicator
+            style={StyleSheet.absoluteFillObject} // Position over the image
+            size="large"
+          />
+        )}
+      </View>
+      <View style={styles.avatarContainer}>
+        <Avatar
+          nickname={message.senderNickname}
+          faceURL={message.senderFaceUrl ?? ''}
+        />
+      </View>
     </View>
-    <View style={styles.avatarContainer}>
-      <Avatar
-        nickname={message.senderNickname}
-        faceURL={message.senderFaceUrl ?? ''}
-      />
-    </View>
-  </View>
-);
+  );
+};
 
-const OtherImageCard = ({message}: {message: ExMessageItem}) => (
-  <View style={styles.chatContainerOther}>
-    <View style={styles.avatarContainer}>
-      <Avatar
-        nickname={message.senderNickname}
-        faceURL={message.senderFaceUrl ?? ''}
-      />
+const OtherImageCard = ({message}: {message: ExMessageItem}) => {
+  const [isLoading, setLoading] = useState(true);
+  return (
+    <View style={styles.chatContainerOther}>
+      <View style={styles.avatarContainer}>
+        <Avatar
+          nickname={message.senderNickname}
+          faceURL={message.senderFaceUrl ?? ''}
+        />
+      </View>
+      <View style={styles.otherMessageContainer}>
+        <Text style={styles.otherMessageText}>{message.senderNickname}</Text>
+        <Image
+          style={styles.image}
+          source={{uri: message.pictureElem.snapshotPicture.url}}
+          onLoadStart={() => setLoading(true)}
+          onLoad={() => setLoading(false)}
+          onError={() => setLoading(false)}
+        />
+        {isLoading && (
+          <ActivityIndicator
+            style={StyleSheet.absoluteFillObject} // Position over the image
+            size="large"
+          />
+        )}
+      </View>
     </View>
-    <View style={styles.otherMessageContainer}>
-      <Text style={styles.otherMessageText}>{message.senderNickname}</Text>
-      <Image
-        style={styles.image}
-        source={{uri: message.pictureElem.snapshotPicture.url}}
-      />
-    </View>
-  </View>
-);
+  );
+};
 
 const styles = StyleSheet.create({
   chatContainerSelf: {

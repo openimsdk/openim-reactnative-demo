@@ -1,6 +1,6 @@
 import {create} from 'zustand';
-import {MessageReceiveOptType} from './types/enum';
-import {AppConfig, UserStore} from './type.d';
+import {MessageReceiveOptType} from '../types/enum';
+import {AppConfig, UserStore} from './type';
 import OpenIMSDKRN from 'open-im-sdk-rn';
 
 export interface BusinessUserInfo {
@@ -35,14 +35,12 @@ export const useUserStore = create<UserStore>()((set, get) => ({
   getSelfInfoByReq: async () => {
     try {
       const rawData = await OpenIMSDKRN.getSelfUserInfo('29129');
-      console.log(rawData);
       const data = JSON.parse(rawData);
       // const {
       //   data: { users },
       // } = await getBusinessUserInfo([data.userID], true);
       // const bussinessData = users[0];
-      // set(() => ({ selfInfo: bussinessData }));
-
+      // set(() => ({ selfInfo: bussinessData }));s
       set(() => ({selfInfo: data}));
     } catch (error) {
       console.log(error);

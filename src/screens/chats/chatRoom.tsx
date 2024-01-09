@@ -21,13 +21,13 @@ import {
 import {API} from '../../api/typings';
 import {useMessageStore} from '../../store/message';
 import {useConversationStore} from '../../store/conversation';
-import {ConversationItem} from '../../store/types/entity';
+import {ConversationItem} from '../../types/entity';
 import OpenIMSDKRN from 'open-im-sdk-rn';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import ImageCard from './chatCards/imageCard';
 import OptionModalView from './optionsModalView';
-import {SendMsgParams} from '../../store/types/params';
+import {SendMsgParams} from '../../types/params';
 
 const ChatRoom = (conversation: {
   route: {params: {item: ConversationItem}};
@@ -45,6 +45,7 @@ const ChatRoom = (conversation: {
     faceURL: '',
     nickname: '',
   });
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   useEffect(() => {
     updateCurrentConversation(conversation.route.params.item);
@@ -65,6 +66,7 @@ const ChatRoom = (conversation: {
       getUser();
     }
   }, []);
+
   const onRefresh = async () => {
     setIsRefreshing(true);
     try {
@@ -89,6 +91,10 @@ const ChatRoom = (conversation: {
     MarkConversationMessageAsRead(
       conversation.route.params.item.conversationID,
     );
+    if (initialLoadDone && messages.length > 0) {
+      // If the initial messages are loaded and there are messages, scroll to the bottom
+      flatListRef.current?.scrollToEnd({animated: true});
+    }
   }, [messages]);
   const [showModal, setShowModal] = useState(false);
   const toggleModal = () => {
@@ -176,9 +182,10 @@ const ChatRoom = (conversation: {
         }
         onContentSizeChange={() => {
           // // Scroll to the bottom when content size changes
-          // if(!initialLoadDone)
-          // flatListRef.current?.scrollToEnd({animated:false});
-          //   // setInitialLoadDone(true)
+          if (!initialLoadDone) {
+            flatListRef.current?.scrollToEnd({animated: false});
+            setInitialLoadDone(true);
+          }
         }}
       />
       <View style={styles.inputContainer}>

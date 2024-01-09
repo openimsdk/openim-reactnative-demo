@@ -1,5 +1,5 @@
-import {MessageItem, PublicUserItem} from '../store/types/entity';
-import {MessageType} from '../store/types/enum';
+import {MessageItem, PublicUserItem} from '../types/entity';
+import {MessageType} from '../types/enum';
 import {useUserStore} from '../store/user';
 
 export const formatMessageByType = (message: MessageItem): string => {
