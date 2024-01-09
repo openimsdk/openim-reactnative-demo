@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {
   FlatList,
   ListRenderItem,
@@ -7,45 +7,48 @@ import {
   Text,
   TouchableOpacity,
   View,
+  TextInput,
 } from 'react-native';
 import ConversationCard from './conversationCard';
 import {useConversationStore} from '../../store/conversation';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ConversationItem} from '../../types/entity';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ChatPage = () => {
   const conversationList: ConversationItem[] = useConversationStore(
     state => state.conversationList,
   );
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
-  const renderConversationItem: ListRenderItem<ConversationItem> = ({item}) => {
-    if (!item.conversationID) {
-      return null; // or some placeholder component
-    }
 
+  const renderConversationItem: ListRenderItem<ConversationItem> = ({item}) => {
     return <ConversationCard item={item} />;
   };
 
   const handleAddFriend = () => {
     navigator.navigate('AddFriend');
   };
-
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
-        <TouchableOpacity style={styles.button}>
-          <Text>Edit</Text>
+        <Text style={styles.title}>Chats</Text>
+        <TouchableOpacity onPress={handleAddFriend}>
+          <Ionicons name="add-circle-outline" size={24} color="#000" />
         </TouchableOpacity>
-        <Text style={styles.title}>Contacts</Text>
-        <TouchableOpacity style={styles.button} onPress={handleAddFriend}>
-          <Text>Add Friend</Text>
-        </TouchableOpacity>
+      </View>
+      <View style={styles.searchBarContainer}>
+        <Ionicons
+          name="search"
+          size={20}
+          color="#000"
+          style={styles.searchIcon}
+        />
+        <TextInput placeholder="Search" style={styles.searchBar} />
       </View>
       <FlatList
         data={conversationList}
-        keyExtractor={item => item.conversationID || `item-${Math.random()}`}
-        extraData={conversationList}
+        keyExtractor={item => item.conversationID}
         renderItem={renderConversationItem}
       />
     </View>
@@ -56,35 +59,37 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    marginTop: Platform.OS === 'ios' ? 50 : 0,
-  },
-  header: {
-    backgroundColor: '#F6F6F6FF',
-    padding: 16,
+    paddingTop: Platform.OS === 'ios' ? 50 : 20,
   },
   topBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
-    marginTop: 8,
-  },
-  button: {
-    padding: 8,
+    paddingHorizontal: 16,
+    marginBottom: 16,
   },
   title: {
-    fontSize: 20,
+    fontSize: 32,
     fontWeight: 'bold',
   },
-  searchBar: {
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    // marginBottom: 16,
-    paddingLeft: 8,
+  searchBarContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#E5E5E5FF',
-    textAlign: 'center',
+    borderRadius: 10,
+    marginHorizontal: 16,
+    marginBottom: 16,
+  },
+  searchIcon: {
+    paddingHorizontal: 8,
+  },
+  searchBar: {
+    flex: 1,
+    padding: 8,
+    paddingRight: 40, // to avoid text overlapping the icon
+    fontSize: 16,
+    
   },
 });
+
 export default ChatPage;
