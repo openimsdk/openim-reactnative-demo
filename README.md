@@ -35,8 +35,8 @@ With the dependencies installed, you can now run the demo app. Make sure you hav
   yarn start
 ```
 
-This command will start the development server and open a Metro Bundler window in your default web browser. From there, you can choose to run the app on an Android or iOS simulator or scan the QR code to open it on your Expo Go app.
-
+This command will start the development server and open a Metro Bundler. From there, you can choose to run the app on an Android or iOS simulator or scan the QR code to open it on your Expo Go app.
+***warning: please submit issus if you encounter problem using IOS, since Development environment is Android. ***
 ### Usage
 Explore the demo app to see how OpenIM is integrated into a React Native environment. This demo showcases various OpenIM features and functionality.
 
