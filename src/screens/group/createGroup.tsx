@@ -60,7 +60,7 @@ const AlphabetHintList: React.FC<AlphabetHintListProps> = ({
         key={index}
         style={styles.hintItem}
         onPress={() => onPressItem(index)}>
-        <Text>{hint}</Text>
+        <Text style={styles.hintText}>{hint}</Text>
       </TouchableOpacity>
     ))}
   </ScrollView>
@@ -277,6 +277,10 @@ const styles = StyleSheet.create({
   hintItem: {
     padding: 4,
     fontSize: 8,
+  },
+  hintText: {
+    color: '#0089FF',
+    fontWeight: 'bold',
   },
   friendSelect: {
     padding: 16,

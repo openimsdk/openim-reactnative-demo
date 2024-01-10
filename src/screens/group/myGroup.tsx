@@ -152,7 +152,7 @@ const MyGroupPage = () => {
             key={index}
             style={styles.hintItem}
             onPress={() => handleHintItemPress(index)}>
-            <Text>{hint}</Text>
+            <Text style={styles.hintText}>{hint}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -217,6 +217,10 @@ const styles = StyleSheet.create({
   },
   hintItem: {
     padding: 4,
+  },
+  hintText: {
+    color: '#0089FF',
+    fontWeight: 'bold',
   },
 });
 

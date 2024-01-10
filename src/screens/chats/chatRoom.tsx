@@ -45,7 +45,6 @@ const ChatRoom = (conversation: {
   const {getHistoryMessageListByReq} = useMessageStore.getState();
   const [initialLoadDone, setInitialLoadDone] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
   const toggleModal = () => {
@@ -55,9 +54,8 @@ const ChatRoom = (conversation: {
   const [inputMessage, setInputMessage] = useState(''); // State to hold the input message
 
   useEffect(() => {
-    setLoading(true);
     updateCurrentConversation(conversation.route.params.item);
-    getHistoryMessageListByReq().then(() => setLoading(false));
+    getHistoryMessageListByReq();
   }, []);
 
   const onRefresh = async () => {
@@ -78,6 +76,16 @@ const ChatRoom = (conversation: {
       console.error('Error refreshing messages:', error);
     }
     setIsRefreshing(false);
+  };
+  const handleLayout = () => {
+    if (!initialLoadDone) {
+      setTimeout(() => {
+        flatListRef.current?.scrollToEnd({animated: false});
+      }, 5);
+      setTimeout(() => {
+        setInitialLoadDone(true);
+      }, 50);
+    }
   };
 
   // Function to handle sending a message
@@ -136,55 +144,50 @@ const ChatRoom = (conversation: {
           </View>
         ) : null}
       </View>
-      {loading ? (
+      {!initialLoadDone && (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
-      ) : (
-        <FlatList
-          style={styles.messageList}
-          data={messages}
-          keyExtractor={(item, index) => index.toString()}
-          ref={flatListRef}
-          renderItem={({item: message}) => {
-            if (message.contentType === 101) {
-              return <TextChatCard message={message} />;
-            } else if (message.contentType === 102) {
-              return <ImageCard message={message} />;
-            } else {
-              // Return a placeholder component or an empty View for other cases
-              return <View />;
-            }
-          }}
-          refreshControl={
-            <RefreshControl
-              title={'Loading'} //android中设置无效
-              colors={['red']} //android
-              tintColor={'red'} //ios
-              titleColor={'red'}
-              refreshing={isRefreshing}
-              onRefresh={onRefresh}
-            />
-          }
-          onScrollToIndexFailed={info => {
-            const wait = new Promise(resolve => setTimeout(resolve, 200));
-            wait.then(() => {
-              flatListRef.current?.scrollToIndex({
-                index: info.index,
-                animated: false,
-              });
-            });
-          }}
-          onContentSizeChange={() => {
-            if (!initialLoadDone) {
-              setTimeout(() => {
-                flatListRef.current?.scrollToEnd({animated: false});
-                setInitialLoadDone(true);
-              }, 100);
-            }
-          }}
-        />
       )}
+
+      <FlatList
+        style={styles.messageList}
+        data={messages}
+        initialNumToRender={15}
+        keyExtractor={item => item.clientMsgID}
+        ref={flatListRef}
+        renderItem={({item: message}) => {
+          if (message.contentType === 101) {
+            return <TextChatCard message={message} />;
+          } else if (message.contentType === 102) {
+            return <ImageCard message={message} />;
+          } else {
+            // Return a placeholder component or an empty View for other cases
+            return <Text>Message not support on demo now</Text>;
+          }
+        }}
+        refreshControl={
+          <RefreshControl
+            title={'Loading'} //android中设置无效
+            colors={['red']} //android
+            tintColor={'red'} //ios
+            titleColor={'red'}
+            refreshing={isRefreshing}
+            onRefresh={onRefresh}
+          />
+        }
+        onScrollToIndexFailed={info => {
+          const wait = new Promise(resolve => setTimeout(resolve, 200));
+          wait.then(() => {
+            flatListRef.current?.scrollToIndex({
+              index: info.index,
+              animated: false,
+            });
+          });
+        }}
+        onLayout={handleLayout}
+        onContentSizeChange={() => {}}
+      />
       <View style={styles.inputContainer}>
         <TouchableOpacity
           style={styles.moreOptionsButton}
@@ -215,6 +218,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     backgroundColor: '#ffffff', // Set your desired background color
+    zIndex: 4,
   },
   backButton: {
     // Define your back button styles here
@@ -240,9 +244,15 @@ const styles = StyleSheet.create({
     flex: 1, // Allow the message list to take up the remaining space
   },
   loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
     alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#DCDCDCff',
+    zIndex: 3,
   },
   inputContainer: {
     flexDirection: 'row',
