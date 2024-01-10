@@ -25,7 +25,7 @@ const MyGroupCard = ({
   };
   return (
     <TouchableOpacity style={styles.contactItem} onPress={handleConversation}>
-      <Avatar nickname={nickname} faceURL={faceURL} />
+      <Avatar nickname={nickname} faceURL={faceURL} isGroup={true} />
       <Text>{nickname}</Text>
     </TouchableOpacity>
   );
