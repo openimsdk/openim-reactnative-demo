@@ -5,7 +5,7 @@ import OpenIMSDKRN from 'open-im-sdk-rn';
 import {useConversationStore} from './conversation';
 import {MessageType} from '../types/enum';
 
-const GET_HISTORY_MESSAGE_COUNT = 20;
+const GET_HISTORY_MESSAGE_COUNT = 15;
 
 export interface ExType {
   checked?: boolean;
