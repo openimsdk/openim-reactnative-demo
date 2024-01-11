@@ -13,7 +13,7 @@ import SetPasswordPage from './src/screens/login/setPasswordPage';
 import SetVerificationPage from './src/screens/login/setVerificationPage';
 import SignUpPage from './src/screens/login/signUpPage';
 import OpenIMSDKRN, {OpenIMEmitter} from 'open-im-sdk-rn';
-
+import 'react-native-get-random-values';
 import {useState, useEffect, lazy, Suspense} from 'react';
 import BottomTabBar from './src/navigation/BottomTabBar';
 import {GetLoginStatus, Init, LoginIM, LogoutIM} from './src/api/openimsdk';

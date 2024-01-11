@@ -87,19 +87,25 @@ const ChatRoom = (conversation: {
       }, 50);
     }
   };
-
-  // Function to handle sending a message
-  const sendMessage = async () => {
-    // Add your logic to send the message here
-    let text;
+  const handleImageSelected = (imageMessage: any) => {
+    // Handle the selected image message
+    // For example, you might want to send this message or add it to your message list
+    
+    sendMessage(imageMessage);
+  };
+  const handleTextSelected = async (textMessage: string) => {
     try {
-      const data = await OpenIMSDKRN.createTextMessage(inputMessage, '289893');
-
-      text = data;
+      const data = await OpenIMSDKRN.createTextMessage(textMessage, '289893');
+      sendMessage(data);
+      setInputMessage(''); // Clear the input field after sending
     } catch (error) {
       console.error('Error CreateTextMsg:', error); // Log the error
     }
-
+  };
+  // Function to handle sending a message
+  const sendMessage = async (message: any) => {
+    // Add your logic to send the message here
+    console.log('message', message);
     const offlinePushInfo = {
       title: 'you have a new message',
       desc: 'new message',
@@ -109,7 +115,7 @@ const ChatRoom = (conversation: {
     };
     if (currentConversation) {
       const options: SendMsgParams = {
-        message: text,
+        message: message,
         recvID: currentConversation.userID,
         groupID: currentConversation.groupID,
         offlinePushInfo,
@@ -117,8 +123,6 @@ const ChatRoom = (conversation: {
       const msg = await SendMessage(options);
       pushNewMessage(msg);
     }
-
-    setInputMessage(''); // Clear the input field after sending
   };
 
   return (
@@ -202,10 +206,16 @@ const ChatRoom = (conversation: {
           value={inputMessage}
           onChangeText={text => setInputMessage(text)}
         />
-        <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
+        <TouchableOpacity
+          style={styles.sendButton}
+          onPress={() => handleTextSelected(inputMessage)}>
           <Text style={styles.sendButtonText}>Send</Text>
         </TouchableOpacity>
-        <OptionModalView isVisible={showModal} onClose={toggleModal} />
+        <OptionModalView
+          isVisible={showModal}
+          onClose={toggleModal}
+          onImageSelected={handleImageSelected}
+        />
       </View>
     </View>
   );
