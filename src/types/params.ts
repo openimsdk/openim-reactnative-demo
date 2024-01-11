@@ -54,9 +54,10 @@ export type SetMessageLocalExParams = {
   localEx: string;
 };
 export type ImageMsgParams = {
-  sourcePicture: PicBaseInfo;
-  bigPicture: PicBaseInfo;
-  snapshotPicture: PicBaseInfo;
+    sourcePicture: PicBaseInfo;
+    bigPicture: PicBaseInfo;
+    snapshotPicture: PicBaseInfo;
+    sourcePath: string;
 };
 export type VideoMsgParams = {
   videoPath: string;

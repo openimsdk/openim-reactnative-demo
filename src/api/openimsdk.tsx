@@ -3,7 +3,7 @@ import OpenIMSDKRN from 'open-im-sdk-rn';
 import RNFS from 'react-native-fs';
 import {API_URL, WS_URL} from '../config/config';
 import {Platform} from 'react-native';
-import {SendMsgParams} from '../types/params';
+import {ImageMsgParams, SendMsgParams} from '../types/params';
 import {useContext} from 'react';
 import {AuthContext} from '../components/AuthContext';
 import {initStore} from '../store/useGlobalEvent';
@@ -351,5 +351,23 @@ export const CreateMessage = async (inputMessage: string) => {
     return data;
   } catch (error) {
     console.error('Error CreateTextMsg:', error); // Log the error
+  }
+};
+export const CreateImage = async (inputMessage: string) => {
+  // Add your logic to send the message here
+  try {
+    const data = await OpenIMSDKRN.createImageMessageFromFullPath(
+      inputMessage,
+      '289893',
+    );
+    console.log(
+      'CreateImage: inputMessage',
+      inputMessage,
+      'and received data',
+      data,
+    );
+    return data;
+  } catch (error) {
+    console.error('Error CreateImageMsg:', error); // Log the error
   }
 };

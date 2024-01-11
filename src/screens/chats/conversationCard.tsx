@@ -94,7 +94,11 @@ const ConversationCard = ({item}: {item: ConversationItem}) => {
 
   return (
     <TouchableOpacity style={styles.contactItem} onPress={handleConversation}>
-      <Avatar nickname={item.showName} faceURL={item.faceURL} />
+      <Avatar
+        nickname={item.showName}
+        faceURL={item.faceURL}
+        isGroup={item.groupID != ''}
+      />
       <View style={styles.messageContainer}>
         <View style={styles.row}>
           <Text>{item.showName}</Text>

@@ -25,7 +25,7 @@ const BottomTabBar = () => {
           // Ensure the icon name is a non-empty string
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: 'tomato', // Moved here from tabBarOptions
+        tabBarActiveTintColor: '#0089FF', // Moved here from tabBarOptions
         tabBarInactiveTintColor: 'gray', // Moved here from tabBarOptions
       })}>
       <Tab.Screen

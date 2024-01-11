@@ -13,7 +13,7 @@ const GroupCard = ({groupID, nickname, faceURL}: GroupCardInput) => {
   };
   return (
     <View style={styles.contactItem}>
-      <Avatar nickname={nickname} faceURL={faceURL} />
+      <Avatar nickname={nickname} faceURL={faceURL} isGroup={true} />
       <View style={{flex: 1}}>
         <View style={styles.textContainer}>
           <Text>{nickname}</Text>

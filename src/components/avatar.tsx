@@ -37,10 +37,12 @@ const getAvatarImage = ({
   nickname,
   faceURL,
   style,
+  isGroup,
 }: {
   nickname: string;
   faceURL: string | null | undefined;
   style?: StyleProp<ImageStyle>;
+  isGroup?: boolean;
 }) => {
   if (faceURL === null || faceURL == undefined) {
     return null; // Return null or a placeholder component if data is undefined
@@ -49,7 +51,7 @@ const getAvatarImage = ({
   if (faceURL === '') {
     return (
       <LinearGradient
-        colors={['#EAF27E', '#00D292']}
+        colors={isGroup ? ['#00D2C4', '#7EBCF2'] : ['#EAF27E', '#00D292']}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 1}}
         style={styles.textImage}>
@@ -73,12 +75,14 @@ const Avatar = ({
   nickname,
   faceURL,
   style,
+  isGroup,
 }: {
   nickname: string;
   faceURL: string | null | undefined;
   style?: StyleProp<ImageStyle>;
+  isGroup?: boolean;
 }) => {
-  return getAvatarImage({nickname, faceURL, style});
+  return getAvatarImage({nickname, faceURL, style, isGroup});
 };
 const styles = StyleSheet.create({
   contactItem: {
@@ -95,6 +99,15 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   textImage: {
+    height: 50,
+    width: 50,
+    borderRadius: 25,
+    marginRight: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'blue',
+  },
+  groupextImage: {
     height: 50,
     width: 50,
     borderRadius: 25,
