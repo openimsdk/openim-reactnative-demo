@@ -1,0 +1,20 @@
+{
+  "title": "Welcome to OpenIM",
+  "email": "Email",
+  "password": "Password",
+  "forget": "Forget Password?",
+  "login": "Login",
+  "signUp": "sign up",
+  "signUpTips": "Don’t have an account? ",
+  "emailRegister": "Continue with Email",
+  "emailRegisterTip": "Sign up with your email.",
+  "inputEmail": "Enter your email",
+  "inputPassword": "Enter your password",
+  "continue": "Continue",
+  "confirmEmail": "Confirm Email",
+  "confirmEmailTip": "We sent a verification code to your email ",
+  "setAccount": "Create Account",
+  "setAccountTip": "Please complete the information to create an account.",
+  "name": "Name",
+  "repeatPassword": "Repeat Password"
+}

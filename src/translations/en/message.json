@@ -1,0 +1,15 @@
+{
+  "imageMessage": "[Image]",
+  "voiceMessage": "[Voice]",
+  "videoMessage": "[Video]",
+  "catchMessage": "[Unsupported Message Type]",
+
+  "alreadyFriendMessage": "You are now friends and can start chatting!",
+  "createGroupMessage": "{{creator}} created a group chat",
+  "quitGroupMessage": "{{name}} quit the group chat",
+  "invitedToGroupMessage": "{{operator}} invited {{invitedUser}} to join the group chat",
+  "kickInGroupMessage": "{{operator}} was removed from the group by {{kickedUser}}",
+  "joinGroupMessage": "{{name}} joined the group chat",
+  "disbanedGroupMessage": "{{operator}} disbanded the group chat",
+  "updateGroupNameMessage": "{{operator}} changed the group name to {{name}}"
+}
