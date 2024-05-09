@@ -74,7 +74,7 @@ const MessageItem: FC<MessageItemProps> = ({ message }) => {
   const MessageRenderComponent = components[message.contentType] || CatchMessageRender;
   return (
     <View style={containerStyle}>
-      {!isSender && <OIMAvatar faceURL="" text="kevin" size={40} fontSize={18} />}
+      {!isSender && <OIMAvatar faceURL={message.senderFaceUrl} text={message.senderNickname} size={40} fontSize={18} />}
       <View style={styles.content}>
         <MessageRenderComponent style={contentStyle} message={message} isSender={isSender} />
       </View>

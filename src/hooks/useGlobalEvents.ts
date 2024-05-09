@@ -1,4 +1,4 @@
-import { SessionType } from "@/constants";
+import { MessageType, SessionType } from "@/constants";
 import { useContactStore } from "@/store/contact";
 import { useConversationStore } from "@/store/conversation";
 import { useMessageStore } from "@/store/message";
@@ -98,6 +98,9 @@ export function useGlobalEvent() {
       return;
     }
     data.map((message) => {
+      if (message.contentType === MessageType.TypingMessage) {
+        return;
+      }
       if (!inCurrentConversation(message)) return;
       pushNewMessage(message);
       return null;
