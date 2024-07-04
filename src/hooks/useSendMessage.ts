@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 import { ExMessageItem } from "@/store/type";
 import { useMessageStore } from "@/store/message";
@@ -52,7 +53,7 @@ export function useSendMessage() {
     };
 
     try {
-      const successMessage = await OpenIMSDKRN.sendMessage(options, "opid");
+      const successMessage = await OpenIMSDKRN.sendMessage(options, uuidv4());
       if (isResend) {
         deleteAndPushOneMessage(successMessage as ExMessageItem);
         return;

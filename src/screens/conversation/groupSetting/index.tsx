@@ -7,6 +7,7 @@ import Dialog from "react-native-dialog";
 import { useState } from "react";
 import { useCurrentMemberRole } from "@/hooks/useCurrentMemberRole";
 import OpenIMSDKRN from "open-im-sdk-rn";
+import { v4 as uuidv4 } from "uuid";
 import { feedbackToast } from "@/utils/common";
 import { useMessageStore } from "@/store/message";
 
@@ -76,7 +77,7 @@ const GroupSetting = () => {
 
   const clearLogs = () => {
     if (!conversationStore.currentConversation?.conversationID) return;
-    OpenIMSDKRN.clearConversationAndDeleteAllMsg(conversationStore.currentConversation?.conversationID, "opid")
+    OpenIMSDKRN.clearConversationAndDeleteAllMsg(conversationStore.currentConversation?.conversationID, uuidv4())
       .then(() => {
         messageStore.clearMessage();
         feedbackToast({ msg: "successfully" });
@@ -87,7 +88,7 @@ const GroupSetting = () => {
   const dismissOrQuit = () => {
     if (!conversationStore.currentConversation?.groupID) return;
     const funName = isOwner ? "dismissGroup" : "quitGroup";
-    OpenIMSDKRN[funName](conversationStore.currentConversation?.groupID, "opid")
+    OpenIMSDKRN[funName](conversationStore.currentConversation?.groupID, uuidv4())
       .then(() => feedbackToast({ msg: "successfully" }))
       .catch((error: unknown) => feedbackToast({ error }));
   };

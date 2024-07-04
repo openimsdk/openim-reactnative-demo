@@ -1,6 +1,7 @@
 import { useConversationStore } from "@/store/conversation";
 import { feedbackToast } from "@/utils/common";
 import { useLatest } from "ahooks";
+import { v4 as uuidv4 } from "uuid";
 import OpenIMSDKRN, { OpenIMEmitter } from "open-im-sdk-rn";
 import { GroupMemberItem } from "open-im-sdk-rn/lib/typescript/types/entity";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -55,7 +56,7 @@ export default function useGroupMembers(props?: UseGroupMembersProps) {
             isSearchMemberNickname: true,
             isSearchUserID: true,
           },
-          "opid",
+          uuidv4(),
         );
 
         lastKeyword.current = keyword;
@@ -99,7 +100,7 @@ export default function useGroupMembers(props?: UseGroupMembersProps) {
             count: 20,
             filter: 0,
           },
-          "opid",
+          uuidv4(),
         );
         setFetchState((state) => ({
           ...state,

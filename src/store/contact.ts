@@ -1,6 +1,7 @@
 import { t } from "i18next";
 import { create } from "zustand";
 import OpenIMSDKRN from "open-im-sdk-rn";
+import { v4 as uuidv4 } from "uuid";
 
 import {
   BlackUserItem,
@@ -23,7 +24,7 @@ export const useContactStore = create<ContactStore>()((set, get) => ({
   userCardData: {},
   getFriendListByReq: async () => {
     try {
-      const data = await OpenIMSDKRN.getFriendList("opid");
+      const data = await OpenIMSDKRN.getFriendList(uuidv4());
       set(() => ({
         friendList: data.map((item) => item.friendInfo as FriendUserItem),
       }));
@@ -57,7 +58,7 @@ export const useContactStore = create<ContactStore>()((set, get) => ({
   },
   getBlackListByReq: async () => {
     try {
-      const data = await OpenIMSDKRN.getBlackList("opid");
+      const data = await OpenIMSDKRN.getBlackList(uuidv4());
       set(() => ({ blackList: data }));
     } catch (error) {
       feedbackToast({ error, msg: t("toast.getBlackListFailed") });
@@ -81,7 +82,7 @@ export const useContactStore = create<ContactStore>()((set, get) => ({
   },
   getGroupListByReq: async () => {
     try {
-      const data = await OpenIMSDKRN.getJoinedGroupList("opid");
+      const data = await OpenIMSDKRN.getJoinedGroupList(uuidv4());
       set(() => ({ groupList: data }));
     } catch (error) {
       feedbackToast({ error, msg: t("toast.getGroupListFailed") });
@@ -108,7 +109,7 @@ export const useContactStore = create<ContactStore>()((set, get) => ({
   },
   getRecvFriendApplicationListByReq: async () => {
     try {
-      const data = await OpenIMSDKRN.getFriendApplicationListAsRecipient("opid");
+      const data = await OpenIMSDKRN.getFriendApplicationListAsRecipient(uuidv4());
       set(() => ({ recvFriendApplicationList: data }));
     } catch (error) {
       console.error(error);
@@ -126,7 +127,7 @@ export const useContactStore = create<ContactStore>()((set, get) => ({
   },
   getSendFriendApplicationListByReq: async () => {
     try {
-      const data = await OpenIMSDKRN.getFriendApplicationListAsApplicant("opid");
+      const data = await OpenIMSDKRN.getFriendApplicationListAsApplicant(uuidv4());
       set(() => ({ sendFriendApplicationList: data }));
     } catch (error) {
       console.error(error);
@@ -144,7 +145,7 @@ export const useContactStore = create<ContactStore>()((set, get) => ({
   },
   getRecvGroupApplicationListByReq: async () => {
     try {
-      const data = await OpenIMSDKRN.getGroupApplicationListAsRecipient("opid");
+      const data = await OpenIMSDKRN.getGroupApplicationListAsRecipient(uuidv4());
       set(() => ({ recvGroupApplicationList: data }));
     } catch (error) {
       console.error(error);
@@ -162,7 +163,7 @@ export const useContactStore = create<ContactStore>()((set, get) => ({
   },
   getSendGroupApplicationListByReq: async () => {
     try {
-      const data = await OpenIMSDKRN.getGroupApplicationListAsApplicant("opid");
+      const data = await OpenIMSDKRN.getGroupApplicationListAsApplicant(uuidv4());
       set(() => ({ sendGroupApplicationList: data }));
     } catch (error) {
       console.error(error);

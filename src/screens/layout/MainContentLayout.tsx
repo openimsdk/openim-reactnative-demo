@@ -3,6 +3,7 @@ import { BottomNavigation, Text } from "react-native-paper";
 import { Image, ImageSourcePropType, StyleSheet } from "react-native";
 import { BaseRoute } from "react-native-paper/lib/typescript/components/BottomNavigation/BottomNavigation";
 import OpenIMSDKRN from "open-im-sdk-rn";
+import { v4 as uuidv4 } from "uuid";
 
 import conversation from "@/assets/images/tabbar/conversation.png";
 import conversation_active from "@/assets/images/tabbar/conversation_active.png";
@@ -62,7 +63,7 @@ const MyComponent = ({ navigation }: ApplicationScreenProps) => {
           userID: IMUserID as string,
           token: IMToken as string,
         },
-        "hrtyy45t",
+        uuidv4(),
       );
     } catch (err) {
       console.log(err);

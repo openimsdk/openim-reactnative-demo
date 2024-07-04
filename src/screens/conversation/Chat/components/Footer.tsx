@@ -6,6 +6,7 @@ import { TextInput } from "react-native-paper";
 import { FC, useState } from "react";
 import { useSendMessage } from "@/hooks/useSendMessage";
 import OpenIMSDKRN from "open-im-sdk-rn";
+import { v4 as uuidv4 } from "uuid";
 import { useCurrentMemberRole } from "@/hooks/useCurrentMemberRole";
 import { useConversationStore } from "@/store/conversation";
 import { useContactStore } from "@/store/contact";
@@ -60,7 +61,7 @@ const Footer: FC<FooterProps> = ({ scrollToBottom }) => {
   const conversationStore = useConversationStore();
 
   const onSubmitEditing = async () => {
-    const message = await OpenIMSDKRN.createTextMessage(text, "opid");
+    const message = await OpenIMSDKRN.createTextMessage(text, uuidv4());
     sendMessage({ message });
     setText("");
     scrollToBottom();
@@ -103,9 +104,12 @@ const Footer: FC<FooterProps> = ({ scrollToBottom }) => {
     });
     if (response.didCancel || response.errorCode) return;
     if (response.assets && response.assets.length > 0) {
-      const { originalPath } = response.assets[0];
-      if (originalPath) {
-        const message = await OpenIMSDKRN.createImageMessageFromFullPath(originalPath, "opid");
+      let { uri } = response.assets[0];
+      if (uri) {
+        if (uri.startsWith("file://")) {
+          uri = uri.substring(7);
+        }
+        const message = await OpenIMSDKRN.createImageMessageFromFullPath(uri, uuidv4());
         sendMessage({ message });
       }
     }
@@ -117,9 +121,12 @@ const Footer: FC<FooterProps> = ({ scrollToBottom }) => {
     });
     if (response.didCancel || response.errorCode) return;
     if (response.assets && response.assets.length > 0) {
-      const { originalPath } = response.assets[0];
-      if (originalPath) {
-        const message = await OpenIMSDKRN.createImageMessageFromFullPath(originalPath, "opid");
+      let { uri } = response.assets[0];
+      if (uri) {
+        if (uri.startsWith("file://")) {
+          uri = uri.substring(7);
+        }
+        const message = await OpenIMSDKRN.createImageMessageFromFullPath(uri, uuidv4());
         sendMessage({ message });
       }
     }

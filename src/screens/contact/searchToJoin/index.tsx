@@ -6,6 +6,7 @@ import { Searchbar } from "react-native-paper";
 import { useState } from "react";
 import { useContactStore } from "@/store/contact";
 import OpenIMSDKRN from "open-im-sdk-rn";
+import { v4 as uuidv4 } from "uuid";
 import { searchBusinessUserInfo } from "@/api/chat";
 import { BusinessUserInfo } from "@/types/chat";
 import { GroupItem } from "open-im-sdk-rn/lib/typescript/types/entity";
@@ -79,7 +80,7 @@ const SearchToJoin = () => {
     try {
       let info = contactStore.groupList.find((item) => item.groupID === keyword);
       if (!info) {
-        const data = await OpenIMSDKRN.getSpecifiedGroupsInfo([keyword], "opid");
+        const data = await OpenIMSDKRN.getSpecifiedGroupsInfo([keyword], uuidv4());
         info = data[0];
       }
       if (info) {

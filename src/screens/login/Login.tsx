@@ -62,8 +62,8 @@ const styles = StyleSheet.create({
 
 function Login({ navigation }: ApplicationScreenProps) {
   const { t } = useTranslation(["login"]);
-  const [phoneNumber, setPhoneNumber] = useState("17500000001");
-  const [password, setPassword] = useState("123456a");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [password, setPassword] = useState("");
   const [secure, { toggle }] = useToggle(true);
 
   const tryLogin = async () => {

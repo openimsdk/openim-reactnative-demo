@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import OpenIMSDKRN from "open-im-sdk-rn";
+import { v4 as uuidv4 } from "uuid";
 
 import { ApplicationItemSource, ApplicationTypeEnum } from "@/components/ApplicationItem";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -136,7 +137,7 @@ const ApplicationDetails = () => {
         toUserID: application.fromUserID,
         handleMsg: "",
       },
-      "opid",
+      uuidv4(),
     )
       .then(() => {
         feedbackToast({ msg: "successfully", onClose: () => navigation.goBack() });

@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { ConversationItem } from "open-im-sdk-rn/lib/typescript/types/entity";
 import OpenIMSDKRN from "open-im-sdk-rn";
+import { v4 as uuidv4 } from "uuid";
 
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { ApplicationStackParamList } from "@/types/navigation";
@@ -30,7 +31,7 @@ export function useConversationToggle() {
             sourceID,
             sessionType,
           },
-          "opid",
+          uuidv4(),
         );
       } catch (error) {
         feedbackToast({ error });

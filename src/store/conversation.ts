@@ -2,6 +2,7 @@ import { t } from "i18next";
 import { create } from "zustand";
 import { ConversationItem, GroupItem, GroupMemberItem } from "open-im-sdk-rn/lib/typescript/types/entity";
 import OpenIMSDKRN from "open-im-sdk-rn";
+import { v4 as uuidv4 } from "uuid";
 import { feedbackToast } from "@/utils/common";
 import { conversationSort, isGroupSession } from "@/utils/imCommon";
 
@@ -28,7 +29,7 @@ export const useConversationStore = create<ConversationStore>()((set, get) => ({
           offset: isOffset ? get().conversationList.length : 0,
           count: CONVERSATION_SPLIT_COUNT,
         },
-        "123",
+        uuidv4(),
       );
       tmpConversationList = data;
     } catch (error) {
@@ -100,7 +101,7 @@ export const useConversationStore = create<ConversationStore>()((set, get) => ({
   },
   getUnReadCountByReq: async () => {
     try {
-      const data = await OpenIMSDKRN.getTotalUnreadMsgCount("opid");
+      const data = await OpenIMSDKRN.getTotalUnreadMsgCount(uuidv4());
       set(() => ({ unReadCount: data }));
       return data;
     } catch (error) {
@@ -119,7 +120,7 @@ export const useConversationStore = create<ConversationStore>()((set, get) => ({
   getCurrentGroupInfoByReq: async (groupID: string) => {
     let groupInfo: GroupItem;
     try {
-      const data = await OpenIMSDKRN.getSpecifiedGroupsInfo([groupID], "opid");
+      const data = await OpenIMSDKRN.getSpecifiedGroupsInfo([groupID], uuidv4());
       [groupInfo] = data;
     } catch (error) {
       feedbackToast({ error, msg: t("toast.getGroupInfoFailed") });
@@ -139,7 +140,7 @@ export const useConversationStore = create<ConversationStore>()((set, get) => ({
           groupID,
           userIDList: [selfID],
         },
-        "opid",
+        uuidv4(),
       );
       [memberInfo] = data;
     } catch (error) {

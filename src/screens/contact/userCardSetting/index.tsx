@@ -4,6 +4,7 @@ import { useContactStore } from "@/store/contact";
 import { feedbackToast } from "@/utils/common";
 import { useNavigation } from "@react-navigation/native";
 import OpenIMSDKRN from "open-im-sdk-rn";
+import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 import { StyleSheet, Switch, View } from "react-native";
 import Dialog from "react-native-dialog";
@@ -36,18 +37,18 @@ const UserCardSetting = () => {
           toUserID: contactStore.userCardData.baseInfo?.userID as string,
           ex: "",
         },
-        "opid",
+        uuidv4(),
       ).catch((error) => feedbackToast({ error }));
       return;
     }
-    OpenIMSDKRN.removeBlack(contactStore.userCardData.baseInfo?.userID as string, "opid").catch((error) =>
+    OpenIMSDKRN.removeBlack(contactStore.userCardData.baseInfo?.userID as string, uuidv4()).catch((error) =>
       feedbackToast({ error }),
     );
   };
 
   const tryRemoveFriend = () => {
     setVisible(false);
-    OpenIMSDKRN.deleteFriend(contactStore.userCardData.baseInfo?.userID as string, "opid")
+    OpenIMSDKRN.deleteFriend(contactStore.userCardData.baseInfo?.userID as string, uuidv4())
       .then(() => navigation.goBack())
       .catch((error) => feedbackToast({ error }));
   };

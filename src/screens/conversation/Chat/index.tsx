@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import OpenIMSDKRN from "open-im-sdk-rn";
+import { v4 as uuidv4 } from "uuid";
 import { View, FlatList, StyleSheet, Keyboard } from "react-native";
 import { ExMessageItem } from "@/store/type";
 import { useLatest } from "ahooks";
@@ -30,7 +31,7 @@ const App = () => {
   const checkUnread = () => {
     if (!latestCurrentConversation.current) return;
     if (latestCurrentConversation.current.unreadCount > 0) {
-      OpenIMSDKRN.markConversationMessageAsRead(latestCurrentConversation.current.conversationID, "opid");
+      OpenIMSDKRN.markConversationMessageAsRead(latestCurrentConversation.current.conversationID, uuidv4());
     }
   };
 

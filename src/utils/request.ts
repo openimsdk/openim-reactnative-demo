@@ -54,7 +54,7 @@ const createAxiosInstance = (baseURL: string, imToken = true) => {
         }
         return Promise.reject(res.data);
       }
-      return res.data;
+      return Promise.resolve(res.data);
     },
     (err) => {
       if (err.message.includes("timeout")) {

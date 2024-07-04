@@ -5,6 +5,7 @@ import { useConversationToggle } from "@/hooks/useConversationToggle";
 import { feedbackToast } from "@/utils/common";
 import { useRoute } from "@react-navigation/native";
 import OpenIMSDKRN from "open-im-sdk-rn";
+import { v4 as uuidv4 } from "uuid";
 import { PublicUserItem } from "open-im-sdk-rn/lib/typescript/types/entity";
 import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -74,7 +75,7 @@ const GroupCard = () => {
         groupInfo: baseInfo,
         memberUserIDs: memberList,
       },
-      "opid",
+      uuidv4(),
     )
       .then((data) => {
         feedbackToast({ msg: "successfully" });

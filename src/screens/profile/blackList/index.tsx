@@ -7,6 +7,7 @@ import search_empty from "@/assets/images/search_empty.png";
 import { BlackUserItem } from "open-im-sdk-rn/lib/typescript/types/entity";
 import { feedbackToast } from "@/utils/common";
 import OpenIMSDKRN from "open-im-sdk-rn";
+import { v4 as uuidv4 } from "uuid";
 
 const styles = StyleSheet.create({
   container: {
@@ -51,7 +52,7 @@ const BlackList = () => {
   const contactStore = useContactStore();
 
   const blackRemove = ({ userID }: BlackUserItem) => {
-    OpenIMSDKRN.removeBlack(userID, "opid").catch((error) => feedbackToast({ error }));
+    OpenIMSDKRN.removeBlack(userID, uuidv4()).catch((error) => feedbackToast({ error }));
   };
 
   return (

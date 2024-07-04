@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 import OpenIMSDKRN from "open-im-sdk-rn";
+import { v4 as uuidv4 } from "uuid";
 import { SessionType, MessageType } from "@/constants";
 
 import { ExMessageItem, MessageStore, UpdateMessaggeBaseInfoParams } from "./type";
@@ -34,7 +35,7 @@ export const useMessageStore = create<MessageStore>()((set, get) => ({
           pageIndex: 1,
           count: 200,
         },
-        "123",
+        uuidv4(),
       );
       if (searchResultItems?.[0].messageCount) {
         const newPreviewImgList = searchResultItems[0].messageList.map((item) => item.pictureElem.sourcePath);
@@ -51,7 +52,7 @@ export const useMessageStore = create<MessageStore>()((set, get) => ({
           startClientMsgID: loadMore ? prevList[prevList.length - 1]?.clientMsgID : "",
           conversationID,
         },
-        "opid",
+        uuidv4(),
       );
 
       if (conversationID !== useConversationStore.getState().currentConversation?.conversationID) return;
@@ -169,7 +170,7 @@ export const useMessageStore = create<MessageStore>()((set, get) => ({
         pageIndex: 1,
         count: 200,
       },
-      "123",
+      uuidv4(),
     );
     if (!searchResultItems?.[0].messageCount) return;
     console.log(searchResultItems[0].messageList);

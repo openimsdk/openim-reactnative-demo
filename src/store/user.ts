@@ -1,6 +1,7 @@
 import { t } from "i18next";
 import { create } from "zustand";
 import OpenIMSDKRN from "open-im-sdk-rn";
+import { v4 as uuidv4 } from "uuid";
 
 import { clearIMProfile } from "@/utils/storage";
 import { BusinessAllowType, BusinessUserInfo } from "@/types/chat";
@@ -20,7 +21,7 @@ export const useUserStore = create<UserStore>()((set, get) => ({
   },
   getSelfInfoByReq: async () => {
     try {
-      const data = await OpenIMSDKRN.getSelfUserInfo("opid");
+      const data = await OpenIMSDKRN.getSelfUserInfo(uuidv4());
       getBusinessUserInfo([data.userID]).then(({ data: { users } }) =>
         set((state) => ({ selfInfo: { ...state.selfInfo, ...users[0] } })),
       );
@@ -50,7 +51,7 @@ export const useUserStore = create<UserStore>()((set, get) => ({
     set((state) => ({ appConfig: { ...state.appConfig, ...config } }));
   },
   userLogout: () => {
-    OpenIMSDKRN.logout("opid");
+    OpenIMSDKRN.logout(uuidv4());
     set({ selfInfo: {} as BusinessUserInfo });
     clearIMProfile();
     useContactStore.getState().clearContactStore();

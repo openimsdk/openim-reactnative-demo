@@ -7,6 +7,7 @@ import { ApplicationStackParamList } from "@/types/navigation";
 import { useState } from "react";
 import Dialog from "react-native-dialog";
 import OpenIMSDKRN from "open-im-sdk-rn";
+import { v4 as uuidv4 } from "uuid";
 import { feedbackToast } from "@/utils/common";
 
 const styles = StyleSheet.create({
@@ -40,7 +41,7 @@ const Setting = () => {
 
   const tryClearChatLogs = () => {
     setVisible(false);
-    OpenIMSDKRN.deleteAllMsgFromLocalAndSvr("opid")
+    OpenIMSDKRN.deleteAllMsgFromLocalAndSvr(uuidv4())
       .then(() => {
         feedbackToast({ msg: "successfully" });
       })

@@ -2,6 +2,7 @@ import { Platform } from "@/constants";
 import { useConversationStore } from "@/store/conversation";
 import { useRequest } from "ahooks";
 import OpenIMSDKRN, { OpenIMEmitter } from "open-im-sdk-rn";
+import { v4 as uuidv4 } from "uuid";
 import { UserOnlineState } from "open-im-sdk-rn/lib/typescript/types/entity";
 import { useEffect, useState } from "react";
 import { Text } from "react-native";
@@ -26,7 +27,7 @@ const OnlineStatus = () => {
   const [onlineState, setOnlineState] = useState<UserOnlineState>();
   const userID = useConversationStore((state) => state.currentConversation?.userID) as string;
 
-  const { cancel: cancelSubscribe } = useRequest(() => OpenIMSDKRN.subscribeUsersStatus([userID], "opid"), {
+  const { cancel: cancelSubscribe } = useRequest(() => OpenIMSDKRN.subscribeUsersStatus([userID], uuidv4()), {
     refreshDeps: [userID],
     onSuccess: (data: UserOnlineState[]) => {
       setOnlineState(data[0]);

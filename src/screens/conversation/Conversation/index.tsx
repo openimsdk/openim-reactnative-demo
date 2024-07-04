@@ -1,5 +1,6 @@
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import OpenIMSDKRN from "open-im-sdk-rn";
+import { v4 as uuidv4 } from "uuid";
 
 import { RowMap, SwipeListView } from "react-native-swipe-list-view";
 import { ConversationItem } from "open-im-sdk-rn/lib/typescript/types/entity";
@@ -69,7 +70,7 @@ const Conversation = () => {
         conversationID,
         isPinned,
       },
-      "opid",
+      uuidv4(),
     );
     if (rowMap[conversationID]) {
       rowMap[conversationID].closeRow();
@@ -77,14 +78,14 @@ const Conversation = () => {
   };
 
   const markHasRead = (conversationID: string, rowMap: RowMap<ConversationItem>) => {
-    OpenIMSDKRN.markConversationMessageAsRead(conversationID, "opid");
+    OpenIMSDKRN.markConversationMessageAsRead(conversationID, uuidv4());
     if (rowMap[conversationID]) {
       rowMap[conversationID].closeRow();
     }
   };
 
   const removeConversation = (conversationID: string, rowMap: RowMap<ConversationItem>) => {
-    OpenIMSDKRN.deleteConversationAndDeleteAllMsg(conversationID, "opid");
+    OpenIMSDKRN.deleteConversationAndDeleteAllMsg(conversationID, uuidv4());
     if (rowMap[conversationID]) {
       rowMap[conversationID].closeRow();
     }

@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
 import relativeTime from "dayjs/plugin/relativeTime";
 import updateLocale from "dayjs/plugin/updateLocale";
+import { v4 as uuidv4 } from "uuid";
 
 import { getApiUrl, getWsUrl } from "@/config";
 import { ConversationItem, MessageItem, PublicUserItem } from "open-im-sdk-rn/lib/typescript/types/entity";
@@ -58,7 +59,7 @@ export const initSDK = () => {
       logLevel: 5,
       isLogStandardOutput: true,
     },
-    "opid",
+    uuidv4(),
   )
     .then(() => {
       console.log(`initSDK success, platformID: ${platformID}`);

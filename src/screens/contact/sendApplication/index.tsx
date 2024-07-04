@@ -4,6 +4,7 @@ import { GroupJoinSource } from "@/constants";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import NavBar from "@/components/NavBar";
 import OpenIMSDKRN from "open-im-sdk-rn";
+import { v4 as uuidv4 } from "uuid";
 import { feedbackToast } from "@/utils/common";
 import { useState } from "react";
 import { TextInput } from "react-native-paper";
@@ -53,7 +54,7 @@ const SendApplication = () => {
           reqMsg: massge,
           joinSource: isScan ? GroupJoinSource.QrCode : GroupJoinSource.Search,
         },
-        "opid",
+        uuidv4(),
       );
     } else {
       func = OpenIMSDKRN.addFriend(
@@ -61,7 +62,7 @@ const SendApplication = () => {
           toUserID: sourceID,
           reqMsg: massge,
         },
-        "opid",
+        uuidv4(),
       );
     }
     func
