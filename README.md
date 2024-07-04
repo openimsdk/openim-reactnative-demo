@@ -1,50 +1,68 @@
-# OpenIM React Native Demo 
+<p align="center">
+    <a href="https://www.openim.online">
+        <img src="./docs/images/openim-logo.gif" width="60%" height="30%"/>
+    </a>
+</p>
 
-Welcome to the OpenIM React Native Demo! This application provides a demonstration of OpenIM integration into a React Native project.
+# OpenIM React Native Demo 💬💻
 
-## Getting Started
+<p>
+  <a href="https://docs.openim.io/">OpenIM Docs</a>
+  •
+  <a href="https://github.com/openimsdk/open-im-server">OpenIM Server</a>
+  •
+  <a href="https://github.com/openimsdk/openim-sdk-core">openim-sdk-core</a>
+  •
+  <a href="https://github.com/openimsdk/open-im-sdk-reactnative">open-im-sdk-reactnative</a>
+</p>
 
-To get started with the demo app, follow these steps:
+<br>
 
-### Prerequisites
+OpenIM React Native Demo is an open-source instant messaging application built on OpenIM SDK React Native, OpenIM Server, and React Native. It demonstrates how to quickly integrate instant messaging capabilities into any web app using OpenIM.
 
-Before you begin, ensure you have the following tools installed on your machine:
+## Tech Stack 🛠️
 
-- [Node.js](https://nodejs.org/) (LTS version recommended)
-- [Yarn](https://yarnpkg.com/) (Package manager for Node.js)
+- This is a [`ReactNative`](https://reactnative.dev/) project.
+- App is built with [open-im-sdk-reactnative](https://github.com/openimsdk/open-im-sdk-reactnative) library.
 
-### Installation
+## Dev Setup 🛠️
 
-1. Clone this repository to your local machine:
+> It is recommended to use node version 16.x-20.x.
 
-   ```bash
-   git clone https://github.com/yourusername/openim-reactnative-demo.git
-2. Navigate to the project directory:
-   ```bash
-   cd openim-reactnative-demo
+Follow these steps to set up a local development environment:
 
-3. Install the project dependencies using Yarn:
-    ```bash
-    yarn
+1. Run `yarn` to install all dependencies.
+2. Modify the request address to your own OpenIM Server IP in the following files:
+   > Note: You need to [deploy](https://docs.openim.io/guides/gettingStarted/dockerCompose) OpenIM Server first, the default port of OpenIM Server is 10001, 10002, 10008.
+   - `src/config/index.ts`
 
-### Running the App
+     ```js
+     export const WS_URL = "ws://your-server-ip:10001";
+     export const API_URL = "http://your-server-ip:10002";
+     export const USER_URL = "http://your-server-ip:10008";
+     ```
+3. Run `yarn run android` to start the android development.
+4. Start development! 🎉
 
-With the dependencies installed, you can now run the demo app. Make sure you have an emulator or a physical device connected:
+## Community :busts_in_silhouette:
 
-  ```bash
-  yarn start
-```
+- 📚 [OpenIM Community](https://github.com/OpenIMSDK/community)
+- 💕 [OpenIM Interest Group](https://github.com/Openim-sigs)
+- 🚀 [Join our Slack community](https://join.slack.com/t/openimsdk/shared_invite/zt-2ijy1ys1f-O0aEDCr7ExRZ7mwsHAVg9A)
+- :eyes: [Join our wechat (微信群)](https://openim-1253691595.cos.ap-nanjing.myqcloud.com/WechatIMG20.jpeg)
 
-This command will start the development server and open a Metro Bundler. From there, you can choose to run the app on an Android or iOS simulator or scan the QR code to open it on your Expo Go app.
-***warning: please submit issus if you encounter problem using IOS, since Development environment is Android. ***
-### Usage
-Explore the demo app to see how OpenIM is integrated into a React Native environment. This demo showcases various OpenIM features and functionality.
+## Community Meetings :calendar:
 
-### Contributing
-Contributions are welcome! If you find any issues or have suggestions for improvements, please feel free to create an issue or submit a pull request.
+We want anyone to get involved in our community and contributing code, we offer gifts and rewards, and we welcome you to join us every Thursday night.
 
-### License
-This project is licensed under the MIT License.
+Our conference is in the [OpenIM Slack](https://join.slack.com/t/openimsdk/shared_invite/zt-2ijy1ys1f-O0aEDCr7ExRZ7mwsHAVg9A) 🎯, then you can search the Open-IM-Server pipeline to join
 
-### Note
-This repository is still under active development. While the core features of OpenIM are functional, additional enhancements and improvements are ongoing. We appreciate your understanding as we work to make this project even better!
+We take notes of each [biweekly meeting](https://github.com/orgs/OpenIMSDK/discussions/categories/meeting) in [GitHub discussions](https://github.com/openimsdk/open-im-server/discussions/categories/meeting), Our historical meeting notes, as well as replays of the meetings are available at [Google Docs :bookmark_tabs:](https://docs.google.com/document/d/1nx8MDpuG74NASx081JcCpxPgDITNTpIIos0DS6Vr9GU/edit?usp=sharing).
+
+## Who are using OpenIM :eyes:
+
+Check out our [user case studies](https://github.com/OpenIMSDK/community/blob/main/ADOPTERS.md) page for a list of the project users. Don't hesitate to leave a [📝comment](https://github.com/openimsdk/open-im-server/issues/379) and share your use case.
+
+## License :page_facing_up:
+
+OpenIM is licensed under the Apache 2.0 license. See [LICENSE](https://github.com/openimsdk/open-im-server/tree/main/LICENSE) for the full license text.
