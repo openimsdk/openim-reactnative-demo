@@ -72,8 +72,6 @@ export const initSDK = () => {
 export const initStore = () => {
   const { getSelfInfoByReq } = useUserStore.getState();
   const {
-    getFriendListByReq,
-    getBlackListByReq,
     getGroupListByReq,
     getRecvFriendApplicationListByReq,
     getRecvGroupApplicationListByReq,
@@ -84,8 +82,6 @@ export const initStore = () => {
 
   getConversationListByReq();
   getSelfInfoByReq();
-  getFriendListByReq();
-  getBlackListByReq();
   getGroupListByReq();
   getRecvFriendApplicationListByReq();
   getRecvGroupApplicationListByReq();

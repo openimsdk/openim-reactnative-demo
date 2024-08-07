@@ -1,5 +1,4 @@
 import { getChatUrl } from "@/config";
-import { AppConfig } from "@/types/chat";
 import { platformID } from "@/utils/imCommon";
 import createAxiosInstance from "@/utils/request";
 
@@ -35,5 +34,3 @@ export const register = (params: API.Login.DemoRegisterType) => {
     platform: platformID,
   });
 };
-
-export const getAppConfig = () => request.post<{ config: AppConfig }>("/client_config/get", {});

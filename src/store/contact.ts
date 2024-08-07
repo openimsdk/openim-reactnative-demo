@@ -7,6 +7,7 @@ import {
   BlackUserItem,
   FriendApplicationItem,
   FriendUserItem,
+  FullUserItem,
   GroupApplicationItem,
   GroupItem,
 } from "open-im-sdk-rn/lib/typescript/types/entity";
@@ -24,9 +25,21 @@ export const useContactStore = create<ContactStore>()((set, get) => ({
   userCardData: {},
   getFriendListByReq: async () => {
     try {
-      const data = await OpenIMSDKRN.getFriendList(uuidv4());
+      let offset = 0;
+      let tmpList = [] as FullUserItem[];
+      let initialFetch = true;
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        const count = initialFetch ? 10000 : 1000;
+        // eslint-disable-next-line no-await-in-loop
+        const data = await OpenIMSDKRN.getFriendListPage({ offset, count }, uuidv4());
+        tmpList = [...tmpList, ...data];
+        offset += count;
+        if (data.length < count) break;
+        initialFetch = false;
+      }
       set(() => ({
-        friendList: data.map((item) => item.friendInfo as FriendUserItem),
+        friendList: tmpList.map((item) => item.friendInfo!),
       }));
     } catch (error) {
       feedbackToast({ error, msg: t("toast.getFriendListFailed") });
@@ -82,8 +95,17 @@ export const useContactStore = create<ContactStore>()((set, get) => ({
   },
   getGroupListByReq: async () => {
     try {
-      const data = await OpenIMSDKRN.getJoinedGroupList(uuidv4());
-      set(() => ({ groupList: data }));
+      let offset = 0;
+      let tmpList = [] as GroupItem[];
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        // eslint-disable-next-line no-await-in-loop
+        const data = await OpenIMSDKRN.getJoinedGroupListPage({ offset, count: 1000 }, uuidv4());
+        tmpList = [...tmpList, ...data];
+        offset += 1000;
+        if (data.length < 1000) break;
+      }
+      set(() => ({ groupList: tmpList }));
     } catch (error) {
       feedbackToast({ error, msg: t("toast.getGroupListFailed") });
     }

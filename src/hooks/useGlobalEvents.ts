@@ -29,6 +29,7 @@ export function useGlobalEvent() {
   const selfUpdateHandler = (data: SelfUserInfo) => {
     updateSelfInfo(data);
   };
+  const { getFriendListByReq, getGroupListByReq } = useContactStore.getState();
   const connectingHandler = () => {
     console.log("connecting...");
   };
@@ -67,11 +68,17 @@ export function useGlobalEvent() {
   };
   const syncFinishHandler = () => {
     updateSyncState(false);
+    getFriendListByReq();
+    getGroupListByReq();
     console.log("sync finish");
   };
   const syncFailedHandler = () => {
     updateSyncState(false);
     console.log("sync failed");
+  };
+
+  const syncProgressHandler = (data: number) => {
+    console.log("sync progress : ", data, "%");
   };
 
   // message
@@ -246,6 +253,7 @@ export function useGlobalEvent() {
     OpenIMEmitter.addListener("onSyncServerStart", syncStartHandler);
     OpenIMEmitter.addListener("onSyncServerFinish", syncFinishHandler);
     OpenIMEmitter.addListener("onSyncServerFailed", syncFailedHandler);
+    OpenIMEmitter.addListener("onSyncServerProgress", syncProgressHandler);
 
     // message
     OpenIMEmitter.addListener("onRecvNewMessages", newMessageHandler);
@@ -293,6 +301,7 @@ export function useGlobalEvent() {
       "onSyncServerStart",
       "onSyncServerFinish",
       "onSyncServerFailed",
+      "onSyncServerProgress",
       "onRecvNewMessage",
       "onRecvNewMessages",
       "onNewRecvMessageRevoked",

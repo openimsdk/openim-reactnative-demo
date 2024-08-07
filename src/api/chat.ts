@@ -1,11 +1,9 @@
 import { getChatUrl } from "@/config";
 import { useUserStore } from "@/store/user";
-import { AppConfig, BusinessUserInfo } from "@/types/chat";
+import { BusinessUserInfo } from "@/types/chat";
 import createAxiosInstance from "@/utils/request";
 
 const request = createAxiosInstance(getChatUrl(), false);
-
-export const getAppConfig = () => request.post<{ config: AppConfig }>("/client_config/get", {});
 
 export const getBusinessUserInfo = (userIDs: string[]) => {
   return request.post<{ users: BusinessUserInfo[] }>("/user/find/full", {

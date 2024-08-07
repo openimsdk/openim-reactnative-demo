@@ -8,7 +8,6 @@ import { Button } from "react-native-paper";
 import RowListItem from "@/components/RowListItem";
 import { useUserStore } from "@/store/user";
 import { useContactStore } from "@/store/contact";
-import { BusinessAllowType } from "@/types/chat";
 import { useConversationStore } from "@/store/conversation";
 import { AllowType, SessionType } from "@/constants";
 import { useConversationToggle } from "@/hooks/useConversationToggle";
@@ -74,8 +73,6 @@ const UserCard = () => {
 
   const isSelf = contactStore.userCardData?.baseInfo?.userID === userStore.selfInfo.userID;
   const friendInfo = contactStore.friendList.find((friend) => friend.userID === contactStore.userCardData.baseInfo?.userID);
-
-  const canSendMessage = Number(userStore.appConfig.allowSendMsgNotFriend) === BusinessAllowType.Allow ? true : !!friendInfo;
 
   const canAddFriend = () => {
     if (friendInfo) {
@@ -147,7 +144,7 @@ const UserCard = () => {
         ))}
       </View>
       <View style={styles.btnBox}>
-        {canSendMessage && !isSelf && (
+        {!isSelf && (
           <Button mode="contained" style={styles.chat} onPress={toConversation}>
             Chat
           </Button>

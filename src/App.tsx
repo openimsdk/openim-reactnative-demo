@@ -9,17 +9,13 @@ import { initSDK } from "@/utils/imCommon";
 import dark from "@/theme/dark.json";
 import light from "@/theme/light.json";
 import "@/translations";
-import { useUserStore } from "./store/user";
 
 function App() {
   const [themeStatus] = useState(true);
   const theme = themeStatus ? light : dark;
 
-  const getAppConfigByReq = useUserStore((state) => state.getAppConfigByReq);
-
   useEffect(() => {
     initSDK();
-    getAppConfigByReq();
   }, []);
 
   return (

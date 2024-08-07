@@ -23,19 +23,10 @@ export type ExMessageItem = MessageItem & ExType;
 export interface UserStore {
   syncing: boolean;
   selfInfo: BusinessUserInfo;
-  appConfig: AppConfig;
   updateSyncState: (syncing: boolean) => void;
   updateSelfInfo: (info: Partial<BusinessUserInfo>) => void;
   getSelfInfoByReq: () => Promise<void>;
-  getAppConfigByReq: () => Promise<void>;
   userLogout: () => void;
-}
-
-export interface AppConfig {
-  discoverPageURL: string;
-  ordinaryUserAddFriend: number;
-  allowSendMsgNotFriend: number;
-  needInvitationCodeRegister: number;
 }
 
 export type ConversationListUpdateType = "push" | "filter";

@@ -1,12 +1,5 @@
 import { MessageReceiveOptType } from "open-im-sdk-rn/lib/typescript/types/enum";
 
-export interface AppConfig {
-  discoverPageURL: string;
-  ordinaryUserAddFriend: number;
-  allowSendMsgNotFriend: number;
-  needInvitationCodeRegister: number;
-}
-
 export enum BusinessAllowType {
   Allow = 1,
   NotAllow = 2,
