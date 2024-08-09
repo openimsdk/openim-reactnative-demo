@@ -5973,10 +5973,10 @@ onetime@^5.1.0, onetime@^5.1.2:
   dependencies:
     mimic-fn "^2.1.0"
 
-open-im-sdk-rn@3.8.0:
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/open-im-sdk-rn/-/open-im-sdk-rn-3.8.0.tgz#4319ceb45c87480424155097632406a0a2c8603d"
-  integrity sha512-feBiSrXIyzN0YTtDLJM/604rsNwT5wqlJQmEkHRWBGqpU30QfkRev8JguziJkgN06T3zvE54kSjtPofEc78Ruw==
+open-im-sdk-rn@3.8.1-rc.0:
+  version "3.8.1-rc.0"
+  resolved "https://registry.yarnpkg.com/open-im-sdk-rn/-/open-im-sdk-rn-3.8.1-rc.0.tgz#87ffcb4fecde79ca9794d2e38735384315441378"
+  integrity sha512-bFJFnJvfCkXVpTR/xOQbENKpLxosZmbYfCsgFmy+GLxdZkOO/64m1dHP3Y7YaMJlYQlAGGG2/2bmzMZDckqyfQ==
   dependencies:
     uuid "^9.0.1"
 
