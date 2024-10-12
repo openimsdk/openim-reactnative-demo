@@ -1,6 +1,5 @@
 import OpenIMSDKRN from "open-im-sdk-rn";
 import RNFS from "react-native-fs";
-import { Platform } from "react-native";
 import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -43,8 +42,6 @@ dayjs.locale("en-US");
 
 const { t } = i18n;
 
-export const platformID = Platform.OS === "ios" ? 1 : 2;
-
 export const AddFriendQrCodePrefix = "io.openim.app/addFriend/";
 export const AddGroupQrCodePrefix = "io.openim.app/joinGroup/";
 
@@ -52,7 +49,6 @@ export const initSDK = () => {
   RNFS.mkdir(`${RNFS.DocumentDirectoryPath}/tmp`);
   OpenIMSDKRN.initSDK(
     {
-      platformID,
       apiAddr: getApiUrl(),
       wsAddr: getWsUrl(),
       dataDir: `${RNFS.DocumentDirectoryPath}/tmp`,
@@ -62,7 +58,7 @@ export const initSDK = () => {
     uuidv4(),
   )
     .then(() => {
-      console.log(`initSDK success, platformID: ${platformID}`);
+      console.log(`initSDK success`);
     })
     .catch((error) => {
       console.log("initSDK error", error);

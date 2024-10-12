@@ -23,7 +23,7 @@
     "dayjs": "^1.11.10",
     "i18next": "^23.10.1",
     "md5": "^2.3.0",
-    "open-im-sdk-rn": "3.8.1-rc.0",
+    "open-im-sdk-rn": "3.8.1",
     "react": "18.2.0",
     "react-i18next": "^14.1.0",
     "react-native": "0.73.6",
@@ -82,5 +82,6 @@
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "packageManager": "yarn@1.22.15+sha512.033a040f18f6e7a04e4bf8ea0d7037a63ca19a2e054410543206284c7238108b7612144492f1f4b283d512d9c3f8340825f53947d6ca85c6751fd97cccf59ea0"
 }

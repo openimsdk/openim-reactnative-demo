@@ -68,7 +68,7 @@ const Conversation = () => {
     OpenIMSDKRN.pinConversation(
       {
         conversationID,
-        isPinned,
+        isPinned: !isPinned,
       },
       uuidv4(),
     );
