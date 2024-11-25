@@ -10,10 +10,6 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven {
-            allowInsecureProtocol = true
-            url 'https://open-im-online.rentsoft.cn:51000/repository/maven2/'
-        }
     }
     dependencies {
         classpath("com.android.tools.build:gradle")
@@ -23,10 +19,8 @@ buildscript {
 }
 allprojects {
     repositories {
-        maven {
-            allowInsecureProtocol = true
-            url 'https://open-im-online.rentsoft.cn:51000/repository/maven2/'
-        }
+        google()
+        mavenCentral()
     }
 }
 apply plugin: "com.facebook.react.rootproject"
