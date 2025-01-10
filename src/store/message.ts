@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 import OpenIMSDKRN from "open-im-sdk-rn";
 import { v4 as uuidv4 } from "uuid";
-import { SessionType, MessageType } from "@/constants";
+import { SessionType, MessageType, ViewType } from "@/constants";
 
 import { ExMessageItem, MessageStore, UpdateMessaggeBaseInfoParams } from "./type";
 import { useConversationStore } from "./conversation";
@@ -14,7 +14,6 @@ export const useMessageStore = create<MessageStore>()((set, get) => ({
   previewImgList: [],
   isCheckMode: false,
   jumpClientMsgID: undefined,
-  lastMinSeq: 0,
   hasMore: true,
   laterHasMore: false,
   enableReverseLoad: false,
@@ -38,19 +37,17 @@ export const useMessageStore = create<MessageStore>()((set, get) => ({
         uuidv4(),
       );
       if (searchResultItems?.[0].messageCount) {
-        const newPreviewImgList = searchResultItems[0].messageList.map((item) => item.pictureElem.sourcePath);
+        const newPreviewImgList = searchResultItems[0].messageList.map((item) => item.pictureElem!.sourcePath);
         set(() => ({ previewImgList: [...newPreviewImgList] }));
       }
 
       const prevList = [...get().historyMessageList];
       const data = await OpenIMSDKRN.getAdvancedHistoryMessageList(
         {
-          userID: "",
-          groupID: "",
           count: GET_HISTORY_MESSAGE_COUNT,
-          lastMinSeq: loadMore ? get().lastMinSeq : 0,
           startClientMsgID: loadMore ? prevList[prevList.length - 1]?.clientMsgID : "",
           conversationID,
+          viewType: ViewType.History,
         },
         uuidv4(),
       );
@@ -73,14 +70,12 @@ export const useMessageStore = create<MessageStore>()((set, get) => ({
       const nextList = [...(loadMore ? prevList : []), ...data.messageList.reverse()];
 
       set(() => ({
-        lastMinSeq: data.lastMinSeq,
         hasMore: data.messageList.length !== 0,
         historyMessageList: nextList,
       }));
     } catch (error) {
       // feedbackToast({ error, msg: t("toast.getHistoryMessageFailed") });
       set(() => ({
-        lastMinSeq: 0,
         hasMore: false,
         historyMessageList: [],
       }));
@@ -174,7 +169,7 @@ export const useMessageStore = create<MessageStore>()((set, get) => ({
     );
     if (!searchResultItems?.[0].messageCount) return;
     console.log(searchResultItems[0].messageList);
-    const newPreviewImgList = searchResultItems[0].messageList.map((item) => item.pictureElem.sourcePath);
+    const newPreviewImgList = searchResultItems[0].messageList.map((item) => item.pictureElem!.sourcePath);
     set(() => ({ previewImgList: [...newPreviewImgList] }));
   },
   clearMessage: () => {

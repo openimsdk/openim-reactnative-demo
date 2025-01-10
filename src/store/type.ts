@@ -68,7 +68,6 @@ export interface UpdateMessaggeBaseInfoParams {
 export interface MessageStore {
   historyMessageList: ExMessageItem[];
   previewImgList: string[];
-  lastMinSeq: number;
   hasMore: boolean;
   laterHasMore: boolean;
   jumpClientMsgID?: string;

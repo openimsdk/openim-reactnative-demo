@@ -13,6 +13,7 @@ import { useUserStore } from "@/store/user";
 import { useContactStore } from "@/store/contact";
 import { useConversationStore } from "@/store/conversation";
 import i18n from "@/translations";
+import { Platform } from "react-native";
 
 dayjs.extend(calendar);
 dayjs.extend(relativeTime);
@@ -39,6 +40,8 @@ dayjs.updateLocale("zh-cn", {
   },
 });
 dayjs.locale("en-US");
+
+export const platformID = Platform.OS === "ios" ? 1 : 2;
 
 const { t } = i18n;
 
@@ -138,7 +141,7 @@ export const notificationMessageFormat = (msg: MessageItem) => {
       case MessageType.FriendAdded:
         return t("message:alreadyFriendMessage");
       case MessageType.GroupCreated:
-        const groupCreatedDetail = JSON.parse(msg.notificationElem.detail);
+        const groupCreatedDetail = JSON.parse(msg.notificationElem!.detail);
         const groupCreatedUser = groupCreatedDetail.opUser;
         return t("message:createGroupMessage", {
           creator: linkWrap({
@@ -148,7 +151,7 @@ export const notificationMessageFormat = (msg: MessageItem) => {
           }),
         });
       case MessageType.MemberQuit:
-        const quitDetails = JSON.parse(msg.notificationElem.detail);
+        const quitDetails = JSON.parse(msg.notificationElem!.detail);
         const quitUser = quitDetails.quitUser;
         return t("message:quitGroupMessage", {
           name: linkWrap({
@@ -158,7 +161,7 @@ export const notificationMessageFormat = (msg: MessageItem) => {
           }),
         });
       case MessageType.MemberInvited:
-        const inviteDetails = JSON.parse(msg.notificationElem.detail);
+        const inviteDetails = JSON.parse(msg.notificationElem!.detail);
         const inviteOpUser = inviteDetails.opUser;
         const invitedUserList = inviteDetails.invitedUserList ?? [];
         let inviteStr = "";
@@ -180,7 +183,7 @@ export const notificationMessageFormat = (msg: MessageItem) => {
           invitedUser: `${inviteStr}${invitedUserList.length > 3 ? "..." : ""}`,
         });
       case MessageType.MemberKicked:
-        const kickDetails = JSON.parse(msg.notificationElem.detail);
+        const kickDetails = JSON.parse(msg.notificationElem!.detail);
         const kickOpUser = kickDetails.opUser;
         const kickdUserList = kickDetails.kickedUserList ?? [];
         let kickStr = "";
@@ -202,7 +205,7 @@ export const notificationMessageFormat = (msg: MessageItem) => {
           kickedUser: `${kickStr}${kickdUserList.length > 3 ? "..." : ""}`,
         });
       case MessageType.MemberEnter:
-        const enterDetails = JSON.parse(msg.notificationElem.detail);
+        const enterDetails = JSON.parse(msg.notificationElem!.detail);
         const enterUser = enterDetails.entrantUser;
         return t("message:joinGroupMessage", {
           name: linkWrap({
@@ -212,7 +215,7 @@ export const notificationMessageFormat = (msg: MessageItem) => {
           }),
         });
       case MessageType.GroupDismissed:
-        const dismissDetails = JSON.parse(msg.notificationElem.detail);
+        const dismissDetails = JSON.parse(msg.notificationElem!.detail);
         const dismissUser = dismissDetails.opUser;
         return t("message:disbanedGroupMessage", {
           operator: linkWrap({
@@ -222,7 +225,7 @@ export const notificationMessageFormat = (msg: MessageItem) => {
           }),
         });
       case MessageType.GroupNameUpdated:
-        const groupNameDetails = JSON.parse(msg.notificationElem.detail);
+        const groupNameDetails = JSON.parse(msg.notificationElem!.detail);
         return t("message:updateGroupNameMessage", {
           operator: linkWrap({
             userID: groupNameDetails.opUser.userID,
@@ -246,7 +249,7 @@ export const formatMessageByType = (message: MessageItem): string => {
   };
   switch (message.contentType) {
     case MessageType.TextMessage:
-      return message.textElem?.content;
+      return message.textElem!.content;
     case MessageType.PictureMessage:
       return t("message:imageMessage");
     case MessageType.VideoMessage:
@@ -254,19 +257,19 @@ export const formatMessageByType = (message: MessageItem): string => {
     case MessageType.FriendAdded:
       return t("message:alreadyFriendMessage");
     case MessageType.MemberEnter:
-      const enterDetails = JSON.parse(message.notificationElem.detail);
+      const enterDetails = JSON.parse(message.notificationElem!.detail);
       const enterUser = enterDetails.entrantUser;
       return t("message:joinGroupMessage", {
         name: getName(enterUser as PublicUserItem),
       });
     case MessageType.GroupCreated:
-      const groupCreatedDetail = JSON.parse(message.notificationElem.detail);
+      const groupCreatedDetail = JSON.parse(message.notificationElem!.detail);
       const groupCreatedUser = groupCreatedDetail.opUser;
       return t("message:createGroupMessage", {
         creator: getName(groupCreatedUser as PublicUserItem),
       });
     case MessageType.MemberInvited:
-      const inviteDetails = JSON.parse(message.notificationElem.detail);
+      const inviteDetails = JSON.parse(message.notificationElem!.detail);
       const inviteOpUser = inviteDetails.opUser;
       const invitedUserList = inviteDetails.invitedUserList ?? [];
       let inviteStr = "";
@@ -280,7 +283,7 @@ export const formatMessageByType = (message: MessageItem): string => {
         invitedUser: `${inviteStr}${invitedUserList.length > 3 ? "..." : ""}`,
       });
     case MessageType.MemberKicked:
-      const kickDetails = JSON.parse(message.notificationElem.detail);
+      const kickDetails = JSON.parse(message.notificationElem!.detail);
       const kickOpUser = kickDetails.opUser;
       const kickdUserList = kickDetails.kickedUserList ?? [];
       let kickStr = "";
@@ -294,19 +297,19 @@ export const formatMessageByType = (message: MessageItem): string => {
         kickedUser: `${kickStr}${kickdUserList.length > 3 ? "..." : ""}`,
       });
     case MessageType.MemberQuit:
-      const quitDetails = JSON.parse(message.notificationElem.detail);
+      const quitDetails = JSON.parse(message.notificationElem!.detail);
       const quitUser = quitDetails.quitUser;
       return t("message:quitGroupMessage", {
         name: getName(quitUser as PublicUserItem),
       });
     case MessageType.GroupDismissed:
-      const dismissDetails = JSON.parse(message.notificationElem.detail);
+      const dismissDetails = JSON.parse(message.notificationElem!.detail);
       const dismissUser = dismissDetails.opUser;
       return t("message:disbanedGroupMessage", {
         operator: getName(dismissUser as PublicUserItem),
       });
     case MessageType.GroupNameUpdated:
-      const groupNameDetails = JSON.parse(message.notificationElem.detail);
+      const groupNameDetails = JSON.parse(message.notificationElem!.detail);
       return t("message:updateGroupNameMessage", {
         operator: getName(groupNameDetails.opUser as PublicUserItem),
         name: groupNameDetails.group.groupName,

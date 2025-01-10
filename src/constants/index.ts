@@ -23,6 +23,7 @@ export enum MessageType {
   OANotification = 1400,
 
   GroupCreated = 1501,
+  GroupInfoUpdated = 1502,
   MemberQuit = 1504,
   GroupOwnerTransferred = 1507,
   MemberKicked = 1508,
@@ -104,4 +105,9 @@ export enum GroupStatus {
   Baned = 1,
   Dismissed = 2,
   Muted = 3,
+}
+
+export enum ViewType {
+  History = 0,
+  Search = 1,
 }
