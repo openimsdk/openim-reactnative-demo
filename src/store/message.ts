@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 import OpenIMSDKRN from "open-im-sdk-rn";
 import { v4 as uuidv4 } from "uuid";
-import { SessionType, MessageType, ViewType } from "@/constants";
+import { SessionType, ViewType } from "@/constants";
 
 import { ExMessageItem, MessageStore, UpdateMessaggeBaseInfoParams } from "./type";
 import { useConversationStore } from "./conversation";
@@ -11,7 +11,6 @@ const GET_HISTORY_MESSAGE_COUNT = 20;
 
 export const useMessageStore = create<MessageStore>()((set, get) => ({
   historyMessageList: [],
-  previewImgList: [],
   isCheckMode: false,
   jumpClientMsgID: undefined,
   hasMore: true,
@@ -22,25 +21,6 @@ export const useMessageStore = create<MessageStore>()((set, get) => ({
     const conversationID = useConversationStore.getState().currentConversation?.conversationID;
     if (!conversationID) return;
     try {
-      const { searchResultItems } = await OpenIMSDKRN.searchLocalMessages(
-        {
-          conversationID,
-          keywordList: [],
-          keywordListMatchType: 0,
-          senderUserIDList: [],
-          messageTypeList: [MessageType.PictureMessage, MessageType.VideoMessage],
-          searchTimePosition: 0,
-          searchTimePeriod: 0,
-          pageIndex: 1,
-          count: 200,
-        },
-        uuidv4(),
-      );
-      if (searchResultItems?.[0].messageCount) {
-        const newPreviewImgList = searchResultItems[0].messageList.map((item) => item.pictureElem!.sourcePath);
-        set(() => ({ previewImgList: [...newPreviewImgList] }));
-      }
-
       const prevList = [...get().historyMessageList];
       const data = await OpenIMSDKRN.getAdvancedHistoryMessageList(
         {
@@ -125,7 +105,7 @@ export const useMessageStore = create<MessageStore>()((set, get) => ({
     set(() => ({ historyMessageList: tmpList }));
   },
   clearHistoryMessage: () => {
-    set(() => ({ historyMessageList: [], previewImgList: [], hasMore: false }));
+    set(() => ({ historyMessageList: [], hasMore: false }));
   },
   updateCheckMode: (isCheckMode: boolean) => {
     if (!isCheckMode) {
@@ -140,39 +120,13 @@ export const useMessageStore = create<MessageStore>()((set, get) => ({
   updateMessagePreview: (message: ExMessageItem) => {
     console.log(message);
   },
-  clearPreviewList: () => {
-    set(() => ({ previewImgList: [], hasMore: false }));
-  },
   updateJumpClientMsgID: (clientMsgID?: string) => {
     set(() => ({ jumpClientMsgID: clientMsgID }));
   },
   updateReverseLoad: (enable: boolean) => {
     set(() => ({ enableReverseLoad: enable }));
   },
-  getConversationPreviewImgList: async () => {
-    const conversationID = useConversationStore.getState().currentConversation?.conversationID;
-
-    if (!conversationID) return;
-    const { searchResultItems } = await OpenIMSDKRN.searchLocalMessages(
-      {
-        conversationID,
-        keywordList: [],
-        keywordListMatchType: 0,
-        senderUserIDList: [],
-        messageTypeList: [MessageType.PictureMessage, MessageType.VideoMessage],
-        searchTimePosition: 0,
-        searchTimePeriod: 0,
-        pageIndex: 1,
-        count: 200,
-      },
-      uuidv4(),
-    );
-    if (!searchResultItems?.[0].messageCount) return;
-    console.log(searchResultItems[0].messageList);
-    const newPreviewImgList = searchResultItems[0].messageList.map((item) => item.pictureElem!.sourcePath);
-    set(() => ({ previewImgList: [...newPreviewImgList] }));
-  },
   clearMessage: () => {
-    set(() => ({ historyMessageList: [], previewImgList: [] }));
+    set(() => ({ historyMessageList: [] }));
   },
 }));

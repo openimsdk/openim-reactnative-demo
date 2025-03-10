@@ -67,7 +67,6 @@ export interface UpdateMessaggeBaseInfoParams {
 
 export interface MessageStore {
   historyMessageList: ExMessageItem[];
-  previewImgList: string[];
   hasMore: boolean;
   laterHasMore: boolean;
   jumpClientMsgID?: string;
@@ -80,11 +79,9 @@ export interface MessageStore {
   deleteOneMessage: (clientMsgID: string) => void;
   getHistoryMessageListByReq: (loadMore?: boolean) => Promise<unknown>;
   updateMessagePreview: (message: ExMessageItem) => void;
-  clearPreviewList: () => void;
   updateCheckMode: (isCheckMode: boolean) => void;
   updateJumpClientMsgID: (clientMsgID?: string) => void;
   updateReverseLoad: (enable: boolean) => void;
-  getConversationPreviewImgList: () => Promise<void>;
   clearMessage: () => void;
 }
 

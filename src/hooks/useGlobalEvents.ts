@@ -62,6 +62,7 @@ export function useGlobalEvent() {
 
   // sync
   const updateSyncState = useUserStore((state) => state.updateSyncState);
+  const getConversationListByReq = useConversationStore((state) => state.getConversationListByReq);
   const syncStartHandler = () => {
     updateSyncState(true);
     console.log("sync start");
@@ -70,6 +71,7 @@ export function useGlobalEvent() {
     updateSyncState(false);
     getFriendListByReq();
     getGroupListByReq();
+    getConversationListByReq();
     console.log("sync finish");
   };
   const syncFailedHandler = () => {

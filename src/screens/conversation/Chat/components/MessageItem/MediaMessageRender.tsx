@@ -8,9 +8,9 @@ import { IMessageItemProps } from ".";
 const ImageMessageRender: FC<IMessageItemProps> = ({ message }) => {
   console.log(message);
   const isVideo = message.contentType === MessageType.VideoMessage;
-  const imageUrl = isVideo ? message.videoElem.snapshotUrl : message.pictureElem.sourcePicture.url;
+  const imageUrl = isVideo ? message.videoElem?.snapshotPath : message.pictureElem?.sourcePicture.url;
 
-  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
+  const [imageSize, setImageSize] = useState({ width: 240, height: 240 });
   const [visible, setIsVisible] = useState(false);
 
   const handleImageLoad = (event: NativeSyntheticEvent<ImageLoadEventData>) => {
