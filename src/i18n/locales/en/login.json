@@ -1,0 +1,109 @@
+{
+  "index": {
+    "welcome": "Welcome to OpenIM",
+    "labels": {
+      "phone": "Phone Number",
+      "email": "Email",
+      "password": "Password",
+      "verificationCode": "Verification Code"
+    },
+    "placeholders": {
+      "phone": "Enter phone number",
+      "email": "Enter email",
+      "password": "Enter password",
+      "verificationCode": "Enter verification code"
+    },
+    "actions": {
+      "forgotPassword": "Forgot password",
+      "loginWithCode": "Login with code",
+      "loginWithPassword": "Login with password",
+      "login": "Log In",
+      "switchToEmail": "Sign in with Email",
+      "switchToPhone": "Sign in with Phone",
+      "registerNow": "Register now"
+    },
+    "tips": {
+      "noAccount": "Don’t have an account?"
+    },
+    "toasts": {
+      "loginFailed": "Login failed. Check phone/email/password/code.",
+      "enterPhone": "Please enter phone number",
+      "enterEmail": "Please enter email",
+      "sendCodeFailed": "Failed to send code. Check phone/email."
+    },
+    "footerBrand": "OpenIM-RN-Demo"
+  },
+  "register": {
+    "title": "Sign Up",
+    "actions": { "next": "Next" },
+    "labels": {
+      "phone": "Phone Number",
+      "email": "Email"
+    },
+    "placeholders": {
+      "phone": "Enter phone number",
+      "email": "Enter email"
+    },
+    "rules": {
+      "requiredPhone": "Please enter phone number",
+      "requiredEmail": "Please enter email",
+      "invalidPhone": "Please enter a valid phone number",
+      "invalidEmail": "Please enter a valid email address"
+    },
+    "toasts": {
+      "sendCodeFailed": "Failed to send code. Please try again later."
+    }
+  },
+  "verifyCode": {
+    "title": "Enter verification code",
+    "actions": {
+      "resend": "Resend code"
+    },
+    "toasts": {
+      "sendCodeFailed": "Failed to send verification code",
+      "invalidCode": "Invalid verification code"
+    }
+  },
+  "selfInfoSetting": {
+    "title": "Set Profile",
+    "labels": {
+      "nickname": "Nickname",
+      "password": "Password",
+      "confirmPassword": "Confirm Password"
+    },
+    "placeholders": {
+      "nickname": "Enter nickname",
+      "password": "Enter password",
+      "confirmPassword": "Re-enter password"
+    },
+    "notes": {
+      "passwordRule": "Enter a 6–20 character password including letters and numbers"
+    },
+    "actions": {
+      "complete": "Done"
+    },
+    "rules": {
+      "requiredNickname": "Please enter nickname",
+      "nicknameMax": "Nickname can be at most 20 characters",
+      "requiredPassword": "Please enter password",
+      "passwordMin": "Password must be at least 6 characters",
+      "passwordMax": "Password can be at most 20 characters",
+      "passwordComposition": "Must include both letters and numbers",
+      "requiredConfirmPassword": "Please re-enter password",
+      "passwordMismatch": "Passwords do not match"
+    },
+    "toasts": {
+      "accountRegistered": "Account already registered",
+      "registerFailed": "Registration failed. Please try again later."
+    }
+  },
+  "components": {
+    "verificationCodeInputItem": {
+      "getCode": "Get code"
+    },
+    "phoneInputPicker": {
+      "ok": "OK",
+      "cancel": "Cancel"
+    }
+  }
+}

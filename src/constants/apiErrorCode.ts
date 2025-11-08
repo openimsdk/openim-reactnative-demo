@@ -1,0 +1,30 @@
+export const ApiErrCode = {
+  PASSWORD_ERROR: 20001,
+  ACCOUNT_NOT_EXIST: 20002,
+  PHONE_NUMBER_REGISTERED: 20003,
+  ACCOUNT_REGISTERED: 20004,
+  OPERATION_TOO_FREQUENT: 20005,
+  VERIFICATION_CODE_ERROR: 20006,
+  VERIFICATION_CODE_EXPIRED: 20007,
+  VERIFICATION_CODE_ERROR_LIMIT_EXCEED: 20008,
+  VERIFICATION_CODE_USED: 20009,
+  INVITATION_CODE_USED: 20010,
+  INVITATION_CODE_NOT_EXIST: 20011,
+  OPERATION_RESTRICTION: 20012,
+  // ACCOUNT_REGISTERED: 20014,
+}
+
+export const ApiErrCodeMap: Record<number, string> = {
+  [ApiErrCode.PASSWORD_ERROR]: 'errCode.passwordError',
+  [ApiErrCode.ACCOUNT_NOT_EXIST]: 'errCode.accountNotExist',
+  [ApiErrCode.PHONE_NUMBER_REGISTERED]: 'errCode.phoneNumberRegistered',
+  [ApiErrCode.ACCOUNT_REGISTERED]: 'errCode.accountRegistered',
+  [ApiErrCode.OPERATION_TOO_FREQUENT]: 'errCode.operationTooFrequent',
+  [ApiErrCode.VERIFICATION_CODE_ERROR]: 'errCode.verificationCodeError',
+  [ApiErrCode.VERIFICATION_CODE_EXPIRED]: 'errCode.verificationCodeExpired',
+  [ApiErrCode.VERIFICATION_CODE_ERROR_LIMIT_EXCEED]: 'errCode.verificationCodeErrorLimitExceed',
+  [ApiErrCode.VERIFICATION_CODE_USED]: 'errCode.verificationCodeUsed',
+  [ApiErrCode.INVITATION_CODE_USED]: 'errCode.invitationCodeUsed',
+  [ApiErrCode.INVITATION_CODE_NOT_EXIST]: 'errCode.invitationCodeNotExist',
+  [ApiErrCode.OPERATION_RESTRICTION]: 'errCode.operationRestriction',
+}

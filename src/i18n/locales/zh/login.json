@@ -1,0 +1,109 @@
+{
+  "index": {
+    "welcome": "欢迎使用OpenIM",
+    "labels": {
+      "phone": "手机号",
+      "email": "邮箱",
+      "password": "密码",
+      "verificationCode": "验证码"
+    },
+    "placeholders": {
+      "phone": "请输入手机号",
+      "email": "请输入邮箱",
+      "password": "请输入密码",
+      "verificationCode": "请输入验证码"
+    },
+    "actions": {
+      "forgotPassword": "忘记密码",
+      "loginWithCode": "验证码登录",
+      "loginWithPassword": "密码登录",
+      "login": "登录",
+      "switchToEmail": "邮箱登录",
+      "switchToPhone": "手机号登录",
+      "registerNow": "立即注册"
+    },
+    "tips": {
+      "noAccount": "还没有账号？"
+    },
+    "toasts": {
+      "loginFailed": "登录失败，请检查手机号/邮箱/密码/验证码是否正确",
+      "enterPhone": "请输入手机号",
+      "enterEmail": "请输入邮箱",
+      "sendCodeFailed": "发送验证码失败，请检查手机号/邮箱是否正确"
+    },
+    "footerBrand": "OpenIM-RN-Demo"
+  },
+  "register": {
+    "title": "用户注册",
+    "actions": { "next": "下一步" },
+    "labels": {
+      "phone": "手机号",
+      "email": "邮箱"
+    },
+    "placeholders": {
+      "phone": "请输入手机号",
+      "email": "请输入邮箱"
+    },
+    "rules": {
+      "requiredPhone": "请输入手机号",
+      "requiredEmail": "请输入邮箱",
+      "invalidPhone": "请输入正确的手机号",
+      "invalidEmail": "请输入正确的邮箱地址"
+    },
+    "toasts": {
+      "sendCodeFailed": "发送验证码失败，请稍后重试"
+    }
+  },
+  "verifyCode": {
+    "title": "请输入验证码",
+    "actions": {
+      "resend": "重新获取验证码"
+    },
+    "toasts": {
+      "sendCodeFailed": "发送验证码失败",
+      "invalidCode": "验证码错误"
+    }
+  },
+  "selfInfoSetting": {
+    "title": "设置个人信息",
+    "labels": {
+      "nickname": "昵称",
+      "password": "密码",
+      "confirmPassword": "确认密码"
+    },
+    "placeholders": {
+      "nickname": "请输入昵称",
+      "password": "请输入密码",
+      "confirmPassword": "请再次确认密码"
+    },
+    "notes": {
+      "passwordRule": "请输入6-20位密码，至少包含数字、字母"
+    },
+    "actions": {
+      "complete": "完成"
+    },
+    "rules": {
+      "requiredNickname": "请输入昵称",
+      "nicknameMax": "昵称最多 20 个字符",
+      "requiredPassword": "请输入密码",
+      "passwordMin": "密码长度至少 6 位",
+      "passwordMax": "密码长度最多 20 位",
+      "passwordComposition": "至少包含数字与字母",
+      "requiredConfirmPassword": "请再次输入密码",
+      "passwordMismatch": "两次输入的密码不一致"
+    },
+    "toasts": {
+      "accountRegistered": "账号已注册",
+      "registerFailed": "注册失败，请稍后重试"
+    }
+  },
+  "components": {
+    "verificationCodeInputItem": {
+      "getCode": "获取验证码"
+    },
+    "phoneInputPicker": {
+      "ok": "确定",
+      "cancel": "取消"
+    }
+  }
+}
