@@ -16,7 +16,15 @@ export default function LinearGradientWrap({ children, style }: LinearGradientWr
       style={{ flex: 1 }}
       locations={[0, 1]}
     >
-      <StatusBar barStyle="dark-content" />
+      {/* 
+        In some android devices, backgroundColor is not transparent, 
+        so we need to set it to transparent to ensure the gradient background is displayed right under status bar.
+      */}
+      <StatusBar
+        barStyle="dark-content" 
+        translucent={true} 
+        backgroundColor="transparent" 
+      />
       <SafeAreaWrap style={[styles.container, style]}>
         {children}
       </SafeAreaWrap>
