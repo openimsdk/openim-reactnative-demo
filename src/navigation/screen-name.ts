@@ -10,8 +10,8 @@ export const RootStackScreenName = {
 } as const;
 
 export const HomeTabScreenName = {
-  Contact: 'Contact',
   Conversation: 'Conversation',
+  Contact: 'Contact',
   Workbench: 'Workbench',
   Profile: 'Profile',
 } as const;
