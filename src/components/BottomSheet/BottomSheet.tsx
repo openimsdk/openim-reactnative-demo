@@ -7,12 +7,12 @@ export type BottomSheetProps = {
   children: React.ReactNode;
   onRequestClose: () => void;
   delay?: number;
-  height?: ViewStyle['height'];
+  contentStyle?: ViewStyle;
 }
 
 const { height: windowHeight } = Dimensions.get('window');
 
-export default function BottomSheet({ visible, children, onRequestClose, delay = 300, height = '30%' }: BottomSheetProps) {
+export default function BottomSheet({ visible, children, onRequestClose, delay = 300, contentStyle }: BottomSheetProps) {
   const maskOpacity = useRef(new Animated.Value(0)).current;
   const [modalMounted, setModalMounted] = useState(false);
 
@@ -56,13 +56,21 @@ export default function BottomSheet({ visible, children, onRequestClose, delay =
   }, [visible]);
 
   return (
-    <Modal visible={modalMounted} transparent>
+    <Modal
+      visible={modalMounted}
+      transparent
+      statusBarTranslucent={true}
+      animationType="none"
+    >
       <View style={styles.modalWrap}>
         <TouchableWithoutFeedback onPress={onRequestClose}>
           <Animated.View style={[styles.mask, { opacity: maskOpacity }]}></Animated.View>
         </TouchableWithoutFeedback>
-        <Animated.View style={[styles.content, { height: height }, { transform: [{ translateY: contentTranslateY }] }]}>
-          <View style={styles.contentHeader}></View>
+        <Animated.View style={[
+          styles.content,
+          contentStyle,
+          { transform: [{ translateY: contentTranslateY }]}
+        ]}>
           {children}
         </Animated.View>
       </View>

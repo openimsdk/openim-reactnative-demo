@@ -31,7 +31,17 @@
       "enterEmail": "请输入邮箱",
       "sendCodeFailed": "发送验证码失败，请检查手机号/邮箱是否正确"
     },
-    "footerBrand": "OpenIM-RN-Demo"
+    "footerBrand": "OpenIM-RN-Demo",
+    "sheets": {
+      "register": {
+        "phone": "手机号注册",
+        "email": "邮箱注册"
+      },
+      "forgetPassword": {
+        "phone": "通过手机号找回",
+        "email": "通过邮箱找回"
+      }
+    }
   },
   "register": {
     "title": "用户注册",

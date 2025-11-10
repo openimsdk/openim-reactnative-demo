@@ -5,15 +5,19 @@ import * as RNLocalize from 'react-native-localize';
 // Load per-screen translation JSONs
 import enLogin from './locales/en/login.json';
 import zhLogin from './locales/zh/login.json';
+import enCommon from './locales/en/common.json';
+import zhCommon from './locales/zh/common.json';
 
 const resources = {
   en: {
     translation: {
+      common: enCommon,
       login: enLogin,
     },
   },
   zh: {
     translation: {
+      common: zhCommon,
       login: zhLogin,
     },
   },

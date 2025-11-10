@@ -20,7 +20,8 @@ import { useToast } from "@/components/Toast";
 import { login, sendSms } from "@/api/login";
 import md5 from 'md5';
 import { DemoLoginParams, SendSmsParams, UsedFor } from "@/api/data";
-import { useTranslation } from 'react-i18next';
+import BottomSheetButtonGroup from "@/components/BottomSheet/BottomSheetButtonGroup";
+import { useTranslation } from "react-i18next";
 
 type LoginAccountType = 'phone' | 'email';
 type LoginValidateType = 'password' | 'verification-code';
@@ -39,6 +40,7 @@ export default function LoginScreen() {
 
   const [loginAccountType, setLoginAccountType] = useState<LoginAccountType>('phone');
   const [loginValidateType, setLoginValidateType] = useState<LoginValidateType>('password');
+
   const handleLoginValidateTypeSwitch = () => {
     setLoginValidateType(loginValidateType === 'password' ? 'verification-code' : 'password');
   }
@@ -128,94 +130,116 @@ export default function LoginScreen() {
     }
   }
 
-  function goRegister() {
-    navigation.navigate('Register', { registerMode: loginAccountType });
+  const [isRegisterBottomSheetVisible, setIsRegisterBottomSheetVisible] = useState(false);
+  const [isForgetPasswordBottomSheetVisible, setIsForgetPasswordBottomSheetVisible] = useState(false);
+  function goRegister(mode: 'phone' | 'email') {
+    navigation.navigate('Register', { registerMode: mode });
   }
 
-  function goForgetPassword() {
-    navigation.navigate('ForgetPassword', { mode: loginAccountType });
+  function goForgetPassword(mode: 'phone' | 'email') {
+    navigation.navigate('ForgetPassword', { mode: mode });
   }
 
   return (
-    <LinearGradientWrap style={styles.container}>
-      <View style={styles.topPart}>
-        <View style={styles.logoContainer}>
-          <Image
-            source={require('@/assets/images/logo.png')}
-            style={styles.logo}
-          />
-          <Text style={styles.title}>{t('login.index.welcome')}</Text>
+    <>
+      <LinearGradientWrap style={styles.container}>
+        <View style={styles.topPart}>
+          <View style={styles.logoContainer}>
+            <Image
+              source={require('@/assets/images/logo.png')}
+              style={styles.logo}
+            />
+            <Text style={styles.title}>{t('login.index.welcome')}</Text>
+          </View>
+
+          <View style={styles.inputContainer}>
+            {
+              loginAccountType === 'phone' ?
+                <Controller 
+                  control={control}
+                  name="phoneNumber" 
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <PhoneInputItem label={t('login.index.labels.phone')} placeholder={t('login.index.placeholders.phone')} onChangeText={onChange} onBlur={onBlur} value={value} ref={phoneInputItemRef}/>
+                  )}
+                /> :
+                <Controller 
+                  control={control}
+                  name="email" 
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <EmailInputItem label={t('login.index.labels.email')} placeholder={t('login.index.placeholders.email')} onChangeText={onChange} onBlur={onBlur} value={value} />
+                  )}
+                /> 
+            }
+            {
+              loginValidateType === 'password' ? 
+                <Controller
+                  control={control}
+                  name="password"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <PasswordInputItem label={t('login.index.labels.password')} placeholder={t('login.index.placeholders.password')} onChangeText={onChange} onBlur={onBlur} value={value} />
+                  )}
+                /> :
+                <Controller
+                  control={control}
+                  name="verificationCode"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <VerificationCodeInputItem 
+                      ref={verificationCodeInputItemRef}
+                      onPressGetCode={handleSendSms}
+                      label={t('login.index.labels.verificationCode')}
+                      placeholder={t('login.index.placeholders.verificationCode')}
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      value={value}
+                    />
+                  )}
+                />
+            }
+          </View>
+          <View style={styles.linkButtonContainer}>
+            <LinkButton label={t('login.index.actions.forgotPassword')} onPress={() => setIsForgetPasswordBottomSheetVisible(true)} variant="gray" style={{ fontSize: 12 }} />
+            <LinkButton label={loginValidateType === 'password' ? t('login.index.actions.loginWithCode') : t('login.index.actions.loginWithPassword')} onPress={handleLoginValidateTypeSwitch} style={{ fontSize: 12 }} />
+          </View>
+
+          <View style={styles.buttonContainer}>
+            <Button disabled={!isFormFilled} style={styles.button} type="primary" onPress={handleSubmit(handleLogin)}>
+              {t('login.index.actions.login')}
+            </Button>
+            <Divider orientation="horizontal" paddingVertical={18} style={{ width: '100%' }}/>
+            <Button style={styles.button} onPress={handleLoginAccountTypeSwitch}>
+              {loginAccountType === 'phone' ? t('login.index.actions.switchToEmail') : t('login.index.actions.switchToPhone')}
+            </Button>
+          </View>
         </View>
 
-        <View style={styles.inputContainer}>
-          {
-            loginAccountType === 'phone' ?
-              <Controller 
-                control={control}
-                name="phoneNumber" 
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <PhoneInputItem label={t('login.index.labels.phone')} placeholder={t('login.index.placeholders.phone')} onChangeText={onChange} onBlur={onBlur} value={value} ref={phoneInputItemRef}/>
-                )}
-              /> :
-              <Controller 
-                control={control}
-                name="email" 
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <EmailInputItem label={t('login.index.labels.email')} placeholder={t('login.index.placeholders.email')} onChangeText={onChange} onBlur={onBlur} value={value} />
-                )}
-              /> 
-          }
-          {
-            loginValidateType === 'password' ? 
-              <Controller
-                control={control}
-                name="password"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <PasswordInputItem label={t('login.index.labels.password')} placeholder={t('login.index.placeholders.password')} onChangeText={onChange} onBlur={onBlur} value={value} />
-                )}
-              /> :
-              <Controller
-                control={control}
-                name="verificationCode"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <VerificationCodeInputItem 
-                    ref={verificationCodeInputItemRef}
-                    onPressGetCode={handleSendSms}
-                    label={t('login.index.labels.verificationCode')}
-                    placeholder={t('login.index.placeholders.verificationCode')}
-                    onChangeText={onChange}
-                    onBlur={onBlur}
-                    value={value}
-                  />
-                )}
-              />
-          }
+        <View style={styles.footerContainer}>
+          <View style={styles.footerItem}>
+            <Text style={styles.footerText}>{t('login.index.tips.noAccount')} </Text>
+            <LinkButton label={t('login.index.actions.registerNow')} onPress={() => setIsRegisterBottomSheetVisible(true)} style={{ fontSize: 12 }}/>
+          </View>
+          <View>
+            <Text style={styles.footerText}>{t('login.index.footerBrand')}</Text>
+          </View>
         </View>
-        <View style={styles.linkButtonContainer}>
-          <LinkButton label={t('login.index.actions.forgotPassword')} onPress={goForgetPassword} variant="gray" style={{ fontSize: 12 }} />
-          <LinkButton label={loginValidateType === 'password' ? t('login.index.actions.loginWithCode') : t('login.index.actions.loginWithPassword')} onPress={handleLoginValidateTypeSwitch} style={{ fontSize: 12 }} />
-        </View>
+      </LinearGradientWrap>
 
-        <View style={styles.buttonContainer}>
-          <Button disabled={!isFormFilled} style={styles.button} type="primary" onPress={handleSubmit(handleLogin)}>
-            {t('login.index.actions.login')}
-          </Button>
-          <Divider orientation="horizontal" paddingVertical={18} style={{ width: '100%' }}/>
-          <Button style={styles.button} onPress={handleLoginAccountTypeSwitch}>
-            {loginAccountType === 'phone' ? t('login.index.actions.switchToEmail') : t('login.index.actions.switchToPhone')}
-          </Button>
-        </View>
-      </View>
+      <BottomSheetButtonGroup 
+        visible={isRegisterBottomSheetVisible} 
+        onRequestClose={() => setIsRegisterBottomSheetVisible(false)}
+        buttons={[
+          { label: t('login.index.sheets.register.phone'), onPress: () => goRegister('phone')},
+          { label: t('login.index.sheets.register.email'), onPress: () => goRegister('email')},
+        ]}
+      />
 
-      <View style={styles.footerContainer}>
-        <View style={styles.footerItem}>
-          <Text style={styles.footerText}>{t('login.index.tips.noAccount')} </Text>
-          <LinkButton label={t('login.index.actions.registerNow')} onPress={goRegister} style={{ fontSize: 12 }}/>
-        </View>
-        <View>
-          <Text style={styles.footerText}>{t('login.index.footerBrand')}</Text>
-        </View>
-      </View>
-    </LinearGradientWrap>
+      <BottomSheetButtonGroup
+        visible={isForgetPasswordBottomSheetVisible}
+        onRequestClose={() => setIsForgetPasswordBottomSheetVisible(false)}
+        buttons={[
+          { label: t('login.index.sheets.forgetPassword.phone'), onPress: () => goForgetPassword('phone')},
+          { label: t('login.index.sheets.forgetPassword.email'), onPress: () => goForgetPassword('email')},
+        ]}
+      />
+    </>
   );
 }

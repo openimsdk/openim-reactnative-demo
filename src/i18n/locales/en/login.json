@@ -31,7 +31,17 @@
       "enterEmail": "Please enter email",
       "sendCodeFailed": "Failed to send code. Check phone/email."
     },
-    "footerBrand": "OpenIM-RN-Demo"
+    "footerBrand": "OpenIM-RN-Demo",
+    "sheets": {
+      "register": {
+        "phone": "Register with phone",
+        "email": "Register with email"
+      },
+      "forgetPassword": {
+        "phone": "Recover via phone",
+        "email": "Recover via email"
+      }
+    }
   },
   "register": {
     "title": "Sign Up",
