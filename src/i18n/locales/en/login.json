@@ -97,6 +97,38 @@
       "registerFailed": "Registration failed. Please try again later."
     }
   },
+  "forgetPassword": {
+    "title": "Forgot Password",
+    "actions": { "next": "Next" },
+    "rules": {
+      "requiredPhone": "Please enter phone number",
+      "invalidPhone": "Please enter a valid phone number",
+      "requiredEmail": "Please enter email",
+      "invalidEmail": "Please enter a valid email address",
+      "requiredVerificationCode": "Please enter verification code"
+    },
+    "toasts": {
+      "accountNotExist": "Account does not exist",
+      "sendCodeFailed": "Failed to send code. Please try again later.",
+      "verifyFailed": "Verification failed. Please try again."
+    }
+  },
+  "resetPassword": {
+    "title": "Set New Password",
+    "actions": { "complete": "Done" },
+    "rules": {
+      "requiredPassword": "Please enter password",
+      "passwordMin": "Password must be at least 6 characters",
+      "passwordMax": "Password can be at most 20 characters",
+      "passwordComposition": "Must include both letters and numbers",
+      "requiredConfirmPassword": "Please re-enter password",
+      "passwordMismatch": "Passwords do not match"
+    },
+    "toasts": {
+      "success": "Password changed. Please log in again.",
+      "failed": "Failed to change password"
+    }
+  },
   "components": {
     "verificationCodeInputItem": {
       "getCode": "Get code"

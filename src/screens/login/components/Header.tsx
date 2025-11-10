@@ -7,7 +7,7 @@ export default function Header() {
 
   return (
     <View style={styles.headerContainer}>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.navBakButton}>
         <Image source={require('@/assets/images/icons/nav_back.png')} style={styles.navBackIcon} />
       </TouchableOpacity>
     </View>
@@ -19,8 +19,12 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingVertical: 15,
   },
-  navBackIcon: {
+  navBakButton: {
     width: 24,
     height: 24,
+  },
+  navBackIcon: {
+    width: '100%',
+    height: '100%',
   },
 });

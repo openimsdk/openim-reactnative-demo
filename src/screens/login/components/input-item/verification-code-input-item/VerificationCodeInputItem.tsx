@@ -1,5 +1,5 @@
 import LinkButton from "@/components/LinkButton";
-import BaseInputItem, { BaseInputItemProps } from "../base-input-item/BaseInputItem";
+import { BaseInputItem, BaseInputItemProps } from "../base-input-item/BaseInputItem";
 import { StyleSheet, Text } from "react-native";
 import { useTimeCount } from "@/hooks/useTimeCount";
 import { theme } from "@/styles/theme";
@@ -13,13 +13,13 @@ export type VerificationCodeInputItemRef = {
 
 export type VerificationCodeInputItemProps = BaseInputItemProps & {
   onPressGetCode?: () => void,
-  ref: React.RefObject<VerificationCodeInputItemRef | null>,
+  ref?: React.RefObject<VerificationCodeInputItemRef | null>,
 }
 
 /**
  * Verification code input item. Shows a countdown or a button on the right.
  */
-export default function VerificationCodeInputItem({ onPressGetCode, ref, ...props }: VerificationCodeInputItemProps) {
+export function VerificationCodeInputItem({ onPressGetCode, ref, ...props }: VerificationCodeInputItemProps) {
   const { isCounting, timeCount, startCountdown, stopCountdown } = useTimeCount(60);
   const { t } = useTranslation();
 

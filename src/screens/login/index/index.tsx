@@ -1,21 +1,25 @@
 import LinearGradientWrap from "../components/LinearGradientWrap";
 import { Image, Text, View } from "react-native";
 import { styles } from "./styles";
-import { PasswordInputItem, PhoneInputItem, EmailInputItem } from "../components/input-item";
+import { 
+  PasswordInputItem,
+  PhoneInputItem,
+  EmailInputItem,
+  VerificationCodeInputItem,
+  PhoneInputItemRef,
+  VerificationCodeInputItemRef
+} from "../components/input-item";
 import { Button } from "@ant-design/react-native";
 import Divider from "@/components/Divider";
 import LinkButton from "@/components/LinkButton";
 import { useMemo, useRef, useState } from "react";
-import VerificationCodeInputItem from "../components/input-item/verification-code-input-item/VerificationCodeInputItem";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackNavigationProp } from "@/navigation/types";
 import { useToast } from "@/components/Toast";
 import { login, sendSms } from "@/api/login";
-import { PhoneInputItemRef } from "../components/input-item/phone-input-item/PhoneInputItem";
 import md5 from 'md5';
 import { DemoLoginParams, SendSmsParams, UsedFor } from "@/api/data";
-import { VerificationCodeInputItemRef } from "../components/input-item/verification-code-input-item/VerificationCodeInputItem";
 import { useTranslation } from 'react-i18next';
 
 type LoginAccountType = 'phone' | 'email';
@@ -128,6 +132,10 @@ export default function LoginScreen() {
     navigation.navigate('Register', { registerMode: loginAccountType });
   }
 
+  function goForgetPassword() {
+    navigation.navigate('ForgetPassword', { mode: loginAccountType });
+  }
+
   return (
     <LinearGradientWrap style={styles.container}>
       <View style={styles.topPart}>
@@ -184,7 +192,7 @@ export default function LoginScreen() {
           }
         </View>
         <View style={styles.linkButtonContainer}>
-          <LinkButton label={t('login.index.actions.forgotPassword')} onPress={() => {}} variant="gray" style={{ fontSize: 12 }} />
+          <LinkButton label={t('login.index.actions.forgotPassword')} onPress={goForgetPassword} variant="gray" style={{ fontSize: 12 }} />
           <LinkButton label={loginValidateType === 'password' ? t('login.index.actions.loginWithCode') : t('login.index.actions.loginWithPassword')} onPress={handleLoginValidateTypeSwitch} style={{ fontSize: 12 }} />
         </View>
 

@@ -30,3 +30,13 @@ export const isValidEmail = (email: string) => {
   // Simple RFC 5322-inspired check, pragmatic for app use
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val);
 };
+
+// Password validation helpers
+export const PASSWORD_MIN = 6;
+export const PASSWORD_MAX = 20;
+
+/** Composition: must include at least one letter and one number. */
+export const isValidPasswordComposition = (password: string) => {
+  const val = password || '';
+  return /[A-Za-z]/.test(val) && /\d/.test(val);
+};

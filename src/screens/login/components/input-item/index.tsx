@@ -1,4 +1,5 @@
-export { default as BaseInputItem } from "./base-input-item/BaseInputItem";
-export { default as PasswordInputItem } from "./password-input-item/PasswordInputItem";
-export { default as PhoneInputItem } from "./phone-input-item/PhoneInputItem";
-export { default as EmailInputItem } from "./email-input-item/EmailInputItem";
+export * from "./base-input-item/BaseInputItem";
+export * from "./password-input-item/PasswordInputItem";
+export * from "./phone-input-item/PhoneInputItem";
+export * from "./verification-code-input-item/VerificationCodeInputItem";
+export * from "./email-input-item/EmailInputItem";

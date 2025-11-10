@@ -97,6 +97,38 @@
       "registerFailed": "注册失败，请稍后重试"
     }
   },
+  "forgetPassword": {
+    "title": "忘记密码",
+    "actions": { "next": "下一步" },
+    "rules": {
+      "requiredPhone": "请输入手机号",
+      "invalidPhone": "请输入正确的手机号",
+      "requiredEmail": "请输入邮箱",
+      "invalidEmail": "请输入正确的邮箱地址",
+      "requiredVerificationCode": "请输入验证码"
+    },
+    "toasts": {
+      "accountNotExist": "账号不存在",
+      "sendCodeFailed": "发送验证码失败，请稍后重试",
+      "verifyFailed": "验证码验证失败"
+    }
+  },
+  "resetPassword": {
+    "title": "请设置新的密码",
+    "actions": { "complete": "完成" },
+    "rules": {
+      "requiredPassword": "请输入密码",
+      "passwordMin": "密码长度至少 6 位",
+      "passwordMax": "密码长度最多 20 位",
+      "passwordComposition": "至少包含数字与字母",
+      "requiredConfirmPassword": "请再次输入密码",
+      "passwordMismatch": "两次输入的密码不一致"
+    },
+    "toasts": {
+      "success": "修改密码成功，请重新登录",
+      "failed": "修改密码失败"
+    }
+  },
   "components": {
     "verificationCodeInputItem": {
       "getCode": "获取验证码"

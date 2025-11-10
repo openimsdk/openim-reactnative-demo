@@ -1,11 +1,11 @@
-import BaseInputItem, { BaseInputItemProps } from "../base-input-item/BaseInputItem";
+import { BaseInputItem, BaseInputItemProps } from "../base-input-item/BaseInputItem";
 import { Image, TouchableHighlight } from "react-native";
 import { useEffect, useState } from "react";
 import { eyeIconStyles } from "./styles";
 
 export type PasswordInputItemProps = BaseInputItemProps
 
-export default function PasswordInputItem({ ...props }: PasswordInputItemProps) {
+export function PasswordInputItem({ ...props }: PasswordInputItemProps) {
   const [value, setValue] = useState(props.value || '');
 
   const [showPassword, setShowPassword] = useState(false);

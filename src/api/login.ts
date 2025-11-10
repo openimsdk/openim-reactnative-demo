@@ -21,7 +21,7 @@ export const verifyCode = (params: VerifyCodeParams) =>
 export const register = (params: DemoRegisterParams) =>
   request.post('/account/register', { ...params, platform })
 
-export const modify = (params: ModifyPasswordParams) =>
+export const modifyPassword = (params: ModifyPasswordParams) =>
   request.post('/account/password/reset', { ...params, platform })
 
 export const login = (params: DemoLoginParams) =>

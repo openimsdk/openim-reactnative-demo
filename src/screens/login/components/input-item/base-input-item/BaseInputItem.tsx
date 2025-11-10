@@ -10,7 +10,7 @@ export type BaseInputItemProps = TextInputProps & {
   right?: React.ReactNode;
 }
 
-export default function BaseInputItem({ label, error, noteText, value: initialValue, onChangeText, left, right, ...props }: BaseInputItemProps) {
+export function BaseInputItem({ label, error, noteText, value: initialValue, onChangeText, left, right, ...props }: BaseInputItemProps) {
   const [value, setValue] = useState(initialValue || '');
 
   useEffect(() => {

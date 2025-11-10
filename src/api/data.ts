@@ -41,11 +41,11 @@ export type VerifyCodeParams = {
 }
 
 export type ModifyPasswordParams = {
-  phoneNumber: string
-  areaCode: string
+  phoneNumber?: string
+  areaCode?: string
+  email?: string
   verifyCode: string
   password: string
-  email?: string
 }
 
 export type ChangPasswordParams = {

@@ -17,6 +17,15 @@ export type RootStackParamList = {
     phone?: string,
     email?: string,
   };
+  [RootStackScreenName.ForgetPassword]: { mode: 'phone' | 'email' };
+  [RootStackScreenName.ResetPassword]: {
+    mode: 'phone' | 'email',
+    phoneNumber?: string,
+    areaCode?: string,
+    email?: string
+    verifyCode: string
+  };
+
   [RootStackScreenName.HomeTabs]: undefined;
 };
 

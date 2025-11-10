@@ -11,6 +11,7 @@ import { register } from "@/api/login";
 import { useToast } from "@/components/Toast";
 import { ApiErrCode } from "@/constants/apiErrorCode";
 import { useTranslation } from 'react-i18next';
+import { PASSWORD_MAX, PASSWORD_MIN, isValidPasswordComposition } from "@/utils/validate";
 
 export default function SelfInfoSettingScreen({ route }: RootStackScreenProps<'SelfInfoSetting'>) {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -19,17 +20,15 @@ export default function SelfInfoSettingScreen({ route }: RootStackScreenProps<'S
   const toast = useToast()
   const { t } = useTranslation()
 
-  const { control, handleSubmit, watch, formState: { errors, isValid } } = useForm({
+  const { control, handleSubmit, formState: { errors }, getValues } = useForm({
     defaultValues: {
       nickname: '',
       password: '',
       confirmPassword: '',
     },
-    mode: 'onBlur',
-    reValidateMode: 'onBlur',
+    mode: 'onTouched',
+    reValidateMode: 'onChange',
   });
-
-  const passwordValue = watch('password');
 
   const onSubmit = async (values: any) => {
     try {
@@ -92,9 +91,9 @@ export default function SelfInfoSettingScreen({ route }: RootStackScreenProps<'S
           name="password"
           rules={{
             required: t('login.selfInfoSetting.rules.requiredPassword'),
-            minLength: { value: 6, message: t('login.selfInfoSetting.rules.passwordMin') },
-            maxLength: { value: 20, message: t('login.selfInfoSetting.rules.passwordMax') },
-            validate: (v) => /^(?=.*[A-Za-z])(?=.*\d).{6,20}$/.test(v || '') || t('login.selfInfoSetting.rules.passwordComposition'),
+            minLength: { value: PASSWORD_MIN, message: t('login.selfInfoSetting.rules.passwordMin') },
+            maxLength: { value: PASSWORD_MAX, message: t('login.selfInfoSetting.rules.passwordMax') },
+            validate: (v) => isValidPasswordComposition(v || '') || t('login.selfInfoSetting.rules.passwordComposition'),
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <PasswordInputItem
@@ -113,7 +112,8 @@ export default function SelfInfoSettingScreen({ route }: RootStackScreenProps<'S
           name="confirmPassword"
           rules={{
             required: t('login.selfInfoSetting.rules.requiredConfirmPassword'),
-            validate: (v) => v === passwordValue || t('login.selfInfoSetting.rules.passwordMismatch'),
+            validate: (v) => v === getValues('password') || t('login.selfInfoSetting.rules.passwordMismatch'),
+            deps: ['password'],
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <PasswordInputItem
@@ -129,7 +129,7 @@ export default function SelfInfoSettingScreen({ route }: RootStackScreenProps<'S
       </View>
 
       <View style={styles.buttonContainer}>
-        <Button type="primary" onPress={handleSubmit(onSubmit)} disabled={!isValid}>
+        <Button type="primary" onPress={handleSubmit(onSubmit)}>
           {t('login.selfInfoSetting.actions.complete')}
         </Button>
       </View>

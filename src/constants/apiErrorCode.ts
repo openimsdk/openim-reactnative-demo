@@ -12,7 +12,7 @@ export const ApiErrCode = {
   INVITATION_CODE_NOT_EXIST: 20011,
   OPERATION_RESTRICTION: 20012,
   // ACCOUNT_REGISTERED: 20014,
-}
+} as const
 
 export const ApiErrCodeMap: Record<number, string> = {
   [ApiErrCode.PASSWORD_ERROR]: 'errCode.passwordError',

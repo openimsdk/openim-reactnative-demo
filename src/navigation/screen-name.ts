@@ -3,6 +3,9 @@ export const RootStackScreenName = {
   Register: 'Register',
   VerifyCode: 'VerifyCode',
   SelfInfoSetting: 'SelfInfoSetting',
+  ForgetPassword: 'ForgetPassword',
+  ResetPassword: 'ResetPassword',
+
   HomeTabs: 'HomeTabs',
 } as const;
 

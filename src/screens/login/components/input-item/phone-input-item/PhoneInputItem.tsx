@@ -1,5 +1,5 @@
 import { Image, TouchableOpacity } from "react-native";
-import BaseInputItem, { BaseInputItemProps } from "../base-input-item/BaseInputItem";
+import { BaseInputItem, BaseInputItemProps } from "../base-input-item/BaseInputItem";
 import { Text } from "react-native";
 import { styles } from "./styles";
 import { useImperativeHandle, useState } from "react";
@@ -15,7 +15,7 @@ export type PhoneInputItemProps = BaseInputItemProps & {
   ref?: React.RefObject<PhoneInputItemRef | null>;
 }
 
-export default function PhoneInputItem({ ref, ...props }: PhoneInputItemProps) {
+export function PhoneInputItem({ ref, ...props }: PhoneInputItemProps) {
   const [phoneCode, setPhoneCode] = useState('+86');
   const { t } = useTranslation();
 
