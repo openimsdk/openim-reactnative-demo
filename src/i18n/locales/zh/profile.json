@@ -1,0 +1,35 @@
+{
+  "index": {
+    "items": {
+      "selfInfo": "我的信息",
+      "accountSettings": "账号设置",
+      "about": "关于我们",
+      "logout": "退出登录"
+    }
+  },
+  "accountSettings": {
+    "headerTitle": "账号设置",
+    "blackList": "通讯录黑名单",
+    "language": "语言"
+  },
+  "about": {
+    "headerTitle": "关于我们",
+    "appName": "OpenIM-RN-Demo"
+  },
+  "selfInfo": {
+    "headerTitle": "我的信息",
+    "labels": {
+      "avatar": "头像",
+      "nickname": "昵称",
+      "gender": "性别",
+      "birthday": "生日",
+      "phone": "手机号",
+      "email": "邮箱"
+    },
+    "genderOptions": {
+      "male": "男",
+      "female": "女",
+      "other": "保密"
+    }
+  }
+}

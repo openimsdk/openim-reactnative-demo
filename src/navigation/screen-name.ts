@@ -1,4 +1,5 @@
 export const RootStackScreenName = {
+  // login
   Login: 'Login',
   Register: 'Register',
   VerifyCode: 'VerifyCode',
@@ -6,7 +7,16 @@ export const RootStackScreenName = {
   ForgetPassword: 'ForgetPassword',
   ResetPassword: 'ResetPassword',
 
+  // home tabs
   HomeTabs: 'HomeTabs',
+
+  // profile
+  About: 'About',
+  AccountSettings: 'AccountSettings',
+  BlackList: 'BlackList',
+  ChangeNickname: 'ChangeNickname',
+  LanguageSettings: 'LanguageSettings',
+  SelfInfo: 'SelfInfo',
 } as const;
 
 export const HomeTabScreenName = {

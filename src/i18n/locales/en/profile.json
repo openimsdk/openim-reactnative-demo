@@ -1,0 +1,35 @@
+{
+  "index": {
+    "items": {
+      "selfInfo": "My Info",
+      "accountSettings": "Account Settings",
+      "about": "About Us",
+      "logout": "Log Out"
+    }
+  },
+  "accountSettings": {
+    "headerTitle": "Account Settings",
+    "blackList": "Blocked Contacts",
+    "language": "Language"
+  },
+  "about": {
+    "headerTitle": "About Us",
+    "appName": "OpenIM-RN-Demo"
+  },
+  "selfInfo": {
+    "headerTitle": "My Info",
+    "labels": {
+      "avatar": "Avatar",
+      "nickname": "Nickname",
+      "gender": "Gender",
+      "birthday": "Birthday",
+      "phone": "Phone",
+      "email": "Email"
+    },
+    "genderOptions": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Secret"
+    }
+  }
+}

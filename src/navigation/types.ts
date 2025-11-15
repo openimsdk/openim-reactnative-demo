@@ -27,6 +27,13 @@ export type RootStackParamList = {
   };
 
   [RootStackScreenName.HomeTabs]: undefined;
+
+  [RootStackScreenName.About]: undefined;
+  [RootStackScreenName.AccountSettings]: undefined;
+  [RootStackScreenName.BlackList]: undefined;
+  [RootStackScreenName.ChangeNickname]: undefined;
+  [RootStackScreenName.LanguageSettings]: undefined;
+  [RootStackScreenName.SelfInfo]: undefined;
 };
 
 export type HomeTabParamList = {

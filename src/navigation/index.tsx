@@ -11,6 +11,12 @@ import ForgetPasswordScreen from "@/screens/login/forget-password";
 import ResetPasswordScreen from "@/screens/login/reset-password";
 
 import HomeTabs from "./home-tabs";
+import AboutScreen from "@/screens/profile/about";
+import AccountSettingsScreen from "@/screens/profile/account-settings";
+import SelfInfoScreen from "@/screens/profile/self-info";
+import LanguageSettingsScreen from "@/screens/profile/language-settings";
+import ChangeNicknameScreen from "@/screens/profile/change-nickname";
+import BlackListScreen from "@/screens/profile/black-list";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -27,6 +33,15 @@ function Stacks() {
       </Stack.Group>
 
       <Stack.Screen options={{ headerShown: false }} name={RootStackScreenName.HomeTabs} component={HomeTabs} />
+
+      <Stack.Group screenOptions={{ headerShown: false }}>
+        <Stack.Screen name={RootStackScreenName.About} component={AboutScreen}/>
+        <Stack.Screen name={RootStackScreenName.AccountSettings} component={AccountSettingsScreen} />
+        <Stack.Screen name={RootStackScreenName.BlackList} component={BlackListScreen} />
+        <Stack.Screen name={RootStackScreenName.ChangeNickname} component={ChangeNicknameScreen} />
+        <Stack.Screen name={RootStackScreenName.LanguageSettings} component={LanguageSettingsScreen} />
+        <Stack.Screen name={RootStackScreenName.SelfInfo} component={SelfInfoScreen} />
+      </Stack.Group>
     </Stack.Navigator>
   );
 }
