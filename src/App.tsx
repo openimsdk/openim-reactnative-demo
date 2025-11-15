@@ -13,7 +13,11 @@ function App() {
     <SafeAreaProvider>
       <AntDesignProvider>
         <ToastProvider>
-          <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} backgroundColor={'transparent'}/>
+          <StatusBar 
+            barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+            backgroundColor={'transparent'}
+            translucent={true}
+          />
           <Navigation />
         </ToastProvider>
       </AntDesignProvider>
