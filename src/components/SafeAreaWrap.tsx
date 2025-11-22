@@ -6,51 +6,71 @@ type Inset = 'top' | 'bottom' | 'left' | 'right' | 'vertical' | 'horizontal' | '
 
 interface SafeAreaWrapProps {
   children: React.ReactNode;
-  style?: StyleProp<ViewStyle>;
   insets?: Inset[];
+  /** 内容区域的样式 */
+  style?: StyleProp<ViewStyle>;
+  /** SafeArea 容器的背景色 */
+  safeAreaBgColor?: string;
+  fullHeight?: boolean;
 }
 
-export default function SafeAreaWrap({ children, style, insets = ['all'] }: SafeAreaWrapProps) {
+export default function SafeAreaWrap(props: SafeAreaWrapProps) {
+  const {
+    children,
+    style,
+    safeAreaBgColor,
+    insets = ['all'],
+    fullHeight = true,
+  } = props;
+
   const safeAreaInsets = useSafeAreaInsets();
 
   const insetsStyle = useMemo(() => {
-    let style: ViewStyle = {};
-    
+    const paddingStyle: ViewStyle = {};
+
+    if (insets.includes('all')) {
+      paddingStyle.paddingTop = safeAreaInsets.top;
+      paddingStyle.paddingBottom = safeAreaInsets.bottom;
+      paddingStyle.paddingLeft = safeAreaInsets.left;
+      paddingStyle.paddingRight = safeAreaInsets.right;
+      return paddingStyle;
+    }
+
     for (const inset of insets) {
       if (inset === 'top') {
-        style.paddingTop = safeAreaInsets.top;
-      }
-      if (inset === 'bottom') {
-        style.paddingBottom = safeAreaInsets.bottom;
-      }
-      if (inset === 'left') {
-        style.paddingLeft = safeAreaInsets.left;
-      }
-      if (inset === 'right') {
-        style.paddingRight = safeAreaInsets.right;
-      }
-      if (inset === 'vertical') {
-        style.paddingTop = safeAreaInsets.top;
-        style.paddingBottom = safeAreaInsets.bottom;
-      }
-      if (inset === 'horizontal') {
-        style.paddingLeft = safeAreaInsets.left;
-        style.paddingRight = safeAreaInsets.right;
-      }
-      if (inset === 'all') {
-        style.paddingTop = safeAreaInsets.top;
-        style.paddingBottom = safeAreaInsets.bottom;
-        style.paddingLeft = safeAreaInsets.left;
-        style.paddingRight = safeAreaInsets.right;
+        paddingStyle.paddingTop = safeAreaInsets.top;
+      } else if (inset === 'bottom') {
+        paddingStyle.paddingBottom = safeAreaInsets.bottom;
+      } else if (inset === 'left') {
+        paddingStyle.paddingLeft = safeAreaInsets.left;
+      } else if (inset === 'right') {
+        paddingStyle.paddingRight = safeAreaInsets.right;
+      } else if (inset === 'vertical') {
+        paddingStyle.paddingTop = safeAreaInsets.top;
+        paddingStyle.paddingBottom = safeAreaInsets.bottom;
+      } else if (inset === 'horizontal') {
+        paddingStyle.paddingLeft = safeAreaInsets.left;
+        paddingStyle.paddingRight = safeAreaInsets.right;
       }
     }
-    return style;
-  }, [insets]);
+    return paddingStyle;
+  }, [insets, safeAreaInsets]);
+
+  const safeAreaStyle = useMemo(() => {
+    const containerStyle: ViewStyle = {
+      ...insetsStyle,
+      backgroundColor: safeAreaBgColor,
+    };
+    if (fullHeight) {
+      containerStyle.height = '100%';
+    }
+    return containerStyle;
+  }, [insetsStyle, safeAreaBgColor, fullHeight]);
 
   return (
     // Wrap two layers to prevent insetsStyle and style from conflicting
-    <View style={[insetsStyle]}>
-      <View style={[style]}>
+    <View style={safeAreaStyle}>
+      <View style={style}>
         {children}
       </View>
     </View>
