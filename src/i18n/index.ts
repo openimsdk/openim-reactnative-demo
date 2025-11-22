@@ -11,6 +11,8 @@ import enCommon from './locales/en/common.json';
 import zhCommon from './locales/zh/common.json';
 import enProfile from './locales/en/profile.json';
 import zhProfile from './locales/zh/profile.json';
+import enWorkbench from './locales/en/workbench.json';
+import zhWorkbench from './locales/zh/workbench.json';
 
 const resources = {
   en: {
@@ -19,6 +21,7 @@ const resources = {
       login: enLogin,
       tabs: enTabs,
       profile: enProfile,
+      workbench: enWorkbench,
     },
   },
   zh: {
@@ -27,6 +30,7 @@ const resources = {
       login: zhLogin,
       tabs: zhTabs,
       profile: zhProfile,
+      workbench: zhWorkbench,
     },
   },
 };

@@ -15,4 +15,7 @@ export const styles = StyleSheet.create({
     color: theme.colors.fontBlack,
     fontWeight: 'bold',
   },
+  webView: {
+    flex: 1,
+  }
 });
