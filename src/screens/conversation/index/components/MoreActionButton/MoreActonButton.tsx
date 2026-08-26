@@ -49,11 +49,11 @@ export function MoreActionButton() {
 
         <View style={[styles.floatWrap, floatPositionStyle]}>
           <View style={styles.actionList}>
-            <ActionListItem icon={require('@/assets/images/conversation/add_friend.png')} children="添加好友" onPress={() => {}} />
+            <ActionListItem icon={require('@/assets/images/conversation/add_friend.png')} onPress={() => {}}>添加好友</ActionListItem>
             <ActionListItemSeparator />
-            <ActionListItem icon={require('@/assets/images/conversation/add_group.png')} children="添加群组" onPress={() => {}} />
+            <ActionListItem icon={require('@/assets/images/conversation/add_group.png')} onPress={() => {}}>添加群组</ActionListItem>
             <ActionListItemSeparator />
-            <ActionListItem icon={require('@/assets/images/conversation/create_group.png')} children="发起群聊" onPress={() => {}} />
+            <ActionListItem icon={require('@/assets/images/conversation/create_group.png')} onPress={() => {}}>发起群聊</ActionListItem>
           </View>
         </View>
       </Modal>

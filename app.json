@@ -1,4 +1,49 @@
 {
-  "name": "OpenIMDemo",
-  "displayName": "OpenIMDemo"
+  "expo": {
+    "name": "OpenIMDemo",
+    "slug": "openim-demo",
+    "version": "1.0.0",
+    "scheme": "openimdemo",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "bundleIdentifier": "io.openim.demo",
+      "buildNumber": "1",
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow OpenIMDemo to take a profile photo.",
+        "NSPhotoLibraryUsageDescription": "Allow OpenIMDemo to choose a profile photo.",
+        "NSAppTransportSecurity": {
+          "NSAllowsLocalNetworking": true
+        }
+      }
+    },
+    "android": {
+      "package": "io.openim.demo",
+      "versionCode": 1,
+      "permissions": [
+        "CAMERA"
+      ],
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": [
+      "expo-dev-client",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./node_modules/@ant-design/icons-react-native/fonts/antfill.ttf",
+            "./node_modules/@ant-design/icons-react-native/fonts/antoutline.ttf"
+          ]
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
+    ]
+  }
 }

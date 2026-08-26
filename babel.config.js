@@ -1,17 +1,21 @@
-module.exports = {
-  presets: ['module:@react-native/babel-preset'],
-  plugins: [
-    [
-      'module-resolver',
-      {
-        root: ['./'],
-        alias: {
-          '@': './src',
-          'config': './config',
+module.exports = function (api) {
+  api.cache(true);
+
+  return {
+    presets: ['babel-preset-expo'],
+    plugins: [
+      [
+        'module-resolver',
+        {
+          root: ['./'],
+          alias: {
+            '@': './src',
+            config: './config',
+          },
         },
-      },
+      ],
+      ['import', { libraryName: '@ant-design/react-native' }],
+      'react-native-worklets/plugin',
     ],
-    'react-native-worklets/plugin',
-    ["import", { libraryName: "@ant-design/react-native" }]
-  ],
+  };
 };

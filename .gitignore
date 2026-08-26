@@ -41,6 +41,17 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
 # fastlane
 #
 # It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
@@ -73,3 +84,7 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Generated native projects (Expo CNG)
+/ios
+/android
