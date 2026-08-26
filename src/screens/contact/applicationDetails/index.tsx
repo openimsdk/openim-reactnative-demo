@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import OpenIMSDKRN from "open-im-sdk-rn";
+import OpenIMSDKRN from "@openim/rn-client-sdk";
 import { v4 as uuidv4 } from "uuid";
 
 import { ApplicationItemSource, ApplicationTypeEnum } from "@/components/ApplicationItem";

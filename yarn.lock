@@ -1565,6 +1565,13 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@openim/rn-client-sdk@^3.8.3-patch.12.4":
+  version "3.8.3-patch.12.4"
+  resolved "https://registry.npmmirror.com/@openim/rn-client-sdk/-/rn-client-sdk-3.8.3-patch.12.4.tgz#b5b5ee007f9e6e9c2951d93fba49f55aad862f94"
+  integrity sha512-Sqoya0S18ZrV1WezgFtvLx5oFUzHpVU7op3zUwNlf2NEK22T+s1pel7ncQTUa8z1HtVTLRPmwOTihwP6dnIylw==
+  dependencies:
+    react-native-uuid "^2.0.3"
+
 "@react-native-async-storage/async-storage@^1.23.1":
   version "1.23.1"
   resolved "https://registry.npmjs.org/@react-native-async-storage/async-storage/-/async-storage-1.23.1.tgz"
@@ -5951,13 +5958,6 @@ onetime@^5.1.0, onetime@^5.1.2:
   dependencies:
     mimic-fn "^2.1.0"
 
-open-im-sdk-rn@3.8.3-2:
-  version "3.8.3-2"
-  resolved "https://registry.yarnpkg.com/open-im-sdk-rn/-/open-im-sdk-rn-3.8.3-2.tgz#a199bb64a6c397fc5885db5be53b1426ef745917"
-  integrity sha512-JtFH8CUKbWZzoPG2yjk3FjrolWz6SlfmAe2OSrN5CrCOuLEV5XpIqCRPggqi9p/APCkkiNCqBpHsfF4VyTvqjQ==
-  dependencies:
-    uuid "^9.0.1"
-
 open@^6.2.0:
   version "6.4.0"
   resolved "https://registry.npmjs.org/open/-/open-6.4.0.tgz"
@@ -6470,6 +6470,11 @@ react-native-tab-view@^3.5.2:
   integrity sha512-nE5WqjbeEPsWQx4mtz81QGVvgHRhujTNIIZiMCx3Bj6CBFDafbk7XZp9ocmtzXUQaZ4bhtVS43R4FIiR4LboJw==
   dependencies:
     use-latest-callback "^0.1.5"
+
+react-native-uuid@^2.0.3:
+  version "2.0.4"
+  resolved "https://registry.npmmirror.com/react-native-uuid/-/react-native-uuid-2.0.4.tgz#0c4f345523c5feac0282d3a51fe19887727df988"
+  integrity sha512-LSJNeh559qC17fgVPBsWuTSW/OygFp2dwTcf94IQBLYft5FzIQS9pCsuT36OPvyvDOMb6yiGr6TafaJDnz9PPQ==
 
 react-native-vector-icons@^10.0.3:
   version "10.0.3"

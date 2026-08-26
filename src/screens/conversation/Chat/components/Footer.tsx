@@ -5,7 +5,7 @@ import add from "@/assets/images/chatFooter/add.png";
 import { TextInput } from "react-native-paper";
 import { FC, useState } from "react";
 import { useSendMessage } from "@/hooks/useSendMessage";
-import OpenIMSDKRN from "open-im-sdk-rn";
+import OpenIMSDKRN from "@openim/rn-client-sdk";
 import { v4 as uuidv4 } from "uuid";
 import { useCurrentMemberRole } from "@/hooks/useCurrentMemberRole";
 import { useConversationStore } from "@/store/conversation";

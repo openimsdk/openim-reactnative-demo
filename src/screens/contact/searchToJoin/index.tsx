@@ -5,11 +5,11 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 import { Searchbar } from "react-native-paper";
 import { useState } from "react";
 import { useContactStore } from "@/store/contact";
-import OpenIMSDKRN from "open-im-sdk-rn";
+import OpenIMSDKRN from "@openim/rn-client-sdk";
 import { v4 as uuidv4 } from "uuid";
 import { searchBusinessUserInfo } from "@/api/chat";
 import { BusinessUserInfo } from "@/types/chat";
-import { GroupItem } from "open-im-sdk-rn/lib/typescript/types/entity";
+import { GroupItem } from "@openim/rn-client-sdk/lib/typescript/types/entity";
 import { useUserStore } from "@/store/user";
 import { ApplicationStackParamList } from "@/types/navigation";
 

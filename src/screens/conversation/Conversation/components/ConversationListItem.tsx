@@ -2,7 +2,7 @@ import OIMAvatar from "@/components/OIMAvatar";
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { ApplicationStackParamList } from "@/types/navigation";
-import { ConversationItem, MessageItem } from "open-im-sdk-rn/lib/typescript/types/entity";
+import { ConversationItem, MessageItem } from "@openim/rn-client-sdk/lib/typescript/types/entity";
 import { FC } from "react";
 import { formatConversionTime, getConversationContent, isGroupSession } from "@/utils/imCommon";
 import { useConversationStore } from "@/store/conversation";

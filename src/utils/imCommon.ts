@@ -1,4 +1,4 @@
-import OpenIMSDKRN from "open-im-sdk-rn";
+import OpenIMSDKRN from "@openim/rn-client-sdk";
 import RNFS from "react-native-fs";
 import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
@@ -7,7 +7,7 @@ import updateLocale from "dayjs/plugin/updateLocale";
 import { v4 as uuidv4 } from "uuid";
 
 import { getApiUrl, getWsUrl } from "@/config";
-import { ConversationItem, MessageItem, PublicUserItem } from "open-im-sdk-rn/lib/typescript/types/entity";
+import { ConversationItem, MessageItem, PublicUserItem } from "@openim/rn-client-sdk/lib/typescript/types/entity";
 import { GroupSessionTypes, GroupSystemMessageTypes, MessageType, SessionType } from "@/constants";
 import { useUserStore } from "@/store/user";
 import { useContactStore } from "@/store/contact";
@@ -56,6 +56,7 @@ export const initSDK = () => {
       wsAddr: getWsUrl(),
       dataDir: `${RNFS.DocumentDirectoryPath}/tmp`,
       logLevel: 5,
+      logFilePath: `${RNFS.DocumentDirectoryPath}/tmp`,
       isLogStandardOutput: true,
     },
     uuidv4(),

@@ -1,6 +1,6 @@
 import { ApplicationItemSource, ApplicationTypeEnum } from "@/components/ApplicationItem";
 import type { StackScreenProps } from "@react-navigation/stack";
-import { PublicUserItem } from "open-im-sdk-rn/lib/typescript/types/entity";
+import { PublicUserItem } from "@openim/rn-client-sdk/lib/typescript/types/entity";
 
 export type ApplicationStackParamList = {
   MainContentLayout: undefined;

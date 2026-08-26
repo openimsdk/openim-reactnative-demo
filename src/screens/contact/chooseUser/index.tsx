@@ -4,7 +4,7 @@ import { useContactStore } from "@/store/contact";
 import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { AlphabetList } from "react-native-section-alphabet-list";
-import { PublicUserItem } from "open-im-sdk-rn/lib/typescript/types/entity";
+import { PublicUserItem } from "@openim/rn-client-sdk/lib/typescript/types/entity";
 import { useRoute } from "@react-navigation/native";
 import CheckedFooter from "./CheckedFooter";
 

@@ -1,7 +1,7 @@
 import { t } from "i18next";
 import { create } from "zustand";
-import { ConversationItem, GroupItem, GroupMemberItem } from "open-im-sdk-rn/lib/typescript/types/entity";
-import OpenIMSDKRN from "open-im-sdk-rn";
+import { ConversationItem, GroupItem, GroupMemberItem } from "@openim/rn-client-sdk/lib/typescript/types/entity";
+import OpenIMSDKRN from "@openim/rn-client-sdk";
 import { v4 as uuidv4 } from "uuid";
 import { feedbackToast } from "@/utils/common";
 import { conversationSort, isGroupSession } from "@/utils/imCommon";

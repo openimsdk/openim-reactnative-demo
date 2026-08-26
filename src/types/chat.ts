@@ -1,4 +1,4 @@
-import { MessageReceiveOptType } from "open-im-sdk-rn/lib/typescript/types/enum";
+import { MessageReceiveOptType } from "@openim/rn-client-sdk/lib/typescript/types/enum";
 
 export enum BusinessAllowType {
   Allow = 1,

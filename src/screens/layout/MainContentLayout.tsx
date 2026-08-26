@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BottomNavigation, Text } from "react-native-paper";
 import { Image, ImageSourcePropType, StyleSheet } from "react-native";
 import { BaseRoute } from "react-native-paper/lib/typescript/components/BottomNavigation/BottomNavigation";
-import OpenIMSDKRN from "open-im-sdk-rn";
+import OpenIMSDKRN from "@openim/rn-client-sdk";
 import { v4 as uuidv4 } from "uuid";
 
 import conversation from "@/assets/images/tabbar/conversation.png";

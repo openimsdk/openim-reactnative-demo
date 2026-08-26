@@ -4,7 +4,7 @@ import { AlphabetList } from "react-native-section-alphabet-list";
 import NavBar from "@/components/NavBar";
 import { useContactStore } from "@/store/contact";
 import InfoItem from "@/components/InfoItem";
-import { FriendUserItem } from "open-im-sdk-rn/lib/typescript/types/entity";
+import { FriendUserItem } from "@openim/rn-client-sdk/lib/typescript/types/entity";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { ApplicationStackParamList } from "@/types/navigation";
 
