@@ -1,6 +1,5 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import Toast from "react-native-simple-toast";
 import Clipboard from "@react-native-clipboard/clipboard";
+import Toast from "react-native-root-toast";
 
 type FeedbackToastParams = {
   msg?: string | null;
@@ -19,7 +18,7 @@ export const feedbackToast = (config?: FeedbackToastParams) => {
   if (error) {
     content = (error as FeedbackError)?.message ?? (error as FeedbackError)?.errDlt;
   }
-  Toast.show(msg ?? content, 2000);
+  Toast.show(msg ?? content, { duration: Toast.durations.SHORT });
   onClose?.();
   if (error) {
     console.error(msg, error);

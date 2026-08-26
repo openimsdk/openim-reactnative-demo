@@ -1,5 +1,5 @@
-import { FriendApplicationItem, GroupApplicationItem } from "open-im-sdk-rn/lib/typescript/types/entity";
-import { GroupJoinSource } from "open-im-sdk-rn/lib/typescript/types/enum";
+import { FriendApplicationItem, GroupApplicationItem } from "@openim/rn-client-sdk";
+import { GroupJoinSource } from "@openim/rn-client-sdk";
 import { FC } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Button } from "react-native-paper";

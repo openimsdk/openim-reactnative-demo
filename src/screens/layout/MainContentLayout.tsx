@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BottomNavigation, Text } from "react-native-paper";
 import { Image, ImageSourcePropType, StyleSheet } from "react-native";
 import { BaseRoute } from "react-native-paper/lib/typescript/components/BottomNavigation/BottomNavigation";
-import OpenIMSDKRN from "open-im-sdk-rn";
+import OpenIMSDKRN from "@openim/rn-client-sdk";
 import { v4 as uuidv4 } from "uuid";
 
 import conversation from "@/assets/images/tabbar/conversation.png";
@@ -91,14 +91,14 @@ const MyComponent = ({ navigation }: ApplicationScreenProps) => {
   });
 
   const renderIcon = ({ route, focused }: { route: BaseRoute; focused: boolean }) => {
-    const images: { [key: string]: string } = {
+    const images: Record<string, ImageSourcePropType> = {
       conversation: focused ? conversation_active : conversation,
       contant: focused ? contacts_active : contacts,
       you: focused ? profile_active : profile,
     };
     const key = route.key as keyof typeof images;
 
-    return <Image source={images[key] as ImageSourcePropType} style={styles.icon} />;
+    return <Image source={images[key]} style={styles.icon} />;
   };
 
   const renderLabel = ({ route, focused }: { route: BaseRoute; focused: boolean }) => {

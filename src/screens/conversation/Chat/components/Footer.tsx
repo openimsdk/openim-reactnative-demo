@@ -1,16 +1,15 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { launchImageLibrary } from "react-native-image-picker";
+import * as ImagePicker from "expo-image-picker";
 
 import add from "@/assets/images/chatFooter/add.png";
 import { TextInput } from "react-native-paper";
 import { FC, useState } from "react";
 import { useSendMessage } from "@/hooks/useSendMessage";
-import OpenIMSDKRN from "open-im-sdk-rn";
+import OpenIMSDKRN, { GroupStatus } from "@openim/rn-client-sdk";
 import { v4 as uuidv4 } from "uuid";
 import { useCurrentMemberRole } from "@/hooks/useCurrentMemberRole";
 import { useConversationStore } from "@/store/conversation";
 import { useContactStore } from "@/store/contact";
-import { GroupStatus } from "@/constants";
 import image from "@/assets/images/chatFooter/image.png";
 import keyboard from "@/assets/images/chatFooter/keyboard.png";
 
@@ -97,20 +96,20 @@ const Footer: FC<FooterProps> = ({ scrollToBottom }) => {
   }
 
   const selectImage = async () => {
-    const response = await launchImageLibrary({
-      mediaType: "photo",
-      selectionLimit: 1,
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permission.granted) return;
+
+    const response = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsMultipleSelection: false,
     });
-    if (response.didCancel || response.errorCode) return;
-    if (response.assets && response.assets.length > 0) {
+    if (!response.canceled && response.assets.length > 0) {
       let { uri } = response.assets[0];
-      if (uri) {
-        if (uri.startsWith("file://")) {
-          uri = uri.substring(7);
-        }
-        const message = await OpenIMSDKRN.createImageMessageFromFullPath(uri, uuidv4());
-        sendMessage({ message });
+      if (uri.startsWith("file://")) {
+        uri = uri.substring(7);
       }
+      const message = await OpenIMSDKRN.createImageMessageFromFullPath(uri, uuidv4());
+      sendMessage({ message });
     }
   };
 

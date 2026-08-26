@@ -18,20 +18,33 @@
 
 <br>
 
-OpenIM React Native Demo is an open-source instant messaging application built on OpenIM SDK React Native, OpenIM Server, and React Native. It demonstrates how to quickly integrate instant messaging capabilities into any web app using OpenIM.
+OpenIM React Native Demo is an open-source instant messaging application built on OpenIM SDK React Native, OpenIM Server, React Native, and Expo. It demonstrates how to integrate OpenIM into a mobile app with an Expo development build.
 
 ## Tech Stack 🛠️
 
-- This is a [`ReactNative`](https://reactnative.dev/) project.
-- App is built with [open-im-sdk-reactnative](https://github.com/openimsdk/open-im-sdk-reactnative) library.
+- [Expo SDK 57](https://expo.dev/changelog/sdk-57)
+- [React Native 0.86.2](https://reactnative.dev/)
+- [OpenIM React Native SDK](https://github.com/openimsdk/open-im-sdk-reactnative)
+- Expo Continuous Native Generation (CNG)
 
 ## Dev Setup 🛠️
 
-> It is recommended to use node version 16.x-20.x.
+> Use Node.js 20.19.4+, 22.13.0+, or 24.3.0+. OpenIM contains native code, so this app requires an Expo development build and does not run in Expo Go.
+
+Native toolchain requirements:
+
+- iOS: Xcode 26.4 or newer.
+- Android: Android Studio with JDK 21 and Android SDK 36.
 
 Follow these steps to set up a local development environment:
 
-1. Run `yarn` to install all dependencies.
+1. Enable Corepack and install dependencies:
+
+   ```sh
+   corepack enable
+   yarn install
+   ```
+
 2. Modify the request address to your own OpenIM Server IP in the following files:
    > Note: You need to [deploy](https://docs.openim.io/guides/gettingStarted/dockerCompose) OpenIM Server first, the default port of OpenIM Server is 10001, 10002, 10008.
    - `src/config/index.ts`
@@ -41,8 +54,23 @@ Follow these steps to set up a local development environment:
      export const API_URL = "http://your-server-ip:10002";
      export const USER_URL = "http://your-server-ip:10008";
      ```
-3. Run `yarn run android` to start the android development.
-4. Start development! 🎉
+3. Generate and run a native development build:
+
+   ```sh
+   yarn android
+   # or
+   yarn ios
+   ```
+
+   `expo run:*` generates `android/` or `ios/` automatically on first run. These generated directories are intentionally not committed.
+
+4. After the development build is installed, start Metro with:
+
+   ```sh
+   yarn start
+   ```
+
+5. If native dependencies or app configuration change, regenerate native projects with `yarn prebuild:clean` and rebuild the development client.
 
 ## Community :busts_in_silhouette:
 

@@ -1,9 +1,9 @@
 import { Platform } from "@/constants";
 import { useConversationStore } from "@/store/conversation";
 import { useRequest } from "ahooks";
-import OpenIMSDKRN, { OpenIMEmitter } from "open-im-sdk-rn";
+import OpenIMSDKRN, { OpenIMEmitter } from "@openim/rn-client-sdk";
 import { v4 as uuidv4 } from "uuid";
-import { UserOnlineState } from "open-im-sdk-rn/lib/typescript/types/entity";
+import { UserOnlineState } from "@openim/rn-client-sdk";
 import { useEffect, useState } from "react";
 import { Text } from "react-native";
 

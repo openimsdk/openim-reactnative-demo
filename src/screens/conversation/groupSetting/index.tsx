@@ -6,7 +6,7 @@ import RowListItem from "@/components/RowListItem";
 import Dialog from "react-native-dialog";
 import { useState } from "react";
 import { useCurrentMemberRole } from "@/hooks/useCurrentMemberRole";
-import OpenIMSDKRN from "open-im-sdk-rn";
+import OpenIMSDKRN from "@openim/rn-client-sdk";
 import { v4 as uuidv4 } from "uuid";
 import { feedbackToast } from "@/utils/common";
 import { useMessageStore } from "@/store/message";

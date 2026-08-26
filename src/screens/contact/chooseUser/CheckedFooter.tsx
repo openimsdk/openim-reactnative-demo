@@ -1,6 +1,6 @@
 import { ApplicationStackParamList } from "@/types/navigation";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { PublicUserItem } from "open-im-sdk-rn/lib/typescript/types/entity";
+import { PublicUserItem } from "@openim/rn-client-sdk";
 import { FC } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Button } from "react-native-paper";

@@ -1,5 +1,5 @@
-import OpenIMSDKRN from "open-im-sdk-rn";
-import RNFS from "react-native-fs";
+import OpenIMSDKRN from "@openim/rn-client-sdk";
+import { Directory, Paths } from "expo-file-system";
 import dayjs from "dayjs";
 import calendar from "dayjs/plugin/calendar";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -7,7 +7,7 @@ import updateLocale from "dayjs/plugin/updateLocale";
 import { v4 as uuidv4 } from "uuid";
 
 import { getApiUrl, getWsUrl } from "@/config";
-import { ConversationItem, MessageItem, PublicUserItem } from "open-im-sdk-rn/lib/typescript/types/entity";
+import { ConversationItem, MessageItem, PublicUserItem } from "@openim/rn-client-sdk";
 import { GroupSessionTypes, GroupSystemMessageTypes, MessageType, SessionType } from "@/constants";
 import { useUserStore } from "@/store/user";
 import { useContactStore } from "@/store/contact";
@@ -49,12 +49,16 @@ export const AddFriendQrCodePrefix = "io.openim.app/addFriend/";
 export const AddGroupQrCodePrefix = "io.openim.app/joinGroup/";
 
 export const initSDK = () => {
-  RNFS.mkdir(`${RNFS.DocumentDirectoryPath}/tmp`);
+  const openIMDirectory = new Directory(Paths.document, "openim");
+  openIMDirectory.create({ idempotent: true, intermediates: true });
+  const openIMPath = openIMDirectory.uri.replace(/^file:\/\//, "").replace(/\/$/, "");
+
   OpenIMSDKRN.initSDK(
     {
       apiAddr: getApiUrl(),
       wsAddr: getWsUrl(),
-      dataDir: `${RNFS.DocumentDirectoryPath}/tmp`,
+      dataDir: openIMPath,
+      logFilePath: openIMPath,
       logLevel: 5,
       isLogStandardOutput: true,
     },

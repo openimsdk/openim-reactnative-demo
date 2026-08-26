@@ -94,19 +94,6 @@ export enum AllowType {
   NotAllowed = 1,
 }
 
-export enum GroupMemberRole {
-  Nomal = 20,
-  Admin = 60,
-  Owner = 100,
-}
-
-export enum GroupStatus {
-  Nomal = 0,
-  Baned = 1,
-  Dismissed = 2,
-  Muted = 3,
-}
-
 export enum ViewType {
   History = 0,
   Search = 1,

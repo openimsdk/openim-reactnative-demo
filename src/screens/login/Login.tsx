@@ -1,4 +1,4 @@
-import LinearGradient from "react-native-linear-gradient";
+import { LinearGradient } from "expo-linear-gradient";
 import { useToggle } from "ahooks";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Button, TextInput } from "react-native-paper";

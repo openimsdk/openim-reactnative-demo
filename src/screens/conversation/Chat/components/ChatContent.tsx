@@ -8,7 +8,7 @@ import NotificationMessage from "./NotificationMessage";
 import MessageItem from "./MessageItem";
 
 type ChatContentProps = {
-  flatListRef: RefObject<FlatList<ExMessageItem>>;
+  flatListRef: RefObject<FlatList<ExMessageItem> | null>;
 };
 
 const styles = StyleSheet.create({

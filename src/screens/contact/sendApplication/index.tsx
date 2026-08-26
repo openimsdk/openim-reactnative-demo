@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { GroupJoinSource } from "@/constants";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import NavBar from "@/components/NavBar";
-import OpenIMSDKRN from "open-im-sdk-rn";
+import OpenIMSDKRN from "@openim/rn-client-sdk";
 import { v4 as uuidv4 } from "uuid";
 import { feedbackToast } from "@/utils/common";
 import { useState } from "react";

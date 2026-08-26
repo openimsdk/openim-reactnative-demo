@@ -1,4 +1,35 @@
 {
-  "name": "openimReactnative",
-  "displayName": "openimReactnative"
+  "expo": {
+    "name": "OpenIM React Native Demo",
+    "slug": "openim-reactnative-demo",
+    "version": "1.0.0",
+    "scheme": "openimrn",
+    "ios": {
+      "bundleIdentifier": "org.reactjs.native.example.openimReactnative",
+      "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": false,
+          "NSAllowsLocalNetworking": true
+        }
+      }
+    },
+    "android": {
+      "package": "com.openimreactnative",
+      "allowBackup": false,
+      "softwareKeyboardLayoutMode": "resize"
+    },
+    "plugins": [
+      "expo-dev-client",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow OpenIM to select photos to send in conversations.",
+          "microphonePermission": false
+        }
+      ]
+    ],
+    "experiments": {
+      "reactCompiler": true
+    }
+  }
 }

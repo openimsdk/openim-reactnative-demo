@@ -7,7 +7,7 @@ import { useUserStore } from "@/store/user";
 import { ApplicationStackParamList } from "@/types/navigation";
 import { feedbackToast } from "@/utils/common";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { OpenIMEmitter } from "open-im-sdk-rn";
+import { OpenIMEmitter } from "@openim/rn-client-sdk";
 import {
   BlackUserItem,
   ConversationItem,
@@ -17,7 +17,7 @@ import {
   GroupItem,
   GroupMemberItem,
   SelfUserInfo,
-} from "open-im-sdk-rn/lib/typescript/types/entity";
+} from "@openim/rn-client-sdk";
 import { useEffect } from "react";
 
 export function useGlobalEvent() {

@@ -1,6 +1,6 @@
 import { useCallback } from "react";
-import { ConversationItem } from "open-im-sdk-rn/lib/typescript/types/entity";
-import OpenIMSDKRN from "open-im-sdk-rn";
+import { ConversationItem } from "@openim/rn-client-sdk";
+import OpenIMSDKRN from "@openim/rn-client-sdk";
 import { v4 as uuidv4 } from "uuid";
 
 import { NavigationProp, useNavigation } from "@react-navigation/native";

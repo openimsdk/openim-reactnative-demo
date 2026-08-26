@@ -6,7 +6,7 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { ApplicationStackParamList } from "@/types/navigation";
 import { useState } from "react";
 import Dialog from "react-native-dialog";
-import OpenIMSDKRN from "open-im-sdk-rn";
+import OpenIMSDKRN from "@openim/rn-client-sdk";
 import { v4 as uuidv4 } from "uuid";
 import { feedbackToast } from "@/utils/common";
 

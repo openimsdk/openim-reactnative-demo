@@ -4,9 +4,9 @@ import { useContactStore } from "@/store/contact";
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import search_empty from "@/assets/images/search_empty.png";
-import { BlackUserItem } from "open-im-sdk-rn/lib/typescript/types/entity";
+import { BlackUserItem } from "@openim/rn-client-sdk";
 import { feedbackToast } from "@/utils/common";
-import OpenIMSDKRN from "open-im-sdk-rn";
+import OpenIMSDKRN from "@openim/rn-client-sdk";
 import { v4 as uuidv4 } from "uuid";
 
 const styles = StyleSheet.create({

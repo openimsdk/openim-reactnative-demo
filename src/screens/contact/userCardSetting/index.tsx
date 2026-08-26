@@ -3,7 +3,7 @@ import RowListItem from "@/components/RowListItem";
 import { useContactStore } from "@/store/contact";
 import { feedbackToast } from "@/utils/common";
 import { useNavigation } from "@react-navigation/native";
-import OpenIMSDKRN from "open-im-sdk-rn";
+import OpenIMSDKRN from "@openim/rn-client-sdk";
 import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 import { StyleSheet, Switch, View } from "react-native";

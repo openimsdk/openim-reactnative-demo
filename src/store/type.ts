@@ -8,7 +8,7 @@ import {
   GroupItem,
   GroupMemberItem,
   MessageItem,
-} from "open-im-sdk-rn/lib/typescript/types/entity";
+} from "@openim/rn-client-sdk";
 
 export interface ExType {
   checked?: boolean;

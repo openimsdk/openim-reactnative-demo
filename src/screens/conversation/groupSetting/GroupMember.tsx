@@ -5,7 +5,7 @@ import useGroupMemberList from "@/hooks/useGroupMemberList";
 import InfoItem from "@/components/InfoItem";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { ApplicationStackParamList } from "@/types/navigation";
-import { GroupMemberRole } from "@/constants";
+import { GroupMemberRole } from "@openim/rn-client-sdk";
 
 const styles = StyleSheet.create({
   container: {

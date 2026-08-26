@@ -1,7 +1,7 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { useState } from "react";
-import { GroupItem } from "open-im-sdk-rn/lib/typescript/types/entity";
+import { GroupItem } from "@openim/rn-client-sdk";
 
 import NavBar from "@/components/NavBar";
 import InfoItem from "@/components/InfoItem";

@@ -2,8 +2,8 @@ import { useConversationStore } from "@/store/conversation";
 import { feedbackToast } from "@/utils/common";
 import { useLatest } from "ahooks";
 import { v4 as uuidv4 } from "uuid";
-import OpenIMSDKRN, { OpenIMEmitter } from "open-im-sdk-rn";
-import { GroupMemberItem } from "open-im-sdk-rn/lib/typescript/types/entity";
+import OpenIMSDKRN, { OpenIMEmitter } from "@openim/rn-client-sdk";
+import { GroupMemberItem } from "@openim/rn-client-sdk";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export const REACH_SEARCH_FLAG = "LAST_FLAG";

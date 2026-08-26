@@ -1,6 +1,6 @@
 import InfoItem from "@/components/InfoItem";
 import NavBar from "@/components/NavBar";
-import { GroupMemberRole } from "@/constants";
+import { GroupMemberRole } from "@openim/rn-client-sdk";
 import useGroupMemberList from "@/hooks/useGroupMemberList";
 import { useConversationStore } from "@/store/conversation";
 import { useState } from "react";

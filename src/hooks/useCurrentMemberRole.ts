@@ -1,4 +1,4 @@
-import { GroupMemberRole } from "@/constants";
+import { GroupMemberRole } from "@openim/rn-client-sdk";
 import { useConversationStore } from "@/store/conversation";
 
 export function useCurrentMemberRole() {
@@ -6,7 +6,7 @@ export function useCurrentMemberRole() {
 
   const isOwner = currentMemberInGroup?.roleLevel === GroupMemberRole.Owner;
   const isAdmin = currentMemberInGroup?.roleLevel === GroupMemberRole.Admin;
-  const isNomal = currentMemberInGroup?.roleLevel === GroupMemberRole.Nomal;
+  const isNomal = currentMemberInGroup?.roleLevel === GroupMemberRole.Normal;
   const isJoinGroup = Boolean(currentMemberInGroup?.groupID);
   const currentRolevel = currentMemberInGroup?.roleLevel ?? 0;
   const currentIsMuted = (currentMemberInGroup?.muteEndTime ?? 0) > Date.now();
